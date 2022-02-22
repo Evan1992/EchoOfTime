@@ -1,0 +1,8 @@
+.control input {
+    width: 250px;
+    background:lightgray;
+}
+
+.control input:focus {
+    background: white;
+}

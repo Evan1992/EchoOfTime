@@ -1,0 +1,7 @@
+.hint {
+    color: gray;
+}
+
+.hint:hover {
+    color: black;
+}
