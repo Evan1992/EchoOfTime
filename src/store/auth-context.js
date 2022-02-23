@@ -4,7 +4,7 @@ const AuthContext = React.createContext({
     token: '',
     isLoggedIn: false,
     userID: '',
-    login: (token) => {},
+    login: () => {},
     logout: () => {}
 })
 
@@ -13,10 +13,8 @@ export const AuthContextProvider = (props) => {
     const initialUserID = localStorage.getItem('userID')
     const [token, setToken] = useState(initialToken);
     const [userID, setUserID] = useState(initialUserID);
-    console.log("initialToken is: ", initialToken);
-    console.log("token in auth-context.js is: ", token);
     
-    const userIsLoggedIn = !!token;
+    const isLoggedIn = !!token;
     
     const loginHandler = (token, userID) => {
         setToken(token);
@@ -32,7 +30,7 @@ export const AuthContextProvider = (props) => {
     
     const contextValue = {
         token: token,
-        isLoggedIn: userIsLoggedIn,
+        isLoggedIn: isLoggedIn,
         userID: userID,
         login: loginHandler,
         logout: logoutHandler
