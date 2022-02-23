@@ -15,23 +15,23 @@ const App = () => {
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          {!isLoggedIn && (
-            <Route path='/' exact element={<HomePage />} />
-          )}
-          
-          {!isLoggedIn && (
-            <Route path='/auth' element={<AuthPage />} />
-          )}
-          
-          {isLoggedIn && (
-            <Route path='/plans' element={<Plans />} />
-          )}
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            {!isLoggedIn && (
+              <Route path='/' exact element={<HomePage />} />
+            )}
+            
+            {!isLoggedIn && (
+              <Route path='/auth' element={<AuthPage />} />
+            )}
+            
+            {isLoggedIn && (
+              <Route path='/plans' element={<Plans />} />
+            )}
+          </Routes>
+        </Layout>
+      </BrowserRouter>
   );
 }
 

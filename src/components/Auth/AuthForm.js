@@ -9,7 +9,8 @@ import classes from './AuthForm.module.css';
 const AuthForm = (props) => {
     const emailInputRef    = useRef();
     const passwordInputRef = useRef();
-    
+
+    // Consume the context by using the useContext hook
     const authCtx = useContext(AuthContext);
     
     const [isLogin, setIsLogin] = useState(true);
@@ -18,8 +19,6 @@ const AuthForm = (props) => {
     const switchAuthModeHandler = () => {
         setIsLogin((prevState) => !prevState);
     }
-    
-    // console.log("authCtx.isLoggedIn is: ", authCtx.isLoggedIn);
 
     const submitHandler = (event) => {
         event.preventDefault();
@@ -64,7 +63,6 @@ const AuthForm = (props) => {
         })
         .then(data => {
             authCtx.login(data.idToken, data.localId);
-            // console.log("authCtx.token is: ", authCtx.token);
         })
         .catch(err => {
             alert(err.message)
