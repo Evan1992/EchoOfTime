@@ -1,6 +1,9 @@
 /* ========== import React and React hooks ========== */
 import React, { useRef } from 'react';
 
+/* ========== import other libraries ========== */
+import axios from '../../../axios'
+
 /* ========== import css ========== */
 import classes from './NewPlanForm.module.css'
 
@@ -13,17 +16,22 @@ const NewPlanForm = (props) => {
     let input_plan = useRef();
 
     const postPlanHandler = () => {
-        // const target = {
-        //     complete: false,
-        //     active: true,
-        //     title: input_plan.current.value,
-        //     comment: "",
-        //     rank: props.rank? props.rank:0,
-        //     parent: props.parent? props.parent:"",
-        //     children: {},
-        //     date: "",
-        //     seconds: 0,
-        // }
+        const target = {
+            complete: false,
+            active: true,
+            title: input_plan.current.value,
+            comment: "",
+            rank: props.rank? props.rank:0,
+            parent: props.parent? props.parent:"",
+            children: {},
+            date: "",
+            seconds: 0,
+        }
+
+        axios.post(`/plans.json`, target)
+        .then(response => {
+            console.log(response)
+        })
     }
     
     return(
@@ -33,7 +41,6 @@ const NewPlanForm = (props) => {
             <button onClick={props.form_toggler}>Cancel</button>
         </div>
     )
-    
 }
 
 export default NewPlanForm

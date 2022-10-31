@@ -27,6 +27,10 @@ const App = () => {
             )}
             
             {isLoggedIn && (
+              <Route path='/' element={<Plans />} />
+            )}
+
+            {isLoggedIn && (
               <Route path='/plans' element={<Plans />} />
             )}
           </Routes>
