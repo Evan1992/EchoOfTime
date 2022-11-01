@@ -14,3 +14,11 @@
     filter: opacity(0.3);
     transform: scale(1.8);
 }
+
+.plan_add_button{
+    float:right;
+    color: gray;
+}
+.plan_add_button:hover{
+    transform: scale(1.8);
+}

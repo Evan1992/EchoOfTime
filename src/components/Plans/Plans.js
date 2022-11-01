@@ -38,9 +38,9 @@ const Plans = () => {
         <React.Fragment>
             <Container>
                 {
-                    plans.map((element, index) =>
-                        <Plan plan_title={element.title} key={plan_ids[index]} />
-                    )
+                    plans.map((element, index) => (
+                        <Plan plan_title={element.title} plan_rank={element.rank} plan_id={plan_ids[index]} key={plan_ids[index]} />
+                    ))
                 }
                 <NewPlan />
             </Container>
