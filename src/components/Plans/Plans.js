@@ -17,20 +17,6 @@ const Plans = () => {
     const [isFetch, setIsFetch] = useState(false);
 
     // get data from database
-    // async function fetchPlansHandler() {
-    //     if(!isFetch){
-    //         const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/plans.json');
-    //         const data = response.data;
-    //         for (let index in data) {
-    //             await setPlans(oldArray => [...oldArray, response.data[index]]);
-    //         }
-    //         setIsFetch(true);
-    //         console.log(data);
-    //         console.log(plans);
-    //     }
-    // }
-
-    // get data from database
     const fetchPlansHandler = useCallback(async () => {
         if(!isFetch){
             const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/plans.json');

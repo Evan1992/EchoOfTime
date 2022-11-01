@@ -9,8 +9,6 @@ import classes from './Plan.module.css'
 
 
 const Plan = (props) => {
-    // console.log("plan_title is " + props.plan_title);
-    // console.log("key is " + props.key);
     return (
         <React.Fragment>
             <Row>
