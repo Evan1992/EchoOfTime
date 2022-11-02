@@ -39,7 +39,7 @@ const Plans = () => {
             <Container>
                 {
                     plans.map((element, index) => (
-                        <Plan plan_title={element.title} plan_rank={element.rank} plan_id={plan_ids[index]} key={plan_ids[index]} />
+                        <Plan key={plan_ids[index]} plan={element} plan_id={plan_ids[index]} plan_title={element.title} plan_rank={element.rank} />
                     ))
                 }
                 <NewPlan />

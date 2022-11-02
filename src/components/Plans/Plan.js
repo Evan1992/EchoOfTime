@@ -47,6 +47,7 @@ const Plan = (props) => {
                             <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
                                 <NewPlanForm 
                                     form_toggler={formToggleHandler}
+                                    parent_plan={props.plan}
                                     parent={props.plan_id}
                                     rank={props.plan_rank+1}
                                 />
