@@ -34,17 +34,21 @@ const NewPlanForm = (props) => {
             const child_id = data.name;
 
             // Update parent if current plan is a child plan
-            if (typeof props.parent !== 'undefined') {
-                let parent_plan = props.parent_plan;
-                if(!parent_plan.children) {
-                    axios.put(`/plans/${props.parent}/children/${child_id}.json`, 1);
-                } else {
-                    // Count the length of josn objects
-                    let keyCount  = Object.keys(parent_plan.children).length;
-                    axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1);
-                }
-            }  
+            updateParentPlan(child_id);
         })   
+    }
+
+    const updateParentPlan = (child_id) => {
+        if (typeof props.parent !== 'undefined') {
+            let parent_plan = props.parent_plan;
+            if(!parent_plan.children) {
+                axios.put(`/plans/${props.parent}/children/${child_id}.json`, 1);
+            } else {
+                // Count the length of josn objects
+                let keyCount  = Object.keys(parent_plan.children).length;
+                axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1);
+            }
+        }  
     }
     
     return(
