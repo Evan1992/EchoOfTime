@@ -17,6 +17,7 @@ const NewPlanForm = (props) => {
 
     const postPlanHandler = () => {
         const target = {
+            show_plan: props.show_plan? props.show_plan:false,
             complete: false,
             active: true,
             title: input_plan.current.value,

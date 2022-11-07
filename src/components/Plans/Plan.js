@@ -22,9 +22,17 @@ const Plan = (props) => {
         <React.Fragment>
             <Row>
                 <Col>
-                    <div className={classes.expand_collapse} >
-                        {/* <img className={classes.expand_collapse_img} src='https://img.icons8.com/material-rounded/24/000000/more-than.png' alt='expand' /> */}
-                        {/* <img className={classes.expand_collapse_img} src='https://img.icons8.com/ios-filled/50/000000/collapse-arrow.png'  alt='collapse' /> */}
+                    <div className={classes.expand_collapse} onClick={props.childrenToggleHandler} >
+                        {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
+                        {
+                            // do not show the expand/shrink icon if no children
+                            (typeof props.plan.children !== 'undefined') &&
+                            (
+                                props.show_plan ?
+                                <img className={classes.expand_collapse_img} src='https://img.icons8.com/ios-filled/50/000000/collapse-arrow.png'  alt='collapse' /> :
+                                <img className={classes.expand_collapse_img} src='https://img.icons8.com/material-rounded/24/000000/more-than.png' alt='expand' />
+                            )
+                        }
                     </div>
                 </Col>
 

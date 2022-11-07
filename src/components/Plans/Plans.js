@@ -23,7 +23,7 @@ const Plans = () => {
             const data = response.data;
             for (let index in data) {
                 await setPlanIds(oldArray => [...oldArray, index]);
-                await setPlans(oldArray => [...oldArray, response.data[index]]);
+                await setPlans(oldArray => [...oldArray, data[index]]);
             }
             setIsFetch(true);
         }
@@ -34,13 +34,67 @@ const Plans = () => {
         fetchPlansHandler();
     }, [fetchPlansHandler]);
 
+    const getChildrenIndexes = (cur_plan_id, cur_plan, return_list) => {
+        if(!("children" in cur_plan)) {
+            return;
+        } else {
+            for(const child_id in cur_plan.children) {
+                for(let i = 0; i < plan_ids.length; i++) {
+                    if(plan_ids[i] === child_id) {
+                        return_list.push(i);
+                        getChildrenIndexes(child_id, plans[i], return_list);
+                    }
+                }
+            }
+        }
+        return return_list;
+    }
+
+    // show/hide children plans of current plan
+    const childrenToggleHandler = (event, cur_plan) => {
+        // shadow copy of "plans"
+        let new_plans = [...plans];
+        let to_change_index = [];
+        let isShow = false;
+
+        // loop through an object
+        for(const child_id in cur_plan.children) {
+            for(let i = 0; i < plan_ids.length; i++) {
+                if(plan_ids[i] === child_id) {
+                    // if hiding children plans, hide all children plans under current plan
+                    if(new_plans[i].show_plan) {
+                        isShow = true;
+                        to_change_index.push(i);
+                        // call this function to get the indexes of all children plans
+                        const children_indexes = getChildrenIndexes(child_id, new_plans[i], []);                        
+                        if(typeof children_indexes !== 'undefined'){
+                            to_change_index = to_change_index.concat(children_indexes);
+                        }
+                    } else {
+                        to_change_index.push(i);
+                    }
+                }
+            }
+        }
+
+        // loop through an array
+        // console.log(to_change_index);
+        for(const i of to_change_index) {
+            new_plans[i].show_plan = !isShow;
+        }
+        
+        setPlans(plans => new_plans);
+    }
+
     return (
         <React.Fragment>
             <Container>
                 {
-                    plans.map((element, index) => (
-                        <Plan key={plan_ids[index]} plan={element} plan_id={plan_ids[index]} plan_title={element.title} plan_rank={element.rank} />
-                    ))
+                    plans.map((element, index) => {
+                        if(element.show_plan)
+                            return <Plan key={plan_ids[index]} plan={element} plan_id={plan_ids[index]} plan_title={element.title} plan_rank={element.rank} childrenToggleHandler={event => childrenToggleHandler(event, element)} />
+                        return <div key={plan_ids[index]} />
+                    })
                 }
                 <NewPlan />
             </Container>
@@ -60,3 +114,11 @@ export default Plans
 // We can sepcify the dependency of the function called in useEffect, here, the dependency is the
 // function itself. The function as an object, will change, and it results in infinite loop. We
 // wrap the function in the useCallback hook
+
+/* Pass function with parameters to child component */
+// pass the function like the below will call the function directly
+// childrenToggleHandler={childrenToggleHandler(element)}
+
+/* Javascript loop through an object vs Javascript loop through an array */
+// Loop through an object: for(const property in object)
+// Loop through an array:  for(const element in array)

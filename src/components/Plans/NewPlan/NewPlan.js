@@ -13,6 +13,7 @@ import classes from './NewPlan.module.css'
 
 const NewPlan = () => {
     const [showForm, setShowForm] = useState(false);
+    const showPlan = true;
 
     const formToggleHandler = () => {
         setShowForm(!showForm);
@@ -30,6 +31,8 @@ const NewPlan = () => {
                 { showForm &&
                     <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
                         <NewPlanForm
+                            // Here, plan is root plan and show_plan is set to true by default
+                            show_plan={showPlan}
                             form_toggler={formToggleHandler}
                         />
                     </Col>
