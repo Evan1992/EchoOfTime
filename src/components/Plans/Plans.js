@@ -12,22 +12,71 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
 const Plans = () => {
-    const [plans, setPlans] = useState([]);
     const [plan_ids, setPlanIds] = useState([]);
+    const [plans, setPlans] = useState([]);
+    const [ordered_plans, setOrderedPlans] = useState([]);
     const [isFetch, setIsFetch] = useState(false);
+
+    const setOrderedPlansFunction = (plan, ordered_plans) => {
+        if(!("children" in plan)) {
+            return ordered_plans;
+        } else {
+            for(const child_id in plan.children) {
+                for(let i = 0; i < plan_ids.length; i++) {
+                    if(plan_ids[i] === child_id) {
+                        ordered_plans = [...ordered_plans, plans[i]];
+                        ordered_plans = setOrderedPlansFunction(plans[i], ordered_plans);
+                    }
+                }
+            }
+        }
+        return ordered_plans;
+    }
+
+    // const setOrderedPlansFunction = useCallback(async (plan, ordered_plans) => {
+    //     if(!("children" in plan)) {
+    //         return ordered_plans;
+    //     } else {
+    //         for(const child_id in plan.children) {
+    //             for(let i = 0; i < plan_ids.length; i++) {
+    //                 if(plan_ids[i] === child_id) {
+    //                     ordered_plans = [...ordered_plans, plans[i]];
+    //                     ordered_plans = setOrderedPlansFunction(plans[i], ordered_plans);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return ordered_plans;
+    // }, [plan_ids, plans])
 
     // get data from database
     const fetchPlansHandler = useCallback(async () => {
+        let _plans = [];
+        let _plan_ids = [];
         if(!isFetch){
             const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/plans.json');
             const data = response.data;
             for (let index in data) {
-                await setPlanIds(oldArray => [...oldArray, index]);
-                await setPlans(oldArray => [...oldArray, data[index]]);
+                _plans.push(data[index]);
+                _plan_ids.push(index);
             }
+
             setIsFetch(true);
+
+            // Set plans and plan_ids for one time
+            setPlanIds(plan_ids => _plan_ids);
+            setPlans(plans => _plans);
         }
-    }, [isFetch])
+        // Set ordered_plans
+        let _ordered_plans = [];
+        for(let i = 0; i < plans.length; i++) {
+            if(plans[i].rank === 0) {
+                _ordered_plans = [..._ordered_plans, plans[i]];
+                _ordered_plans = setOrderedPlansFunction(plans[i], _ordered_plans);
+            }
+        }
+        setOrderedPlans(ordered_plans => _ordered_plans);
+    }, [isFetch, plans])
 
     // get the data from database as soon as user visit the home page
     useEffect(() => {
@@ -90,7 +139,7 @@ const Plans = () => {
         <React.Fragment>
             <Container>
                 {
-                    plans.map((element, index) => {
+                    ordered_plans.map((element, index) => {
                         if(element.show_plan)
                             return <Plan key={plan_ids[index]} plan={element} plan_id={plan_ids[index]} plan_title={element.title} plan_rank={element.rank} childrenToggleHandler={event => childrenToggleHandler(event, element)} />
                         return <div key={plan_ids[index]} />
