@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 /* ========== import react components ========== */
 import NewPlanForm from './NewPlan/NewPlanForm'
+import Timer from '../Timer/Timer';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
@@ -13,9 +14,14 @@ import classes from './Plan.module.css'
 
 const Plan = (props) => {
     const [showForm, setShowForm] = useState(false);
+    const [isClockActive, setIsClockActive] = useState(false);
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
+    }
+
+    const clockToggleHandler = () => {
+        setIsClockActive(isClockActive => !isClockActive);
     }
 
     return (
@@ -43,6 +49,14 @@ const Plan = (props) => {
 
                 <Col xs="auto" style={{padding: 0}}>
                     <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
+                </Col>
+
+                <Col xs={2}>
+                    <Timer isClockActive={isClockActive}/>
+                </Col>
+
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_clock_button} onClick={clockToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
                 </Col>
             </Row>
 

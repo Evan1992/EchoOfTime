@@ -22,3 +22,13 @@
 .plan_add_button:hover{
     transform: scale(1.8);
 }
+
+.plan_clock_button{
+    vertical-align: middle;
+    width:20px;
+    height:20px;
+}
+
+.plan_clock_button:hover{
+    transform: scale(1.8);
+}
