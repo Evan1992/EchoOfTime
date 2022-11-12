@@ -17,37 +17,30 @@ const Plans = () => {
     const [ordered_plans, setOrderedPlans] = useState([]);
     const [isFetch, setIsFetch] = useState(false);
 
-    const setOrderedPlansFunction = (plan, ordered_plans) => {
-        if(!("children" in plan)) {
-            return ordered_plans;
-        } else {
-            for(const child_id in plan.children) {
-                for(let i = 0; i < plan_ids.length; i++) {
-                    if(plan_ids[i] === child_id) {
-                        ordered_plans = [...ordered_plans, plans[i]];
-                        ordered_plans = setOrderedPlansFunction(plans[i], ordered_plans);
+    const setOrderedPlansHandler = (plan, index, ordered_plans) => {
+        if(plan !== null) {
+            if(!("children" in plan)) {
+                return ordered_plans;
+            } else {
+                for(const child_id in plan.children) {
+                    for(let i = 0; i < plan_ids.length; i++) {
+                        if(plan_ids[i] === child_id) {
+                            ordered_plans = [...ordered_plans, plans[i]];
+                            ordered_plans = setOrderedPlansHandler(plans[i], i+1, ordered_plans);
+                        }
                     }
+                }
+            }
+        } else {
+            for(let i = index; i < plans.length; i++) {
+                if(plans[i].rank === 0) {
+                    ordered_plans = [...ordered_plans, plans[i]];
+                    ordered_plans = setOrderedPlansHandler(plans[i], i+1, ordered_plans);
                 }
             }
         }
         return ordered_plans;
     }
-
-    // const setOrderedPlansFunction = useCallback(async (plan, ordered_plans) => {
-    //     if(!("children" in plan)) {
-    //         return ordered_plans;
-    //     } else {
-    //         for(const child_id in plan.children) {
-    //             for(let i = 0; i < plan_ids.length; i++) {
-    //                 if(plan_ids[i] === child_id) {
-    //                     ordered_plans = [...ordered_plans, plans[i]];
-    //                     ordered_plans = setOrderedPlansFunction(plans[i], ordered_plans);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return ordered_plans;
-    // }, [plan_ids, plans])
 
     // get data from database
     const fetchPlansHandler = useCallback(async () => {
@@ -67,21 +60,7 @@ const Plans = () => {
             setPlanIds(plan_ids => _plan_ids);
             setPlans(plans => _plans);
         }
-        // Set ordered_plans
-        let _ordered_plans = [];
-        for(let i = 0; i < plans.length; i++) {
-            if(plans[i].rank === 0) {
-                _ordered_plans = [..._ordered_plans, plans[i]];
-                _ordered_plans = setOrderedPlansFunction(plans[i], _ordered_plans);
-            }
-        }
-        setOrderedPlans(ordered_plans => _ordered_plans);
-    }, [isFetch, plans])
-
-    // get the data from database as soon as user visit the home page
-    useEffect(() => {
-        fetchPlansHandler();
-    }, [fetchPlansHandler]);
+    }, [isFetch])
 
     const getChildrenIndexes = (cur_plan_id, cur_plan, return_list) => {
         if(!("children" in cur_plan)) {
@@ -127,12 +106,26 @@ const Plans = () => {
         }
 
         // loop through an array
-        // console.log(to_change_index);
         for(const i of to_change_index) {
             new_plans[i].show_plan = !isShow;
         }
         
         setPlans(plans => new_plans);
+    }
+
+    // get the data from database as soon as user visit the home page
+    useEffect(() => {
+        fetchPlansHandler();
+    }, [fetchPlansHandler]);
+
+    // Set ordered_plans
+    if(plans.length !== 0) {
+        if(ordered_plans.length === 0) {
+            let _ordered_plans = [];
+            _ordered_plans = setOrderedPlansHandler(null, 0, []);
+            setOrderedPlans(ordered_plans => _ordered_plans);
+        }
+
     }
 
     return (
@@ -171,3 +164,7 @@ export default Plans
 /* Javascript loop through an object vs Javascript loop through an array */
 // Loop through an object: for(const property in object)
 // Loop through an array:  for(const element in array)
+
+/* Number of render of this page */
+// Number of render of this page depends on how many times we setState
+// Each time when a new state is set, the page will be re-rendered
