@@ -21,7 +21,8 @@ const Plan = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Col>
+                <Col xs={1} />
+                <Col xs='auto'>
                     <div className={classes.expand_collapse} onClick={props.childrenToggleHandler} >
                         {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
                         {
@@ -36,8 +37,8 @@ const Plan = (props) => {
                     </div>
                 </Col>
 
-                <Col>
-                    <div>{props.plan_title}</div>
+                <Col xs={{ span: 4}} style={{display:'flex', justifyContent:'left'}}>
+                    <div style={{'textIndent':`calc(${props.plan_rank} * 20px)`}}>{props.plan_title || 'No title'}</div>
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>

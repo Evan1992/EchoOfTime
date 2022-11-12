@@ -5,11 +5,13 @@ import Plan from './Plan'
 import NewPlan from './NewPlan/NewPlan'
 
 /* ========== import other libraries ========== */
+import axios from 'axios';
 import Container from 'react-bootstrap/Container';
+
 
 /* ========== import css ========== */
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
+import classes from './Plans.module.css';
 
 const Plans = () => {
     const [plan_ids, setPlanIds] = useState([]);
@@ -129,8 +131,8 @@ const Plans = () => {
     }
 
     return (
-        <React.Fragment>
-            <Container>
+        <div className={classes.plans}>
+            <Container fluid className={classes.container}>
                 {
                     ordered_plans.map((element, index) => {
                         if(element.show_plan)
@@ -140,7 +142,7 @@ const Plans = () => {
                 }
                 <NewPlan />
             </Container>
-        </React.Fragment>
+        </div>
     )
 }
 
