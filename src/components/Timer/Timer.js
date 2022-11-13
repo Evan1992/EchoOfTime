@@ -1,8 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 const Timer = (props) => {
-    const [seconds, setSeconds] = useState(0);
-
     const formatToTwoDigits = (n) => {
         if(n < 10 ){
             return `0${n}`;
@@ -27,15 +25,15 @@ const Timer = (props) => {
         let interval = null;
         if(props.isClockActive) {
             interval = setInterval(() => {
-                setSeconds((preSeconds) => preSeconds + 1);
+                props.setSeconds((preSeconds) => preSeconds + 1);
             }, 1000);
         }
         return () => clearInterval(interval);
-    }, [props.isClockActive])
+    }, [props])
 
     return (
         <div>
-            {secondsToHMS(seconds)}
+            {secondsToHMS(props.seconds)}
         </div>
     )
 }

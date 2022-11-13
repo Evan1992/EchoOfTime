@@ -120,7 +120,7 @@ const Plans = () => {
         fetchPlansHandler();
     }, [fetchPlansHandler]);
 
-    // Set ordered_plans
+    // After fetching the data, set ordered_plans
     if(plans.length !== 0) {
         if(ordered_plans.length === 0) {
             let _ordered_plans = [];

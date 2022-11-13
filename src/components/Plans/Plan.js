@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 /* ========== import react components ========== */
+import axios from '../../axios';
 import NewPlanForm from './NewPlan/NewPlanForm'
 import Timer from '../Timer/Timer';
 
@@ -15,12 +16,17 @@ import classes from './Plan.module.css'
 const Plan = (props) => {
     const [showForm, setShowForm] = useState(false);
     const [isClockActive, setIsClockActive] = useState(false);
+    const [seconds, setSeconds] = useState(0);
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
     }
 
     const clockToggleHandler = () => {
+        // Upload the time to database after stopping the timer
+        if(isClockActive) {
+            axios.put(`/plans/${props.plan_id}/seconds.json`, seconds);
+        }
         setIsClockActive(isClockActive => !isClockActive);
     }
 
@@ -52,7 +58,7 @@ const Plan = (props) => {
                 </Col>
 
                 <Col xs={2}>
-                    <Timer isClockActive={isClockActive}/>
+                    <Timer seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>
