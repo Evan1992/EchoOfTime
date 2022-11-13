@@ -117,7 +117,7 @@ const Plans = () => {
                             if("children" in element[1]) {
                                 show_children = plans.get(Object.keys(element[1].children)[0]).show_plan;
                             }
-                            return <Plan key={element[0]} plan={element[1]} plan_id={element[0]} plan_title={element[1].title} plan_rank={element.rank} show_children={show_children} childrenToggleHandler={event => childrenToggleHandler(event, element[0])} />
+                            return <Plan key={element[0]} plan_id={element[0]} plan={element[1]} show_children={show_children} childrenToggleHandler={event => childrenToggleHandler(event, element[0])} />
                         }
                         return <div key={element[0]} />
                     })

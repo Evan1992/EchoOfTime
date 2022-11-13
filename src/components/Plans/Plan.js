@@ -50,7 +50,7 @@ const Plan = (props) => {
                 </Col>
 
                 <Col xs={{ span: 4}} style={{display:'flex', justifyContent:'left'}}>
-                    <div style={{'textIndent':`calc(${props.plan_rank} * 20px)`}}>{props.plan_title || 'No title'}</div>
+                    <div style={{'textIndent':`calc(${props.plan.rank} * 20px)`}}>{props.plan.title || 'No title'}</div>
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>
@@ -78,7 +78,7 @@ const Plan = (props) => {
                                     form_toggler={formToggleHandler}
                                     parent_plan={props.plan}
                                     parent={props.plan_id}
-                                    rank={props.plan_rank+1}
+                                    rank={props.plan.rank+1}
                                 />
                             </Col>
                         </Row>
