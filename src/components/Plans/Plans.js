@@ -14,104 +14,76 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import classes from './Plans.module.css';
 
 const Plans = () => {
-    const [plan_ids, setPlanIds] = useState([]);
-    const [plans, setPlans] = useState([]);
+    // plans is map, key is the plan_id, value is the plan object
+    const [plans, setPlans] = useState(new Map());
+    // ordered_plans is a 2D array, each element is [plan_id, plan]
     const [ordered_plans, setOrderedPlans] = useState([]);
     const [isFetch, setIsFetch] = useState(false);
 
-    const setOrderedPlansHandler = (plan, index, ordered_plans) => {
-        if(plan !== null) {
-            if(!("children" in plan)) {
-                return ordered_plans;
-            } else {
-                for(const child_id in plan.children) {
-                    for(let i = 0; i < plan_ids.length; i++) {
-                        if(plan_ids[i] === child_id) {
-                            ordered_plans = [...ordered_plans, plans[i]];
-                            ordered_plans = setOrderedPlansHandler(plans[i], i+1, ordered_plans);
-                        }
-                    }
-                }
+    // get data from database
+    const fetchPlansHandler = useCallback(async () => {
+        let _plans = new Map();
+        if(!isFetch){
+            const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/plans.json');
+            const data = response.data;
+            for (let index in data) {
+                _plans.set(index, data[index]);
             }
-        } else {
-            for(let i = index; i < plans.length; i++) {
-                if(plans[i].rank === 0) {
-                    ordered_plans = [...ordered_plans, plans[i]];
-                    ordered_plans = setOrderedPlansHandler(plans[i], i+1, ordered_plans);
-                }
+
+            setIsFetch(true);
+
+            // Set plans all in one time
+            setPlans(plans => _plans);
+        }
+    }, [isFetch])
+
+    const setOrderedPlansHandler = (plan, ordered_plans) => {
+        if("children" in plan) {
+            for(const child_id in plan.children) {
+                ordered_plans = [...ordered_plans, [child_id, plans.get(child_id)]];
+                ordered_plans = setOrderedPlansHandler(plans.get(child_id), ordered_plans);
             }
         }
         return ordered_plans;
     }
 
-    // get data from database
-    const fetchPlansHandler = useCallback(async () => {
-        let _plans = [];
-        let _plan_ids = [];
-        if(!isFetch){
-            const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/plans.json');
-            const data = response.data;
-            for (let index in data) {
-                _plans.push(data[index]);
-                _plan_ids.push(index);
-            }
-
-            setIsFetch(true);
-
-            // Set plans and plan_ids for one time
-            setPlanIds(plan_ids => _plan_ids);
-            setPlans(plans => _plans);
-        }
-    }, [isFetch])
-
-    const getChildrenIndexes = (cur_plan_id, cur_plan, return_list) => {
-        if(!("children" in cur_plan)) {
-            return;
-        } else {
+    const getToChangePlanIds = (plan_id, to_change_plan_ids) => {
+        const cur_plan = plans.get(plan_id);
+        if("children" in cur_plan) {
             for(const child_id in cur_plan.children) {
-                for(let i = 0; i < plan_ids.length; i++) {
-                    if(plan_ids[i] === child_id) {
-                        return_list.push(i);
-                        getChildrenIndexes(child_id, plans[i], return_list);
-                    }
-                }
+                to_change_plan_ids = [...to_change_plan_ids, child_id];
+                to_change_plan_ids = getToChangePlanIds(child_id, to_change_plan_ids)
             }
         }
-        return return_list;
+        return to_change_plan_ids;
     }
 
     // show/hide children plans of current plan
-    const childrenToggleHandler = (event, cur_plan) => {
+    const childrenToggleHandler = (event, cur_plan_id) => {
         // shadow copy of "plans"
-        let new_plans = [...plans];
-        let to_change_index = [];
-        let isShow = false;
+        let new_plans = new Map(plans);
+        let to_change_plan_ids = []
 
-        // loop through an object
-        for(const child_id in cur_plan.children) {
-            for(let i = 0; i < plan_ids.length; i++) {
-                if(plan_ids[i] === child_id) {
-                    // if hiding children plans, hide all children plans under current plan
-                    if(new_plans[i].show_plan) {
-                        isShow = true;
-                        to_change_index.push(i);
-                        // call this function to get the indexes of all children plans
-                        const children_indexes = getChildrenIndexes(child_id, new_plans[i], []);                        
-                        if(typeof children_indexes !== 'undefined'){
-                            to_change_index = to_change_index.concat(children_indexes);
-                        }
-                    } else {
-                        to_change_index.push(i);
-                    }
-                }
+        const cur_plan = plans.get(cur_plan_id);
+        const cur_plan_child_id = Object.keys(cur_plan.children)[0];
+        const cur_plan_child_plan = plans.get(cur_plan_child_id);
+
+        // if hiding children plans, hide all children plans under current plan
+        if(cur_plan_child_plan.show_plan) {
+            to_change_plan_ids = getToChangePlanIds(cur_plan_id, []);
+        } else {
+            for(const child_id in cur_plan.children) {
+                to_change_plan_ids.push(child_id);
             }
         }
-
-        // loop through an array
-        for(const i of to_change_index) {
-            new_plans[i].show_plan = !isShow;
-        }
         
+        to_change_plan_ids.forEach(plan_id => {
+            let new_plan = new_plans.get(plan_id);
+            new_plan.show_plan = !new_plan.show_plan;
+            // Update the map
+            new_plans.set(plan_id, new_plan);
+        })
+
         setPlans(plans => new_plans);
     }
 
@@ -121,10 +93,15 @@ const Plans = () => {
     }, [fetchPlansHandler]);
 
     // After fetching the data, set ordered_plans
-    if(plans.length !== 0) {
+    if(plans.size !== 0) {
         if(ordered_plans.length === 0) {
             let _ordered_plans = [];
-            _ordered_plans = setOrderedPlansHandler(null, 0, []);
+            plans.forEach((value, key) => {
+                if(value.rank === 0) {
+                    _ordered_plans = [..._ordered_plans, [key, value]]
+                    _ordered_plans = setOrderedPlansHandler(value, _ordered_plans);
+                }
+            })
             setOrderedPlans(ordered_plans => _ordered_plans);
         }
 
@@ -134,10 +111,10 @@ const Plans = () => {
         <div className={classes.plans}>
             <Container fluid className={classes.container}>
                 {
-                    ordered_plans.map((element, index) => {
-                        if(element.show_plan)
-                            return <Plan key={plan_ids[index]} plan={element} plan_id={plan_ids[index]} plan_title={element.title} plan_rank={element.rank} childrenToggleHandler={event => childrenToggleHandler(event, element)} />
-                        return <div key={plan_ids[index]} />
+                    ordered_plans.map((element) => {
+                        if(element[1].show_plan)
+                            return <Plan key={element[0]} plan={element[1]} plan_id={element[0]} plan_title={element[1].title} plan_rank={element.rank} childrenToggleHandler={event => childrenToggleHandler(event, element[0])} />
+                        return <div key={element[0]} />
                     })
                 }
                 <NewPlan />
