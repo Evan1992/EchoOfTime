@@ -41,7 +41,7 @@ const Plan = (props) => {
                             // do not show the expand/shrink icon if no children
                             (typeof props.plan.children !== 'undefined') &&
                             (
-                                props.show_plan ?
+                                props.show_children ?
                                 <img className={classes.expand_collapse_img} src='https://img.icons8.com/ios-filled/50/000000/collapse-arrow.png'  alt='collapse' /> :
                                 <img className={classes.expand_collapse_img} src='https://img.icons8.com/material-rounded/24/000000/more-than.png' alt='expand' />
                             )
