@@ -17,17 +17,41 @@ const Plan = (props) => {
     const [showForm, setShowForm] = useState(false);
     const [isClockActive, setIsClockActive] = useState(false);
     const [seconds, setSeconds] = useState(props.plan.seconds);
-
+    const [secondsBeforeStart, setSecondsBeforeStart] = useState(props.plan.seconds);
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
     }
 
+    const getAllParentPlans = (cur_plan, parent_plans_ids_seconds) => {
+        if(cur_plan.parent !== "") {
+            let parent_plan = props.all_plans.get(cur_plan.parent);
+            parent_plans_ids_seconds = [...parent_plans_ids_seconds, [cur_plan.parent, parent_plan.seconds]];
+            parent_plans_ids_seconds = getAllParentPlans(parent_plan, parent_plans_ids_seconds);
+        }
+        return parent_plans_ids_seconds;
+    }
+
     const clockToggleHandler = () => {
-        // Upload the time to database after stopping the timer
+        // Upload the latest time to database after stopping the timer
+        // Update both current plan and its parent plans
         if(isClockActive) {
+            // Update current plan
             console.log("Updating the database...");
             axios.put(`/plans/${props.plan_id}/seconds.json`, seconds);
+
+            // Update parent plans
+            const addedSeconds = seconds - secondsBeforeStart;
+            setSecondsBeforeStart(secondsBeforeStart => seconds);
+
+            let parent_plans_ids_seconds = []
+            parent_plans_ids_seconds = getAllParentPlans(props.plan, parent_plans_ids_seconds)
+
+            for(let i = 0; i < parent_plans_ids_seconds.length; i++) {
+                let plan_id = parent_plans_ids_seconds[i][0];
+                let seconds = parent_plans_ids_seconds[i][1];
+                axios.put(`/plans/${plan_id}/seconds.json`, seconds+addedSeconds);
+            }
         }
         setIsClockActive(isClockActive => !isClockActive);
     }
