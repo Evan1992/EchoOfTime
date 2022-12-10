@@ -16,7 +16,8 @@ import classes from './Plan.module.css'
 const Plan = (props) => {
     const [showForm, setShowForm] = useState(false);
     const [isClockActive, setIsClockActive] = useState(false);
-    const [seconds, setSeconds] = useState(0);
+    const [seconds, setSeconds] = useState(props.plan.seconds);
+
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
