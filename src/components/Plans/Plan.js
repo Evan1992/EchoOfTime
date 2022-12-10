@@ -25,6 +25,7 @@ const Plan = (props) => {
     const clockToggleHandler = () => {
         // Upload the time to database after stopping the timer
         if(isClockActive) {
+            console.log("Updating the database...");
             axios.put(`/plans/${props.plan_id}/seconds.json`, seconds);
         }
         setIsClockActive(isClockActive => !isClockActive);

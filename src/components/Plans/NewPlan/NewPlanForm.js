@@ -43,10 +43,12 @@ const NewPlanForm = (props) => {
         if (typeof props.parent !== 'undefined') {
             let parent_plan = props.parent_plan;
             if(!parent_plan.children) {
+                console.log("Updating the database...");
                 axios.put(`/plans/${props.parent}/children/${child_id}.json`, 1);
             } else {
                 // Count the length of josn objects
                 let keyCount  = Object.keys(parent_plan.children).length;
+                console.log("Updating the database...");
                 axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1);
             }
         }  
