@@ -139,7 +139,7 @@ export default Plans
 /* useCallback */
 // We can sepcify the dependency of the function called in useEffect, here, the dependency is the
 // function itself. The function as an object, will change, and it results in infinite loop. We
-// wrap the function in the useCallback hook
+// wrap the function in the useCallback hook to prevent infinite loop.
 
 /* Pass function with parameters to child component */
 // pass the function like the below will call the function directly
