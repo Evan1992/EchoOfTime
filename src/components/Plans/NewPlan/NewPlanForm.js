@@ -49,7 +49,11 @@ const NewPlanForm = (props) => {
                 // Count the length of josn objects
                 let keyCount  = Object.keys(parent_plan.children).length;
                 console.log("Updating the database...");
-                axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1);
+                axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1)
+                .then(() => {
+                    // Reload the page
+                    window.location.reload(false);
+                })
             }
         }  
     }
