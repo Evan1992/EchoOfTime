@@ -9,6 +9,7 @@ import Timer from '../Timer/Timer';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import Calendar from 'react-calendar';
 
 /* ========== import css ========== */
 import classes from './Plan.module.css'
