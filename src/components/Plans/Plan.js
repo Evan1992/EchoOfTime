@@ -16,12 +16,18 @@ import classes from './Plan.module.css'
 
 const Plan = (props) => {
     const [showForm, setShowForm] = useState(false);
+    const [showCalendar, setShowCalendar] = useState(false);
     const [isClockActive, setIsClockActive] = useState(false);
     const [seconds, setSeconds] = useState(props.plan.seconds);
     const [secondsBeforeStart, setSecondsBeforeStart] = useState(props.plan.seconds);
+    const [_date, setDate] = useState("");
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
+    }
+
+    const calendarToggleHandler = () => {
+        setShowCalendar(showCalendar => !showCalendar)
     }
 
     const getAllParentPlans = (cur_plan, parent_plans_ids_seconds) => {
@@ -51,10 +57,20 @@ const Plan = (props) => {
             for(let i = 0; i < parent_plans_ids_seconds.length; i++) {
                 let plan_id = parent_plans_ids_seconds[i][0];
                 let seconds = parent_plans_ids_seconds[i][1];
+                console.log("Updating the database...")
                 axios.put(`/plans/${plan_id}/seconds.json`, seconds+addedSeconds);
             }
         }
         setIsClockActive(isClockActive => !isClockActive);
+    }
+
+    const dateChangeHandler = (date) => {
+        // Show the date on the page
+        setDate(_date => date.toISOString().slice(0,10));
+
+        // Update the plan with the date
+        console.log("Updating the database...");
+        axios.put(`/plans/${props.plan_id}/date.json`, {val: date.toISOString().slice(0,10)})
     }
 
     return (
@@ -88,6 +104,21 @@ const Plan = (props) => {
                     <Timer seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
                 </Col>
 
+                <Col xs={1}>
+                    <div>{_date}</div>
+                </Col>
+
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_calendar_icon} onClick={calendarToggleHandler} src="https://img.icons8.com/windows/32/000000/calendar.png" alt='calendar' />
+                    {showCalendar &&
+                        <React.Fragment>
+                            <div className={classes.plan_calendar}>
+                                <Calendar onChange={dateChangeHandler}/>
+                            </div>
+                        </React.Fragment>
+                    }
+                </Col>
+
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_clock_button} onClick={clockToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
                 </Col>
@@ -119,3 +150,9 @@ const Plan = (props) => {
 }
 
 export default Plan;
+
+
+/* ========== Learning ========== */
+/* axios update string value */
+// For some reasons, axios.put cannot update string value though it
+// can update number/boolean value directly

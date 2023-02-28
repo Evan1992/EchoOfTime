@@ -32,3 +32,22 @@
 .plan_clock_button:hover{
     transform: scale(1.8);
 }
+
+.plan_calendar{
+    position:fixed;
+    top: 20%;
+    right: 10%;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.plan_calendar_icon {
+    vertical-align: middle;
+    width:20px;
+    height:20px;
+}
+
+.plan_calendar_icon:hover {
+    filter: opacity(0.3);
+    transform: scale(1.5);
+}
