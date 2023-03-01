@@ -74,6 +74,21 @@ const Plan = (props) => {
         axios.put(`/plans/${props.plan_id}/date.json`, {val: date.toISOString().slice(0,10)})
     }
 
+    const dateTransformHandler = (date) => {
+        const cur_date = new Date().toISOString().slice(0,10)
+        const cur_date_to_time = new Date(cur_date).getTime()
+        const plan_date_to_time = new Date(date).getTime()
+        if(plan_date_to_time - cur_date_to_time === -86400000){
+            return "Yesterday"
+        } else if(plan_date_to_time - cur_date_to_time === 0) {
+            return "Today"
+        } else if(plan_date_to_time - cur_date_to_time === 86400000) {
+            return "Tomorrow"
+        } else {
+            return date
+        }
+    }
+
     return (
         <React.Fragment>
             <Row>
@@ -106,7 +121,7 @@ const Plan = (props) => {
                 </Col>
 
                 <Col xs={1}>
-                    <div>{_date}</div>
+                    <div>{dateTransformHandler(_date)}</div>
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>
