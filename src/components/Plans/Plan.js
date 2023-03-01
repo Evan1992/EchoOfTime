@@ -20,7 +20,7 @@ const Plan = (props) => {
     const [isClockActive, setIsClockActive] = useState(false);
     const [seconds, setSeconds] = useState(props.plan.seconds);
     const [secondsBeforeStart, setSecondsBeforeStart] = useState(props.plan.seconds);
-    const [_date, setDate] = useState("");
+    const [_date, setDate] = useState(props.plan.date.val);
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
