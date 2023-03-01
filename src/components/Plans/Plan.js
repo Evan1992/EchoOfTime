@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from '../../axios';
 import NewPlanForm from './NewPlan/NewPlanForm'
 import Timer from '../Timer/Timer';
+import Backdrop from '../UI/Backdrop';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
@@ -112,6 +113,7 @@ const Plan = (props) => {
                     <img className={classes.plan_calendar_icon} onClick={calendarToggleHandler} src="https://img.icons8.com/windows/32/000000/calendar.png" alt='calendar' />
                     {showCalendar &&
                         <React.Fragment>
+                            <Backdrop onClick={calendarToggleHandler} />
                             <div className={classes.plan_calendar}>
                                 <Calendar onChange={dateChangeHandler}/>
                             </div>
