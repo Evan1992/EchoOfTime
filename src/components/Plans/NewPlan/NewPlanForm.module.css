@@ -1,3 +1,7 @@
+.control {
+    z-index: 100;
+}
+
 .control input {
     width: 250px;
     background:lightgray;

@@ -1,5 +1,7 @@
-/* ========== import React and React hooks ========== */
 import React, { useRef } from 'react';
+
+/* ========== import react components ========== */
+import Backdrop from '../../UI/Backdrop';
 
 /* ========== import other libraries ========== */
 import axios from '../../../axios'
@@ -59,11 +61,14 @@ const NewPlanForm = (props) => {
     }
     
     return(
-        <div className={classes.control}>
-            <input type="text" ref={input_plan} />
-            <button onClick={postPlanHandler}>Add</button>
-            <button onClick={props.form_toggler}>Cancel</button>
-        </div>
+        <React.Fragment>
+            <Backdrop onClick={props.form_toggler} />
+            <div className={classes.control}>
+                <input type="text" ref={input_plan} />
+                <button onClick={postPlanHandler}>Add</button>
+                <button onClick={props.form_toggler}>Cancel</button>
+            </div>
+        </React.Fragment>
     )
 }
 
