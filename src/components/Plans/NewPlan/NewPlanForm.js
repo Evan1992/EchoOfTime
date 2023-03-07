@@ -37,8 +37,8 @@ const NewPlanForm = (props) => {
             const child_id = data.name;
 
             // Update parent if current plan is a child plan
-            updateParentPlan(child_id);
-        })   
+            updateParentPlan(child_id)
+        });
     }
 
     const updateParentPlan = (child_id) => {
@@ -46,18 +46,26 @@ const NewPlanForm = (props) => {
             let parent_plan = props.parent_plan;
             if(!parent_plan.children) {
                 console.log("Updating the database...");
-                axios.put(`/plans/${props.parent}/children/${child_id}.json`, 1);
+                axios.put(`/plans/${props.parent}/children/${child_id}.json`, 1)
+                .then(() => {
+                    refershPage();
+                })
             } else {
                 // Count the length of josn objects
                 let keyCount  = Object.keys(parent_plan.children).length;
                 console.log("Updating the database...");
                 axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1)
                 .then(() => {
-                    // Reload the page
-                    window.location.reload(false);
+                    refershPage();
                 })
             }
-        }  
+        } else {
+            refershPage();
+        }
+    }
+
+    const refershPage = () => {
+        window.location.reload();
     }
     
     return(
