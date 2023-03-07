@@ -47,12 +47,16 @@ const Plans = () => {
         return ordered_plans;
     }
 
+    // this function get called when hiding all the children plans
     const getToChangePlanIds = (plan_id, to_change_plan_ids) => {
         const cur_plan = plans.get(plan_id);
         if("children" in cur_plan) {
             for(const child_id in cur_plan.children) {
-                to_change_plan_ids = [...to_change_plan_ids, child_id];
-                to_change_plan_ids = getToChangePlanIds(child_id, to_change_plan_ids)
+                // If child plan is not shown, stop adding the child id the to_change_plan_ids list
+                if(plans.get(child_id).show_plan) {
+                    to_change_plan_ids = [...to_change_plan_ids, child_id];
+                    to_change_plan_ids = getToChangePlanIds(child_id, to_change_plan_ids)
+                }
             }
         }
         return to_change_plan_ids;
