@@ -89,6 +89,41 @@ const Plan = (props) => {
         }
     }
 
+    // Delete current plan and all its children plans
+    const deletePlanHandler = () => {
+        // DFS(Depth first search) to get current plan and all its children plans
+        let cur_plans = [props.plan]
+        let deleted_plans = [props.plan_id]
+        while(cur_plans.length !== 0) {
+            const cur_plan = cur_plans.pop();
+            for(let child_plan_id in cur_plan.children) {
+                deleted_plans.push(child_plan_id)
+                cur_plans.push(props.all_plans.get(child_plan_id))
+            }
+        }
+
+        deleted_plans.forEach(plan => {
+            console.log("Updating the database...");
+            axios.delete(`/plans/${plan}.json`);
+        })
+
+        // Update parent plan if have
+        if(props.plan.parent !== "") {
+            console.log("Updating the database...");
+            let new_children = {};
+            const parent_plan = props.all_plans.get(props.plan.parent);
+            let count = 1;
+            for(let child in parent_plan.children){
+                if(child !== props.plan_id) {
+                    new_children[child] = count;
+                    count = count + 1;
+                }
+            }
+
+            axios.put(`/plans/${props.plan.parent}/children.json`, new_children);
+        }
+    }
+
     return (
         <React.Fragment>
             <Row>
@@ -138,6 +173,11 @@ const Plan = (props) => {
 
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_clock_button} onClick={clockToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
+                </Col>
+
+                {/* Delete a plan */}
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
                 </Col>
             </Row>
 

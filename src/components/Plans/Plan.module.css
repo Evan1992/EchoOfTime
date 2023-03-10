@@ -23,13 +23,17 @@
     transform: scale(1.8);
 }
 
-.plan_clock_button{
+/* Set one CSS for two tags */
+.plan_clock_button,
+.plan_deletion_button{
     vertical-align: middle;
     width:20px;
     height:20px;
 }
 
-.plan_clock_button:hover{
+/* Set one CSS for two tags */
+.plan_clock_button:hover,
+.plan_deletion_button:hover{
     transform: scale(1.8);
 }
 
