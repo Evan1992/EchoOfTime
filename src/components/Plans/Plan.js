@@ -22,6 +22,8 @@ const Plan = (props) => {
     const [seconds, setSeconds] = useState(props.plan.seconds);
     const [secondsBeforeStart, setSecondsBeforeStart] = useState(props.plan.seconds);
     const [_date, setDate] = useState(props.plan.date.val);
+    const [planDeleted, setPlanDeleted] = useState(false);
+    const [parentPlanUpdated, setParentPlanUpdated] = useState(false);
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
@@ -104,7 +106,12 @@ const Plan = (props) => {
 
         deleted_plans.forEach(plan => {
             console.log("Updating the database...");
-            axios.delete(`/plans/${plan}.json`);
+            axios.delete(`/plans/${plan}.json`)
+            .then(response => {
+                if(response.status === 200) {
+                    setPlanDeleted(true);
+                }
+            })
         })
 
         // Update parent plan if have
@@ -120,8 +127,21 @@ const Plan = (props) => {
                 }
             }
 
-            axios.put(`/plans/${props.plan.parent}/children.json`, new_children);
+            axios.put(`/plans/${props.plan.parent}/children.json`, new_children)
+            .then(response => {
+                if(response.status === 200) {
+                    setParentPlanUpdated(true);
+                }
+            })
         }
+    }
+
+    if(planDeleted === true && parentPlanUpdated === true) {
+        setPlanDeleted(false)
+        setParentPlanUpdated(false)
+
+        // Refresh the page
+        window.location.reload();
     }
 
     return (
