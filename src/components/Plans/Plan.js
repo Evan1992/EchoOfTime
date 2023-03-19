@@ -133,6 +133,8 @@ const Plan = (props) => {
                     setParentPlanUpdated(true);
                 }
             })
+        } else {
+            setParentPlanUpdated(true);
         }
     }
 
