@@ -25,7 +25,8 @@
 
 /* Set one CSS for two tags */
 .plan_clock_button,
-.plan_deletion_button{
+.plan_deletion_button,
+.plan_check_button{
     vertical-align: middle;
     width:20px;
     height:20px;
@@ -33,7 +34,8 @@
 
 /* Set one CSS for two tags */
 .plan_clock_button:hover,
-.plan_deletion_button:hover{
+.plan_deletion_button:hover,
+.plan_check_button:hover{
     transform: scale(1.8);
 }
 

@@ -138,6 +138,32 @@ const Plan = (props) => {
         }
     }
 
+    // Check current plan and all its children plans
+    const checkPlanHandler = () => {
+        // DFS(Depth first search) to get current plan and all its children plans
+        let cur_plans = [props.plan]
+        let checked_plans = []
+        while(cur_plans.length !== 0) {
+            const cur_plan = cur_plans.pop();
+            checked_plans.push(cur_plan)
+            for(let child_plan_id in cur_plan.children) {
+                cur_plans.push(props.all_plans.get(child_plan_id))
+            }
+        }
+
+        // Post the plan and its children plans to history_plans
+        checked_plans.forEach(plan => {
+            const cur_date = new Date().toISOString().slice(0,10)
+
+            // Use the completion date for categorizing the history plans
+            console.log("Updating the database...");
+            axios.post(`/history_plans/${cur_date}.json`, plan);
+        })
+
+        // Delete the plan and its children plans from active_plans
+        deletePlanHandler();
+    }
+
     if(planDeleted === true && parentPlanUpdated === true) {
         setPlanDeleted(false)
         setParentPlanUpdated(false)
@@ -200,6 +226,11 @@ const Plan = (props) => {
                 {/* Delete a plan */}
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
+                </Col>
+
+                {/* Check a plan */}
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                 </Col>
             </Row>
 
