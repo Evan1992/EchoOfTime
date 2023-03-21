@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 /* ========== import React components ========== */
 import Layout from './components/Layout/Layout';
 import Plans from './components/Plans/Plans';
+import LongTermPlan from './components/Plans/LongTermPlans/LongTermPlan';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage.js';
 import AuthContext from './store/auth-context';
@@ -27,7 +28,7 @@ const App = () => {
             )}
             
             {isLoggedIn && (
-              <Route path='/' element={<Plans />} />
+              <Route path='/' element={<LongTermPlan />} />
             )}
 
             {isLoggedIn && (
