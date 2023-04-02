@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 /* ========== import react components ========== */
-import axios from '../../axios';
-import NewPlanForm from './NewPlan/NewPlanForm'
-import Timer from '../Timer/Timer';
-import Backdrop from '../UI/Backdrop';
+import axios from '../../../axios';
+import NewPlanForm from '../NewPlan/NewPlanForm'
+import Timer from '../../Timer/Timer';
+import Backdrop from '../../UI/Backdrop';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';

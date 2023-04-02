@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 /* ========== import React components ========== */
 import Plan from './Plan'
-import NewPlan from './NewPlan/NewPlan'
+import NewPlan from '../NewPlan/NewPlan'
 
 /* ========== import other libraries ========== */
 import axios from 'axios';
