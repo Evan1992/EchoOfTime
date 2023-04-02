@@ -48,7 +48,7 @@ const NewPlanForm = (props) => {
                 console.log("Updating the database...");
                 axios.put(`/plans/${props.parent}/children/${child_id}.json`, 1)
                 .then(() => {
-                    refershPage();
+                    refreshPage();
                 })
             } else {
                 // Count the length of josn objects
@@ -56,15 +56,15 @@ const NewPlanForm = (props) => {
                 console.log("Updating the database...");
                 axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1)
                 .then(() => {
-                    refershPage();
+                    refreshPage();
                 })
             }
         } else {
-            refershPage();
+            refreshPage();
         }
     }
 
-    const refershPage = () => {
+    const refreshPage = () => {
         window.location.reload();
     }
     
