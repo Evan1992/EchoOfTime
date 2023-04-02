@@ -30,6 +30,9 @@ const NewLongTermPlan = () => {
         axios.post(`/plans.json`, target)
         .then(res => {
             setIsLoading(false);
+            
+            // Refresh the page after posting the data
+            window.location.reload();
         })
     }
 
