@@ -7,24 +7,24 @@ import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
 import axios from 'axios';
 
 const LongTermPlan = () => {
-    // plans is map, key is the plan_id, value is the plan object
-    const [plans, setPlans] = useState(new Map());
+    // plan is empty object
+    const [plan, setPlan] = useState({});
     const [isFetch, setIsFetch] = useState(false);
 
     // get data from database function
     const fetchPlansHandler = useCallback(async () => {
-        let _plans = new Map();
+        let _plan = {};
 
         if(!isFetch){
             const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/plans.json');
             const data = response.data;
             if(data != null){
                 for (let index in data) {
-                    _plans.set(index, data[index]);
+                    _plan = data[index];
                 }
             }
             setIsFetch(true);
-            setPlans(plans => _plans);
+            setPlan(plan => _plan)
         }
     }, [isFetch])
 
@@ -35,8 +35,8 @@ const LongTermPlan = () => {
 
     return (
         <React.Fragment>
-            {plans.size === 0 &&
-                <NewLongTermPlan />   
+            {Object.keys(plan).length === 0 &&
+                <NewLongTermPlan />
             }
         </React.Fragment>
     )
