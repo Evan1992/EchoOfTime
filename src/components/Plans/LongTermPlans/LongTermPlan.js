@@ -6,6 +6,9 @@ import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
 /* ========== import other libraries ========== */
 import axios from 'axios';
 
+/* ========== import css ========== */
+import classes from './LongTermPlan.module.css';
+
 const LongTermPlan = () => {
     // plan is empty object
     const [plan, setPlan] = useState({});
@@ -38,8 +41,20 @@ const LongTermPlan = () => {
             {Object.keys(plan).length === 0 &&
                 <NewLongTermPlan />
             }
+
+            {Object.keys(plan).length > 0 &&
+                <section className={classes.card}>
+                    <h3>Marathon</h3>
+                    <h5>{plan['title']}</h5>
+                    <div>{plan['description']}</div>
+                </section>
+            }
         </React.Fragment>
     )
 }
 
 export default LongTermPlan
+
+/* ========== Learning ========== */
+/* html tag span vs div */
+// A div is a block element; a span is an inline element
