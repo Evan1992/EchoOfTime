@@ -25,7 +25,8 @@ const NewLongTermPlan = () => {
             complete: false,
             title: enteredTitle,
             description: enteredDescription,
-            date: new Date().toISOString().slice(0,10)
+            date: new Date().toISOString().slice(0,10),
+            short_term_plans: {}
         };
         axios.post(`/long_term_plans.json`, target)
         .then(res => {
