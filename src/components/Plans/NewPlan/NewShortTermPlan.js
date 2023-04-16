@@ -26,7 +26,8 @@ const NewShortTermPlan = (props) => {
             description: enteredDescription,
             date: new Date().toISOString().slice(0,10)
         };
-        console.log(props.long_term_plan_id);
+
+        console.log("Updating the database...");
         axios.post(`/long_term_plans/${props.long_term_plan_id}/short_term_plans.json`, target)
         .then(res => {
             setIsLoading(false);
