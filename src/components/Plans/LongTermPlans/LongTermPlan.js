@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 
 /* ========== import React components ========== */
 import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
+import ShortTermPlans from '../ShortTermPlans/ShortTermPlans'
 
 /* ========== import other libraries ========== */
 import axios from 'axios';
@@ -11,11 +12,13 @@ import classes from './LongTermPlan.module.css';
 
 const LongTermPlan = () => {
     // plan is empty object
+    const [planId, setPlanId] = useState("");
     const [plan, setPlan] = useState({});
     const [isFetch, setIsFetch] = useState(false);
 
     // get data from database function
     const fetchPlansHandler = useCallback(async () => {
+        let plan_id = "";
         let _plan = {};
 
         if(!isFetch){
@@ -23,11 +26,13 @@ const LongTermPlan = () => {
             const data = response.data;
             if(data != null){
                 for (let index in data) {
+                    plan_id = index;
                     _plan = data[index];
                 }
             }
             setIsFetch(true);
-            setPlan(plan => _plan)
+            setPlanId(planId => plan_id);
+            setPlan(plan => _plan);
         }
     }, [isFetch])
 
@@ -43,11 +48,14 @@ const LongTermPlan = () => {
             }
 
             {Object.keys(plan).length > 0 &&
-                <section className={classes.card}>
-                    <h3>Marathon</h3>
-                    <h5>{plan['title']}</h5>
-                    <div>{plan['description']}</div>
-                </section>
+                <div>
+                    <section className={classes.card}>
+                        <h3>Marathon</h3>
+                        <h5>{plan['title']}</h5>
+                        <div>{plan['description']}</div>
+                    </section>
+                    <ShortTermPlans long_term_plan_id={planId} long_term_plan={plan}/>
+                </div>
             }
         </React.Fragment>
     )
