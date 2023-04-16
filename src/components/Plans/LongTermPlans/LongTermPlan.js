@@ -19,7 +19,7 @@ const LongTermPlan = () => {
         let _plan = {};
 
         if(!isFetch){
-            const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/plans.json');
+            const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/long_term_plans.json');
             const data = response.data;
             if(data != null){
                 for (let index in data) {

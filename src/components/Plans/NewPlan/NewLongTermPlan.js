@@ -27,7 +27,7 @@ const NewLongTermPlan = () => {
             description: enteredDescription,
             date: new Date().toISOString().slice(0,10)
         };
-        axios.post(`/plans.json`, target)
+        axios.post(`/long_term_plans.json`, target)
         .then(res => {
             setIsLoading(false);
             
