@@ -5,6 +5,7 @@ import axios from 'axios';
 
 /* ========== import React components ========== */
 import NewShortTermPlan from '../NewPlan/NewShortTermPlan';
+import Plans from '../Plans/Plans';
 
 /* ========== import css ========== */
 import classes from './ShortTermPlans.module.css';
@@ -52,6 +53,10 @@ const ShortTermPlans = (props) => {
 
             {Object.keys(plan).length > 0 &&
                 showShortTermPlan
+            }
+
+            {Object.keys(plan).length > 0 &&
+                <Plans />
             }
         </React.Fragment>   
     )
