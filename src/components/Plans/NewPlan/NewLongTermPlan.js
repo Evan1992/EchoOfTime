@@ -22,12 +22,12 @@ const NewLongTermPlan = () => {
         setIsLoading(true);
 
         const target = {
-            complete: false,
             title: enteredTitle,
             description: enteredDescription,
             date: new Date().toISOString().slice(0,10),
             short_term_plans: {}
         };
+        console.log("Updating the database...");
         axios.post(`/long_term_plans/active_plans.json`, target)
         .then(res => {
             setIsLoading(false);
