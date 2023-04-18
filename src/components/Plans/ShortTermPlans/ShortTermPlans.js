@@ -31,6 +31,14 @@ const ShortTermPlans = (props) => {
         }
     }, [isFetch, props.long_term_plan_id])
 
+    const showShortTermPlan = (
+        <section className={classes.card}>
+            <h3>Sprint</h3>
+            <h5>{plan['title']}</h5>
+            <div>{plan['description']}</div>
+        </section>
+    )
+
     // get the data from database as soon as user visit the home page
     useEffect(() => {
         fetchPlansHandler();
@@ -43,11 +51,7 @@ const ShortTermPlans = (props) => {
             }
 
             {Object.keys(plan).length > 0 &&
-                <section className={classes.card}>
-                    <h3>Sprint</h3>
-                    <h5>{plan['title']}</h5>
-                    <div>{plan['description']}</div>
-                </section>
+                showShortTermPlan
             }
         </React.Fragment>   
     )
