@@ -21,7 +21,6 @@ const NewShortTermPlan = (props) => {
         setIsLoading(true);
 
         const target = {
-            complete: false,
             title: enteredTitle,
             description: enteredDescription,
             date: new Date().toISOString().slice(0,10)
