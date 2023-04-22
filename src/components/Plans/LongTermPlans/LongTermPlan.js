@@ -5,7 +5,7 @@ import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
 import ShortTermPlans from '../ShortTermPlans/ShortTermPlans'
 
 /* ========== import other libraries ========== */
-import axios from 'axios';
+import axios from '../../../axios'
 
 /* ========== import css ========== */
 import classes from './LongTermPlan.module.css';
@@ -22,7 +22,7 @@ const LongTermPlan = () => {
         let _plan = {};
 
         if(!isFetch){
-            const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/long_term_plans/active_plans.json');
+            const response = await axios.get('/long_term_plans/active_plans.json');
             const data = response.data;
             if(data != null){
                 for (let index in data) {
