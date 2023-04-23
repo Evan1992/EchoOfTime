@@ -5,7 +5,7 @@ import axios from '../../../axios'
 
 /* ========== import React components ========== */
 import NewShortTermPlan from '../NewPlan/NewShortTermPlan';
-import Plans from '../Plans/Plans';
+import Plans from '../DailyPlans/Plans';
 
 /* ========== import css ========== */
 import classes from './ShortTermPlans.module.css';
