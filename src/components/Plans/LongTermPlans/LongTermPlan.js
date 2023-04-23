@@ -36,10 +36,29 @@ const LongTermPlan = () => {
         }
     }, [isFetch])
 
+    const archivePlan = () => {
+        // Migrate the plan from active_plans to history_plans
+        console.log("Updating the database...");
+        axios.post(`/long_term_plans/history_plans.json`, plan);
+
+        // Delete the plan in active_plans
+        console.log("Updating the database...");
+        axios.delete(`/long_term_plans/active_plans/${planId}.json`)
+        .then(response => {
+            if(response.status === 200) {
+                // Refresh the page
+                window.location.reload();
+            }
+        })
+    }
+
     const showLongTermPlan = (
         <div>
             <section className={classes.card}>
-                <h3>Marathon</h3>
+                <div>
+                    <h3>Marathon</h3>
+                    <button onClick={archivePlan}>Done</button>
+                </div>
                 <h5>{plan['title']}</h5>
                 <div>{plan['description']}</div>
             </section>
