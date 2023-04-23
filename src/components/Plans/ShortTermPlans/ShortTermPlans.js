@@ -79,7 +79,7 @@ const ShortTermPlans = (props) => {
             }
 
             {Object.keys(plan).length > 0 &&
-                <Plans />
+                <Plans long_term_plan_id={props.long_term_plan_id} short_term_plan_id={planId} />
             }
         </React.Fragment>   
     )

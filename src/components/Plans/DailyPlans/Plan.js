@@ -48,7 +48,7 @@ const Plan = (props) => {
         if(isClockActive) {
             // Update current plan
             console.log("Updating the database...");
-            axios.put(`/plans/${props.plan_id}/seconds.json`, seconds);
+            axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/seconds.json`, seconds);
 
             // Update parent plans
             const addedSeconds = seconds - secondsBeforeStart;
@@ -60,8 +60,8 @@ const Plan = (props) => {
             for(let i = 0; i < parent_plans_ids_seconds.length; i++) {
                 let plan_id = parent_plans_ids_seconds[i][0];
                 let seconds = parent_plans_ids_seconds[i][1];
-                console.log("Updating the database...")
-                axios.put(`/plans/${plan_id}/seconds.json`, seconds+addedSeconds);
+                console.log("Updating the database...");
+                axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${plan_id}/seconds.json`, seconds+addedSeconds);
             }
         }
         setIsClockActive(isClockActive => !isClockActive);
@@ -73,7 +73,7 @@ const Plan = (props) => {
 
         // Update the plan with the date
         console.log("Updating the database...");
-        axios.put(`/plans/${props.plan_id}/date.json`, {val: date.toISOString().slice(0,10)})
+        axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/date.json`, {val: date.toISOString().slice(0,10)});
     }
 
     const dateTransformHandler = (date) => {
@@ -106,7 +106,7 @@ const Plan = (props) => {
 
         deleted_plans.forEach(plan => {
             console.log("Updating the database...");
-            axios.delete(`/plans/${plan}.json`)
+            axios.delete(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${plan}.json`)
             .then(response => {
                 if(response.status === 200) {
                     setPlanDeleted(true);
@@ -116,7 +116,6 @@ const Plan = (props) => {
 
         // Update parent plan if have
         if(props.plan.parent !== "") {
-            console.log("Updating the database...");
             let new_children = {};
             const parent_plan = props.all_plans.get(props.plan.parent);
             let count = 1;
@@ -127,7 +126,8 @@ const Plan = (props) => {
                 }
             }
 
-            axios.put(`/plans/${props.plan.parent}/children.json`, new_children)
+            console.log("Updating the database...");
+            axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan.parent}/children.json`, new_children)
             .then(response => {
                 if(response.status === 200) {
                     setParentPlanUpdated(true);
@@ -153,11 +153,9 @@ const Plan = (props) => {
 
         // Post the plan and its children plans to history_plans
         checked_plans.forEach(plan => {
-            const cur_date = new Date().toISOString().slice(0,10)
-
             // Use the completion date for categorizing the history plans
             console.log("Updating the database...");
-            axios.post(`/history_plans/${cur_date}.json`, plan);
+            axios.post(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/history_plans.json`, plan);
         })
 
         // Delete the plan and its children plans from active_plans
@@ -242,7 +240,9 @@ const Plan = (props) => {
                             <Col xs={1}></Col>
                             {/* <Col xs="auto"><div style={{width: `calc(20px + ${data.rank} * 20px)`}}></div></Col> */}
                             <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
-                                <NewPlanForm 
+                                <NewPlanForm
+                                    long_term_plan_id={props.long_term_plan_id}
+                                    short_term_plan_id={props.short_term_plan_id}
                                     form_toggler={formToggleHandler}
                                     parent_plan={props.plan}
                                     parent={props.plan_id}

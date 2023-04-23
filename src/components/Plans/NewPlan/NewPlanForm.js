@@ -31,7 +31,7 @@ const NewPlanForm = (props) => {
             seconds: 0,
         }
 
-        axios.post(`/plans.json`, target)
+        axios.post(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans.json`, target)
         .then(response => {
             const data = response.data;
             const child_id = data.name;
@@ -46,15 +46,16 @@ const NewPlanForm = (props) => {
             let parent_plan = props.parent_plan;
             if(!parent_plan.children) {
                 console.log("Updating the database...");
-                axios.put(`/plans/${props.parent}/children/${child_id}.json`, 1)
+                axios.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.parent}/children/${child_id}.json`, 1)
                 .then(() => {
                     refreshPage();
                 })
             } else {
-                // Count the length of josn objects
+                // Count the length of json objects
                 let keyCount  = Object.keys(parent_plan.children).length;
                 console.log("Updating the database...");
-                axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1)
+                // axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1)
+                axios.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.parent}/children/${child_id}.json`, keyCount+1)
                 .then(() => {
                     refreshPage();
                 })

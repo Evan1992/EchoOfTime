@@ -11,7 +11,7 @@ import Col from 'react-bootstrap/Col';
 /* ========== import corresponding css ========== */
 import classes from './NewPlan.module.css'
 
-const NewPlan = () => {
+const NewPlan = (props) => {
     const [showForm, setShowForm] = useState(false);
     const showPlan = true;
 
@@ -32,6 +32,8 @@ const NewPlan = () => {
                     <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
                         <NewPlanForm
                             // Here, plan is root plan and show_plan is set to true by default
+                            long_term_plan_id={props.long_term_plan_id}
+                            short_term_plan_id={props.short_term_plan_id}
                             show_plan={showPlan}
                             form_toggler={formToggleHandler}
                         />

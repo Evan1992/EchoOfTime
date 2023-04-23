@@ -23,7 +23,8 @@ const NewShortTermPlan = (props) => {
         const target = {
             title: enteredTitle,
             description: enteredDescription,
-            date: new Date().toISOString().slice(0,10)
+            date: new Date().toISOString().slice(0,10),
+            daily_plans: {}
         };
 
         console.log("Updating the database...");

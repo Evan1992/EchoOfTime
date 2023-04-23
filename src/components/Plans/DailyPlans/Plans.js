@@ -5,7 +5,7 @@ import Plan from './Plan'
 import NewPlan from '../NewPlan/NewPlan'
 
 /* ========== import other libraries ========== */
-import axios from 'axios';
+import axios from '../../../axios'
 import Container from 'react-bootstrap/Container';
 
 
@@ -13,7 +13,7 @@ import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import classes from './Plans.module.css';
 
-const Plans = () => {
+const Plans = (props) => {
     // plans is map, key is the plan_id, value is the plan object
     const [plans, setPlans] = useState(new Map());
     // ordered_plans is a 2D array, each element is [plan_id, plan]
@@ -24,7 +24,7 @@ const Plans = () => {
     const fetchPlansHandler = useCallback(async () => {
         let _plans = new Map();
         if(!isFetch){
-            const response = await axios.get('https://sound-of-time-2-default-rtdb.firebaseio.com/plans.json');
+            const response = await axios.get(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans.json`);
             const data = response.data;
             for (let index in data) {
                 _plans.set(index, data[index]);
@@ -35,7 +35,7 @@ const Plans = () => {
             // Set plans all in one time
             setPlans(plans => _plans);
         }
-    }, [isFetch])
+    }, [isFetch, props.long_term_plan_id, props.short_term_plan_id])
 
     const setOrderedPlansHandler = (plan, ordered_plans) => {
         if("children" in plan) {
@@ -108,7 +108,6 @@ const Plans = () => {
             })
             setOrderedPlans(ordered_plans => _ordered_plans);
         }
-
     }
 
     return (
@@ -121,12 +120,24 @@ const Plans = () => {
                             if("children" in element[1]) {
                                 show_children = plans.get(Object.keys(element[1].children)[0]).show_plan;
                             }
-                            return <Plan key={element[0]} all_plans={plans} plan_id={element[0]} plan={element[1]} show_children={show_children} childrenToggleHandler={event => childrenToggleHandler(event, element[0])} />
+                            return <Plan
+                                        long_term_plan_id={props.long_term_plan_id}
+                                        short_term_plan_id={props.short_term_plan_id}
+                                        key={element[0]}
+                                        all_plans={plans}
+                                        plan_id={element[0]} 
+                                        plan={element[1]}
+                                        show_children={show_children}
+                                        childrenToggleHandler={event => childrenToggleHandler(event, element[0])}
+                                    />
                         }
                         return <div key={element[0]} />
                     })
                 }
-                <NewPlan />
+                <NewPlan 
+                    long_term_plan_id={props.long_term_plan_id}
+                    short_term_plan_id={props.short_term_plan_id}
+                />
             </Container>
         </div>
     )
