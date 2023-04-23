@@ -90,6 +90,8 @@ export default ShortTermPlans
 /* ========== Learning ========== */
 /* Posting data and asynchronous call */
 // If we write code like below, the database won't be updated and the page get refreshed.
+// This is because the http request is sent to the backend, but before the response get back
+// to the requester, the page is already refreshed, so the TCP handshake is not completely done.
     /* 
         axios.put(...);
         window.location.reload();
