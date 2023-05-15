@@ -21,6 +21,8 @@ const Plan = (props) => {
     const [isClockActive, setIsClockActive] = useState(false);
     const [seconds, setSeconds] = useState(props.plan.seconds);
     const [secondsBeforeStart, setSecondsBeforeStart] = useState(props.plan.seconds);
+    const [expectedHours, setExpectedHours] = useState(props.plan.expected_hours);
+    const [expectedMinutes, setExpectedMinutes] = useState(props.plan.expected_minutes);
     const [_date, setDate] = useState(props.plan.date.val);
     const [planDeleted, setPlanDeleted] = useState(false);
     const [parentPlanUpdated, setParentPlanUpdated] = useState(false);
@@ -162,6 +164,18 @@ const Plan = (props) => {
         deletePlanHandler();
     }
 
+    // Set the expected time to complete a task
+    const expectedHoursChangeHandler = (event) => {
+        setExpectedHours(expectedHours => event.target.value);
+        console.log("Updating the database...");
+        axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/expected_hours.json`, event.target.value);
+    }
+    const expectedMinutesChangeHandler = (event) => {
+        setExpectedMinutes(expectedMinutes => event.target.value);
+        console.log("Updating the database...");
+        axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/expected_minutes.json`, event.target.value);
+    }
+
     if(planDeleted === true && parentPlanUpdated === true) {
         setPlanDeleted(false)
         setParentPlanUpdated(false)
@@ -195,6 +209,13 @@ const Plan = (props) => {
 
                 <Col xs="auto" style={{padding: 0}}>
                     <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
+                </Col>
+
+                <Col xs="auto" style={{padding: 0}}>
+                    <div>
+                        <input className={classes.input_time} type="number" onChange={expectedHoursChangeHandler} value={expectedHours} />:
+                        <input className={classes.input_time} type="number" onChange={expectedMinutesChangeHandler} value={expectedMinutes} />
+                    </div>
                 </Col>
 
                 <Col xs={2}>
@@ -266,3 +287,12 @@ export default Plan;
 /* axios update string value */
 // For some reasons, axios.put cannot update string value though it
 // can update number/boolean value directly
+
+/* setState and callback */
+// After setState, like setExpectedHours(expectedHours => event.target.value);
+// The expectedHours is not immediately changed. So if we want to perform an
+// action immediately after setting state on a state variable and then return
+// a result, a callback will be useful. However, useState() Hooks doesn't support
+// the second callback argument. To execute a side effect after rendering, declare
+// it in the component body with useEffect().
+// Reference: https://stackoverflow.com/questions/42038590/when-to-use-react-setstate-callback

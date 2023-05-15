@@ -29,6 +29,8 @@ const NewPlanForm = (props) => {
             children: {},
             date: "",
             seconds: 0,
+            expected_hours: 0,
+            expected_minutes: 0
         }
 
         axios.post(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans.json`, target)
