@@ -36,6 +36,10 @@ const ShortTermPlans = (props) => {
         }
     }, [isFetch, props.long_term_plan_id])
 
+    const editPlan = () => {
+        // TODO
+    }
+
     const archivePlan = () => {
         // Migrate the plan from active_plans to history_plans
         console.log("Updating the database...");
@@ -56,6 +60,7 @@ const ShortTermPlans = (props) => {
         <section className={classes.card}>
             <div>
                 <h3>Sprint</h3>
+                <button onClick={editPlan}>Edit</button>
                 <button onClick={archivePlan}>Done</button>
             </div>
             <h5>{plan['title']}</h5>
