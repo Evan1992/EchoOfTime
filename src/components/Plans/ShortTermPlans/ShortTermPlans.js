@@ -4,8 +4,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import axios from '../../../axios'
 
 /* ========== import React components ========== */
-import NewShortTermPlan from '../NewPlan/NewShortTermPlan';
 import Plans from '../DailyPlans/Plans';
+import InlineEdit from '../../UI/InlineEdit';
 
 /* ========== import css ========== */
 import classes from './ShortTermPlans.module.css';
@@ -36,7 +36,43 @@ const ShortTermPlans = (props) => {
         }
     }, [isFetch, props.long_term_plan_id])
 
-    const archivePlan = () => {
+    const postPlanHandler= (inputTitle, inputDescription) => {
+        const target = {
+            title: inputTitle,
+            description: inputDescription,
+            date: new Date().toISOString().slice(0,10),
+            daily_plans: {}
+        };
+
+        console.log("Updating the database...");
+        axios.post(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans.json`, target)
+        .then(res => {
+            // Refresh the page after posting the data
+            window.location.reload();
+        })
+    }
+
+    const updatePlanHandler = (inputTitle, inputDescription) => {
+        const config = { headers: {'Content-Type': 'application/json'} };
+        if(inputTitle !== plan['title']){
+            console.log("Updating the database...");
+            axios.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${planId}/title.json`, inputTitle, config)
+            .then(res => {
+                // Refresh the page after posting the data
+                window.location.reload();
+            })
+        }
+        if(inputDescription !== plan['description']){
+            console.log("Updating the database...");
+            axios.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${planId}/description.json`, inputDescription, config)
+            .then(res => {
+                // Refresh the page after posting the data
+                window.location.reload();
+            })
+        }
+    }
+
+    const archivePlanHandler = () => {
         // Migrate the plan from active_plans to history_plans
         console.log("Updating the database...");
         axios.post(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/history_plans.json`, plan)
@@ -52,17 +88,6 @@ const ShortTermPlans = (props) => {
         })
     }
 
-    const showShortTermPlan = (
-        <section className={classes.card}>
-            <div>
-                <h3>Sprint</h3>
-                <button onClick={archivePlan}>Done</button>
-            </div>
-            <h5>{plan['title']}</h5>
-            <div>{plan['description']}</div>
-        </section>
-    )
-
     // get the data from database as soon as user visit the home page
     useEffect(() => {
         fetchPlansHandler();
@@ -70,14 +95,30 @@ const ShortTermPlans = (props) => {
 
     return (
         <React.Fragment>
-            {Object.keys(plan).length === 0 &&
-                <NewShortTermPlan long_term_plan_id={props.long_term_plan_id} />
-            }
+            {/* Show short_term_plan */}
+            <section className={classes.card}>
+                <div>
+                    <h3>Sprint</h3>
+                    <button onClick={archivePlanHandler}>Done</button>
+                </div>
+                {Object.keys(plan).length === 0 &&
+                    <InlineEdit 
+                        inputTitle=""
+                        inputDescription=""
+                        postPlan={postPlanHandler}
+                    />
+                }
 
-            {Object.keys(plan).length > 0 &&
-                showShortTermPlan
-            }
+                {Object.keys(plan).length > 0 &&
+                    <InlineEdit 
+                        inputTitle={plan['title']}
+                        inputDescription={plan['description']}
+                        postPlan={updatePlanHandler}
+                    />
+                }
+            </section>
 
+            {/* Show daily_plans if short_term_plan exists */}
             {Object.keys(plan).length > 0 &&
                 <Plans long_term_plan_id={props.long_term_plan_id} short_term_plan_id={planId} />
             }
