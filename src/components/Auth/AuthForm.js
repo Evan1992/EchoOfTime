@@ -109,3 +109,12 @@ const AuthForm = (props) => {
 }
 
 export default AuthForm;
+
+/* ========== Learning ========== */
+/* event.preventDefault() */
+// a preventDefault is called on the event when submitting the form to prevent
+// a browser reload/refresh.
+// Why is form submit reloading the browseer?
+// All native HTML elements come with their internal behavior. For instance, input
+// elements store their internal state. The same applies for a form element which
+// has a submit event that is invoked via a submit button element.
