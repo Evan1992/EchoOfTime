@@ -1,4 +1,16 @@
-.inline_edit input {
+.inline_edit input:hover,
+.inline_edit textarea:hover {
+    background-color: #d3d3d3;
+    cursor: pointer;
+}
+
+.input_title,
+.input_description {
+    width: 100%;
+    text-align: left;
+}
+
+.input_title {
     background-color: transparent;
     border: 0;
     padding: 8px;
@@ -6,7 +18,8 @@
     font-size:large;
 }
 
-.inline_edit input:hover {
-    background-color: #d3d3d3;
-    cursor: pointer;
+.input_description {
+    background-color: transparent;
+    border: 0;
+    padding: 8px;
 }

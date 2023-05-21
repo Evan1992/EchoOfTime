@@ -36,10 +36,11 @@ const ShortTermPlans = (props) => {
         }
     }, [isFetch, props.long_term_plan_id])
 
-    const postPlanHandler= (inputTitle, inputDescription) => {
+    const postPlanHandler= (inputTitle, inputDescription, inputDescriptionHeight) => {
         const target = {
             title: inputTitle,
             description: inputDescription,
+            description_height: inputDescriptionHeight,
             date: new Date().toISOString().slice(0,10),
             daily_plans: {}
         };
@@ -52,7 +53,7 @@ const ShortTermPlans = (props) => {
         })
     }
 
-    const updatePlanHandler = (inputTitle, inputDescription) => {
+    const updatePlanHandler = (inputTitle, inputDescription, inputDescriptionHeight) => {
         const config = { headers: {'Content-Type': 'application/json'} };
         if(inputTitle !== plan['title']){
             console.log("Updating the database...");
@@ -65,6 +66,7 @@ const ShortTermPlans = (props) => {
         if(inputDescription !== plan['description']){
             console.log("Updating the database...");
             axios.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${planId}/description.json`, inputDescription, config)
+            axios.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${planId}/description_height.json`, inputDescriptionHeight, config)
             .then(res => {
                 // Refresh the page after posting the data
                 window.location.reload();
@@ -105,6 +107,7 @@ const ShortTermPlans = (props) => {
                     <InlineEdit 
                         inputTitle=""
                         inputDescription=""
+                        inputDescriptionHeight="100px"
                         postPlan={postPlanHandler}
                     />
                 }
@@ -113,6 +116,7 @@ const ShortTermPlans = (props) => {
                     <InlineEdit 
                         inputTitle={plan['title']}
                         inputDescription={plan['description']}
+                        inputDescriptionHeight={plan['description_height']}
                         postPlan={updatePlanHandler}
                     />
                 }

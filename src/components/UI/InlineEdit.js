@@ -10,6 +10,7 @@ import classes from './InlineEdit.module.css';
 const InlineEdit = (props) => {
     const [inputTitle, setInputTitle] = useState(props.inputTitle);
     const [inputDescription, setInputDescription] = useState(props.inputDescription);
+    const [inputDescriptionHeight, setInputDescriptionHeight] = useState(props.inputDescriptionHeight)
     let newInputTitle = useRef(props.inputTitle);
     let newInputDescription = useRef(props.inputDescription);
 
@@ -18,11 +19,21 @@ const InlineEdit = (props) => {
     }
 
     const descriptionChangeHandler = (event) => {
+        // Update the description height
+        setInputDescriptionHeight(inputDescriptionHeight => event.target.style.height)
+
+        // Update the description
         setInputDescription(inputDescription => event.target.value);
     }
 
+    const onInput = (event) => {
+        if (event.target.scrollHeight > 100) {
+            event.target.style.height = (event.target.scrollHeight - 16) + "px";
+        }
+    }
+
     const onBlur = () => {
-        props.postPlan(inputTitle, inputDescription);
+        props.postPlan(inputTitle, inputDescription, inputDescriptionHeight);
     }
 
     const onKeyDown = (event) => {
@@ -31,10 +42,14 @@ const InlineEdit = (props) => {
         }
     }
 
+    const inlineStyle = {
+        height: `${inputDescriptionHeight}`
+    }
+
     return (
         <React.Fragment >
             <div className={classes.inline_edit}>
-                <input
+                <input className={classes.input_title}
                     type = "text"
                     aria-label = "Title"
                     ref = {newInputTitle}
@@ -43,14 +58,17 @@ const InlineEdit = (props) => {
                     onBlur={onBlur}
                     onKeyDown={onKeyDown}
                 />
-                <input 
+            </div>
+            <div className={classes.inline_edit}>
+                <textarea className={classes.input_description}
                     type = "text"
+                    style = {inlineStyle}
                     aria-label = "Description"
                     ref = {newInputDescription}
                     value = {inputDescription}
                     onChange = {descriptionChangeHandler}
-                    onBlur={onBlur}
-                    onKeyDown={onKeyDown}
+                    onInput = {onInput}
+                    onBlur = {onBlur}
                 />                
             </div>
         </React.Fragment>
