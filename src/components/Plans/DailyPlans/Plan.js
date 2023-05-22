@@ -75,7 +75,8 @@ const Plan = (props) => {
 
         // Update the plan with the date
         console.log("Updating the database...");
-        axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/date.json`, {val: date.toISOString().slice(0,10)});
+        const config = { headers: {'Content-Type': 'application/json'} };
+        axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/date.json`, date.toISOString().slice(0,10), config);
     }
 
     const dateTransformHandler = (date) => {
@@ -296,3 +297,9 @@ export default Plan;
 // the second callback argument. To execute a side effect after rendering, declare
 // it in the component body with useEffect().
 // Reference: https://stackoverflow.com/questions/42038590/when-to-use-react-setstate-callback
+
+/* update database with string value */
+// For the key-value pair stored in firebase, when we want to update
+// the string value, we are supposed to specify the headers. Otherwise,
+// the put request will fail
+// Reference: https://stackoverflow.com/questions/43573297/put-request-with-simple-string-as-request-body
