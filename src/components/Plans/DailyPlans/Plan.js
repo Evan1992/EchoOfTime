@@ -23,7 +23,7 @@ const Plan = (props) => {
     const [secondsBeforeStart, setSecondsBeforeStart] = useState(props.plan.seconds);
     const [expectedHours, setExpectedHours] = useState(props.plan.expected_hours);
     const [expectedMinutes, setExpectedMinutes] = useState(props.plan.expected_minutes);
-    const [_date, setDate] = useState(props.plan.date.val);
+    const [_date, setDate] = useState(props.plan.date);
     const [planDeleted, setPlanDeleted] = useState(false);
     const [parentPlanUpdated, setParentPlanUpdated] = useState(false);
 
