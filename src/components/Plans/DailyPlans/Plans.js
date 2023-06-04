@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 /* ========== import React components ========== */
-import Plan from './Plan'
-import NewPlan from '../NewPlan/NewPlan'
+import Plan from './Plan';
+import NewPlan from '../NewPlan/NewPlan';
+import TodayPlan from '../TodayPlans/TodayPlan';
+import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 
 /* ========== import other libraries ========== */
 import axios from '../../../axios'
@@ -111,35 +113,60 @@ const Plans = (props) => {
     }
 
     return (
-        <div className={classes.plans}>
-            <Container fluid className={classes.container}>
-                {
-                    ordered_plans.map((element) => {
-                        if(element[1].show_plan) {
-                            let show_children = false;
-                            if("children" in element[1]) {
-                                show_children = plans.get(Object.keys(element[1].children)[0]).show_plan;
+        <React.Fragment>
+            <div className={classes.plans}>
+                <Container fluid className={classes.container}>
+                    {
+                        ordered_plans.map((element) => {
+                            if(element[1].show_plan) {
+                                let show_children = false;
+                                if("children" in element[1]) {
+                                    show_children = plans.get(Object.keys(element[1].children)[0]).show_plan;
+                                }
+                                return <Plan
+                                            long_term_plan_id={props.long_term_plan_id}
+                                            short_term_plan_id={props.short_term_plan_id}
+                                            key={element[0]}
+                                            all_plans={plans}
+                                            plan_id={element[0]}
+                                            plan={element[1]}
+                                            show_children={show_children}
+                                            childrenToggleHandler={event => childrenToggleHandler(event, element[0])}
+                                        />
                             }
-                            return <Plan
-                                        long_term_plan_id={props.long_term_plan_id}
-                                        short_term_plan_id={props.short_term_plan_id}
-                                        key={element[0]}
-                                        all_plans={plans}
-                                        plan_id={element[0]} 
-                                        plan={element[1]}
-                                        show_children={show_children}
-                                        childrenToggleHandler={event => childrenToggleHandler(event, element[0])}
-                                    />
-                        }
-                        return <div key={element[0]} />
-                    })
-                }
-                <NewPlan 
-                    long_term_plan_id={props.long_term_plan_id}
-                    short_term_plan_id={props.short_term_plan_id}
-                />
-            </Container>
-        </div>
+                            return <div key={element[0]} />
+                        })
+                    }
+                    <NewPlan
+                        long_term_plan_id={props.long_term_plan_id}
+                        short_term_plan_id={props.short_term_plan_id}
+                    />
+                </Container>
+            </div>
+            <div>
+                <Container fluid className={classes.container}>
+                    {
+                        ordered_plans.map((element) => {
+                            const cur_date = new Date().toISOString().slice(0,10)
+                            const cur_date_to_time = new Date(cur_date).getTime()
+                            const plan_date = element[1].date
+                            const plan_date_to_time = new Date(plan_date).getTime()
+                            // If the plan is set to today
+                            if(plan_date_to_time - cur_date_to_time === 0) {
+                                return <TodayPlan
+                                            key={element[0]}
+                                            plan={element[1]}
+                                        />
+                            }
+                            return <div key={element[0]} />
+                        })
+                    }
+                </Container>
+            </div>
+            <TodayPlanSummary
+                all_plans = {plans}
+            />
+        </React.Fragment>
     )
 }
 
