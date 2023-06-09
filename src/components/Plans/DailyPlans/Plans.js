@@ -8,6 +8,7 @@ import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 
 /* ========== import other libraries ========== */
 import axios from '../../../axios'
+import { isToday } from '../../../utilities';
 import Container from 'react-bootstrap/Container';
 
 
@@ -147,12 +148,8 @@ const Plans = (props) => {
                 <Container fluid className={classes.container}>
                     {
                         ordered_plans.map((element) => {
-                            const cur_date = new Date().toISOString().slice(0,10)
-                            const cur_date_to_time = new Date(cur_date).getTime()
-                            const plan_date = element[1].date
-                            const plan_date_to_time = new Date(plan_date).getTime()
-                            // If the plan is set to today
-                            if(plan_date_to_time - cur_date_to_time === 0) {
+                            const is_today = isToday(element[1].date)
+                            if(is_today) {
                                 return <TodayPlan
                                             key={element[0]}
                                             plan={element[1]}
