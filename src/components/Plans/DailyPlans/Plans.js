@@ -144,6 +144,8 @@ const Plans = (props) => {
                     />
                 </Container>
             </div>
+
+            {/* Component of plans for today */}
             <div>
                 <Container fluid className={classes.container}>
                     {

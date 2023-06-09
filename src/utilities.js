@@ -9,3 +9,9 @@ const isToday = (plan_date) => {
 }
 
 export { isToday };
+
+/* ========== Learning ========== */
+/* Export functions */
+// We can export function like what is done above
+// Or we can export function like
+// export const isToday = (plan_date) => {...}
