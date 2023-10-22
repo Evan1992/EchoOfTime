@@ -80,9 +80,25 @@ const Plan = (props) => {
     }
 
     const dateTransformHandler = (date) => {
-        const cur_date = new Date().toISOString().slice(0,10)
+        /**
+         * date's format is yyyy-mm-dd, somehow, new Date(date) will use UTC to parse it,
+         * while if date's format is mm/dd/yyyy, new Date(date) will use local time zone to parse it.
+         * As a result, we should convert yyyy-mm-dd to mm/dd/yyyy first
+         */
+        let plan_date
+        if(date) {
+            const splitted_date = date.split("-")
+            const yy = splitted_date[0]
+            const mm = splitted_date[1]
+            const dd = splitted_date[2]
+            plan_date = mm.concat("/", dd, "/", yy)
+        }
+
+        const cur_date = new Date().toLocaleDateString()
+
         const cur_date_to_time = new Date(cur_date).getTime()
-        const plan_date_to_time = new Date(date).getTime()
+        const plan_date_to_time = new Date(plan_date).getTime()
+
         if(plan_date_to_time - cur_date_to_time === -86400000){
             return "Yesterday"
         } else if(plan_date_to_time - cur_date_to_time === 0) {
