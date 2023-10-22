@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Plan from './Plan';
 import NewPlan from '../NewPlan/NewPlan';
 import TodayPlan from '../TodayPlans/TodayPlan';
+import { PlansOfTodayContextProvider } from '../../../store/plans-of-today-context';
 import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 
 /* ========== import other libraries ========== */
@@ -124,16 +125,17 @@ const Plans = (props) => {
                                 if("children" in element[1]) {
                                     show_children = plans.get(Object.keys(element[1].children)[0]).show_plan;
                                 }
-                                return <Plan
-                                            long_term_plan_id={props.long_term_plan_id}
-                                            short_term_plan_id={props.short_term_plan_id}
-                                            key={element[0]}
-                                            all_plans={plans}
-                                            plan_id={element[0]}
-                                            plan={element[1]}
-                                            show_children={show_children}
-                                            childrenToggleHandler={event => childrenToggleHandler(event, element[0])}
-                                        />
+                                return <PlansOfTodayContextProvider key={element[0]}>
+                                            <Plan
+                                                long_term_plan_id={props.long_term_plan_id}
+                                                short_term_plan_id={props.short_term_plan_id}
+                                                all_plans={plans}
+                                                plan_id={element[0]}
+                                                plan={element[1]}
+                                                show_children={show_children}
+                                                childrenToggleHandler={event => childrenToggleHandler(event, element[0])}
+                                            />
+                                        </PlansOfTodayContextProvider>
                             }
                             return <div key={element[0]} />
                         })
