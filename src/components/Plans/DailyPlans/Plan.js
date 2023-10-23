@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 /* ========== import react components ========== */
 import axios from '../../../axios';
 import NewPlanForm from '../NewPlan/NewPlanForm'
 import Timer from '../../Timer/Timer';
 import Backdrop from '../../UI/Backdrop';
+import PlansOfTodayContext from '../../../store/plans-of-today-context';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Calendar from 'react-calendar';
+import { isToday } from '../../../utilities';
 
 /* ========== import css ========== */
 import classes from './Plan.module.css'
@@ -26,6 +28,7 @@ const Plan = (props) => {
     const [_date, setDate] = useState(props.plan.date);
     const [planDeleted, setPlanDeleted] = useState(false);
     const [parentPlanUpdated, setParentPlanUpdated] = useState(false);
+    const plans_of_today_context = useContext(PlansOfTodayContext)
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
@@ -73,10 +76,25 @@ const Plan = (props) => {
         // Show the date on the page
         setDate(_date => date.toISOString().slice(0,10));
 
+        // Determine if add/remove plan to/from a global state plans_of_today
+        if(isToday(date.toISOString().slice(0,10))) {
+            addPlansOfTodayHandler(props.plan);
+        } else {
+            removePlansOfTodayHandler(props.plan);
+        }
+
         // Update the plan with the date
         console.log("Updating the database...");
         const config = { headers: {'Content-Type': 'application/json'} };
         axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/date.json`, date.toISOString().slice(0,10), config);
+    }
+
+    const addPlansOfTodayHandler = (plan) => {
+        plans_of_today_context.addPlan(plan);
+    }
+
+    const removePlansOfTodayHandler = (plan) => {
+        plans_of_today_context.removePlan(plan);
     }
 
     const dateTransformHandler = (date) => {
@@ -239,6 +257,7 @@ const Plan = (props) => {
                     <Timer seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
                 </Col>
 
+                {/* Show the date of the plan */}
                 <Col xs={1}>
                     <div>{dateTransformHandler(_date)}</div>
                 </Col>

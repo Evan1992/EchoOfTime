@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 
-const PlansOfTodayContext = React.createContext( {
-    plans_of_today: new Map()
-})
+const PlansOfTodayContext = React.createContext(null)
 
 export const PlansOfTodayContextProvider = (props) => {
+    const default_plans_of_today = new Map()
+    props.today_plans.forEach((plan) => {
+        default_plans_of_today.set(plan.title, [plan.seconds, plan.expected_hours, plan.expected_minutes])
+    })
+    const [plans_of_today, setPlans] = useState(default_plans_of_today);
 
-    const [plans_of_today, setPlans] = useState(new Map());
-
-    const addPlanHandler = (plan) => {        
+    const addPlanHandler = (plan) => {
         // Use plan title as the key, might come across issue if duplicated plan title
         if(!plans_of_today.has(plan.title)) {
-            plans_of_today[plan.title] = [plan.seconds, plan.expected_hours, plan.expected_minutes]
+            plans_of_today.set(plan.title, [plan.seconds, plan.expected_hours, plan.expected_minutes])
             setPlans(plans_of_today => plans_of_today)
         }
     }

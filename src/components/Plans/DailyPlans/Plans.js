@@ -22,6 +22,8 @@ const Plans = (props) => {
     const [plans, setPlans] = useState(new Map());
     // ordered_plans is a 2D array, each element is [plan_id, plan]
     const [ordered_plans, setOrderedPlans] = useState([]);
+    const [today_plans, setTodayPlans] = useState([]);
+    const [exist_today_plans, setExistTodayPlans] = useState(true);
     const [isFetch, setIsFetch] = useState(false);
 
     // get data from database
@@ -49,6 +51,21 @@ const Plans = (props) => {
             }
         }
         return ordered_plans;
+    }
+
+    const setTodayPlansHandler = (all_plans) => {
+        const _today_plans = []
+        all_plans.forEach((plan) => {
+            const is_today = isToday(plan.date)
+            if(is_today) {
+                _today_plans.push(plan)
+            }
+        })
+
+        if(_today_plans.length === 0) {
+            setExistTodayPlans(false)
+        }
+        setTodayPlans(today_plans => _today_plans)
     }
 
     // this function get called when hiding all the children plans
@@ -114,6 +131,14 @@ const Plans = (props) => {
         }
     }
 
+    // set today_plans and pass it to PlansOfTodayContextProvider
+    // All these if conditions are used to prevent infinite react render
+    if(plans.size !== 0) {
+        if(today_plans.length === 0 && exist_today_plans ) {
+            setTodayPlansHandler(plans)
+        }
+    }
+
     return (
         <React.Fragment>
             <div className={classes.plans}>
@@ -125,7 +150,7 @@ const Plans = (props) => {
                                 if("children" in element[1]) {
                                     show_children = plans.get(Object.keys(element[1].children)[0]).show_plan;
                                 }
-                                return <PlansOfTodayContextProvider key={element[0]}>
+                                return <PlansOfTodayContextProvider key={element[0]} today_plans={today_plans}>
                                             <Plan
                                                 long_term_plan_id={props.long_term_plan_id}
                                                 short_term_plan_id={props.short_term_plan_id}
@@ -164,6 +189,7 @@ const Plans = (props) => {
                     }
                 </Container>
             </div>
+
             <TodayPlanSummary
                 all_plans = {plans}
             />
