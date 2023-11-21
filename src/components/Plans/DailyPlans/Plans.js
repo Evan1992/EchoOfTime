@@ -141,6 +141,7 @@ const Plans = (props) => {
 
     return (
         <React.Fragment>
+            {/* Component for all active plans */}
             <div className={classes.plans}>
                 <Container fluid className={classes.container}>
                     {
@@ -172,7 +173,7 @@ const Plans = (props) => {
                 </Container>
             </div>
 
-            {/* Component of plans for today */}
+            {/* Component for plans of today */}
             <div>
                 <Container fluid className={classes.container}>
                     {
