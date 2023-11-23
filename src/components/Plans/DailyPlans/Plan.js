@@ -311,7 +311,6 @@ const Plan = (props) => {
                     
                 }
             </Row>
-
         </React.Fragment>
     )
 }

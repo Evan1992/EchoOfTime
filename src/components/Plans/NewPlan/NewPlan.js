@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 /* ========== import react components ========== */
 import NewPlanForm from './NewPlanForm'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
@@ -20,10 +19,16 @@ const NewPlan = (props) => {
     }
 
     return (
-        <Container fluid>
+        <React.Fragment>
             <Row>
+                {/* The two Cols are placeholders to make the NewPlan align with Plan above */}
+                <Col xs={1} />
+                <Col xs='auto' >
+                    <div className={classes.expand_collapse}></div>
+                </Col>
+
                 { !showForm && 
-                    <Col xs={{ span: 3}} style={{display:'flex', justifyContent:'left'}}>
+                    <Col xs={{ span: 4}} style={{display:'flex', justifyContent:'left'}}>
                         <div className={classes.hint} onClick={formToggleHandler}>Click here to add a task</div>
                     </Col>
                 }
@@ -40,7 +45,7 @@ const NewPlan = (props) => {
                     </Col>
                 }
             </Row>
-        </Container>
+        </React.Fragment>
     )
 }
 
