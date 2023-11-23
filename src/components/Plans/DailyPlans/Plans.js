@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 /* ========== import React components ========== */
 import Plan from './Plan';
 import NewPlan from '../NewPlan/NewPlan';
-import TodayPlan from '../TodayPlans/TodayPlan';
+import TodayPlans from '../TodayPlans/TodayPlans';
 import { PlansOfTodayContextProvider } from '../../../store/plans-of-today-context';
 import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 
@@ -11,7 +11,6 @@ import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 import axios from '../../../axios'
 import { isToday } from '../../../utilities';
 import Container from 'react-bootstrap/Container';
-
 
 /* ========== import css ========== */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -175,20 +174,7 @@ const Plans = (props) => {
 
             {/* Component for plans of today */}
             <div>
-                <Container fluid className={classes.container}>
-                    {
-                        ordered_plans.map((element) => {
-                            const is_today = isToday(element[1].date)
-                            if(is_today) {
-                                return <TodayPlan
-                                            key={element[0]}
-                                            plan={element[1]}
-                                        />
-                            }
-                            return <div key={element[0]} />
-                        })
-                    }
-                </Container>
+                <TodayPlans today_plans={today_plans} />
             </div>
 
             <TodayPlanSummary

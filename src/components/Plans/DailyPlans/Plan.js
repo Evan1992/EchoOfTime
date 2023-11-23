@@ -28,7 +28,7 @@ const Plan = (props) => {
     const [_date, setDate] = useState(props.plan.date);
     const [planDeleted, setPlanDeleted] = useState(false);
     const [parentPlanUpdated, setParentPlanUpdated] = useState(false);
-    const plans_of_today_context = useContext(PlansOfTodayContext)
+    const plans_of_today_context = useContext(PlansOfTodayContext);
 
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
