@@ -2,6 +2,9 @@ import React from 'react';
 
 /* ========== import other libraries ========== */
 import { isToday } from '../../../utilities';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/esm/Container';
 
 const TodayPlanSummary = (props) => {
     const formatToTwoDigits = (n) => {
@@ -48,9 +51,22 @@ const TodayPlanSummary = (props) => {
 
     return (
         <React.Fragment>
-            <h4>Summary</h4>
-            <div>Expected Time Sum: {calExpectedTimeSum(props.all_plans)}</div>
-            <div>Used Time Sum: {calUsedTimeSum(props.all_plans)}</div>
+            <Container fluid>
+                <Row>
+                    <Col xs={1} />
+                    <Col>
+                        <h4>Summary</h4>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={1} />
+                    <Col>Expected Time Sum: {calExpectedTimeSum(props.all_plans)}</Col>
+                </Row>
+                <Row>
+                    <Col xs={1} />
+                    <Col>Used Time Sum: {calUsedTimeSum(props.all_plans)}</Col>
+                </Row>
+            </Container>
         </React.Fragment>
     )
 }

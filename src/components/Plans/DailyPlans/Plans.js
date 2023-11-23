@@ -177,6 +177,9 @@ const Plans = (props) => {
                 <TodayPlans today_plans={today_plans} />
             </div>
 
+            {/* Separation between TodayPlans and TodayPlanSummary*/}
+            <div style={{height: "25px"}} /> 
+
             <TodayPlanSummary
                 all_plans = {plans}
             />
