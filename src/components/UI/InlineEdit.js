@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 
 /* ========== import react components ========== */
 // import Backdrop from './Backdrop';
-// import axios from '../../axios';
 
 /* ========== import css ========== */
 import classes from './InlineEdit.module.css';

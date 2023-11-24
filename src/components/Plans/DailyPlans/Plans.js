@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 
 /* ========== import React components ========== */
 import Plan from './Plan';
@@ -6,9 +6,9 @@ import NewPlan from '../NewPlan/NewPlan';
 import TodayPlans from '../TodayPlans/TodayPlans';
 import { PlansOfTodayContextProvider } from '../../../store/plans-of-today-context';
 import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
-import axios from '../../../axios'
 import { isToday } from '../../../utilities';
 import Container from 'react-bootstrap/Container';
 
@@ -25,11 +25,15 @@ const Plans = (props) => {
     const [exist_today_plans, setExistTodayPlans] = useState(true);
     const [isFetch, setIsFetch] = useState(false);
 
+    // Object for interacting with database endpoint
+    const authCtx = useContext(AuthContext);
+    const instance = authCtx.firebase;
+
     // get data from database
     const fetchPlansHandler = useCallback(async () => {
         let _plans = new Map();
         if(!isFetch){
-            const response = await axios.get(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans.json`);
+            const response = await instance.get(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans.json`);
             const data = response.data;
             for (let index in data) {
                 _plans.set(index, data[index]);
@@ -40,7 +44,7 @@ const Plans = (props) => {
             // Set plans all in one time
             setPlans(plans => _plans);
         }
-    }, [isFetch, props.long_term_plan_id, props.short_term_plan_id])
+    }, [isFetch, props.long_term_plan_id, props.short_term_plan_id, instance])
 
     const setOrderedPlansHandler = (plan, ordered_plans) => {
         if("children" in plan) {

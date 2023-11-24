@@ -1,8 +1,8 @@
 /* ========== import React and React hooks ========== */
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
 
 /* ========== import other libraries ========== */
-import axios from '../../../axios'
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import css ========== */
 import classes from './NewLongTermPlan.module.css';
@@ -13,9 +13,13 @@ const NewLongTermPlan = () => {
     let inputDescription = useRef();
     const [isLoading, setIsLoading] = useState(false);
 
+    // Object for interacting with database endpoint
+    const authCtx = useContext(AuthContext);
+    const instance = authCtx.firebase;
+
     const postPlanHandler= (event) => {
         event.preventDefault();
-        
+
         const enteredTitle = inputTitle.current.value;
         const enteredDescription = inputDescription.current.value;
 
@@ -28,7 +32,7 @@ const NewLongTermPlan = () => {
             short_term_plans: {}
         };
         console.log("Updating the database...");
-        axios.post(`/long_term_plans/active_plans.json`, target)
+        instance.post(`/long_term_plans/active_plans.json`, target)
         .then(res => {
             setIsLoading(false);
             

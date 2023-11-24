@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 
 /* ========== import react components ========== */
 import Backdrop from '../../UI/Backdrop';
 
 /* ========== import other libraries ========== */
-import axios from '../../../axios'
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import css ========== */
 import classes from './NewPlanForm.module.css'
@@ -16,6 +16,10 @@ const NewPlanForm = (props) => {
      * and re-render the page for every keystroke
      */
     let input_plan = useRef();
+
+    // Object for interacting with database endpoint
+    const authCtx = useContext(AuthContext);
+    const instance = authCtx.firebase;
 
     const postPlanHandler = () => {
         const target = {
@@ -33,7 +37,7 @@ const NewPlanForm = (props) => {
             expected_minutes: 0
         }
 
-        axios.post(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans.json`, target)
+        instance.post(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans.json`, target)
         .then(response => {
             const data = response.data;
             const child_id = data.name;
@@ -48,7 +52,7 @@ const NewPlanForm = (props) => {
             let parent_plan = props.parent_plan;
             if(!parent_plan.children) {
                 console.log("Updating the database...");
-                axios.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.parent}/children/${child_id}.json`, 1)
+                instance.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.parent}/children/${child_id}.json`, 1)
                 .then(() => {
                     refreshPage();
                 })
@@ -56,8 +60,8 @@ const NewPlanForm = (props) => {
                 // Count the length of json objects
                 let keyCount  = Object.keys(parent_plan.children).length;
                 console.log("Updating the database...");
-                // axios.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1)
-                axios.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.parent}/children/${child_id}.json`, keyCount+1)
+                // instance.put(`/plans/${props.parent}/children/${child_id}.json`, keyCount+1)
+                instance.put(`/long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.parent}/children/${child_id}.json`, keyCount+1)
                 .then(() => {
                     refreshPage();
                 })

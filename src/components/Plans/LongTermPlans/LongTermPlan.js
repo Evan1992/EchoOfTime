@@ -1,11 +1,9 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useContext } from 'react';
 
 /* ========== import React components ========== */
 import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
 import ShortTermPlans from '../ShortTermPlans/ShortTermPlans'
-
-/* ========== import other libraries ========== */
-import axios from '../../../axios'
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import css ========== */
 import classes from './LongTermPlan.module.css';
@@ -16,13 +14,17 @@ const LongTermPlan = () => {
     const [plan, setPlan] = useState({});
     const [isFetch, setIsFetch] = useState(false);
 
+    // Object for interacting with database endpoint
+    const authCtx = useContext(AuthContext);
+    const instance = authCtx.firebase;
+
     // get data from database function
     const fetchPlansHandler = useCallback(async () => {
         let plan_id = "";
         let _plan = {};
 
         if(!isFetch){
-            const response = await axios.get('/long_term_plans/active_plans.json');
+            const response = await instance.get('/long_term_plans/active_plans.json');
             const data = response.data;
             if(data != null){
                 for (let index in data) {
@@ -34,16 +36,16 @@ const LongTermPlan = () => {
             setPlanId(planId => plan_id);
             setPlan(plan => _plan);
         }
-    }, [isFetch])
+    }, [isFetch, instance])
 
     const archivePlan = () => {
         // Migrate the plan from active_plans to history_plans
         console.log("Updating the database...");
-        axios.post(`/long_term_plans/history_plans.json`, plan);
+        instance.post(`/long_term_plans/history_plans.json`, plan);
 
         // Delete the plan in active_plans
         console.log("Updating the database...");
-        axios.delete(`/long_term_plans/active_plans/${planId}.json`)
+        instance.delete(`/long_term_plans/active_plans/${planId}.json`)
         .then(response => {
             if(response.status === 200) {
                 // Refresh the page

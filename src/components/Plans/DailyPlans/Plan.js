@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 
 /* ========== import react components ========== */
-import axios from '../../../axios';
 import NewPlanForm from '../NewPlan/NewPlanForm'
 import Timer from '../../Timer/Timer';
 import Backdrop from '../../UI/Backdrop';
 import PlansOfTodayContext from '../../../store/plans-of-today-context';
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
@@ -30,6 +30,10 @@ const Plan = (props) => {
     const [parentPlanUpdated, setParentPlanUpdated] = useState(false);
     const plans_of_today_context = useContext(PlansOfTodayContext);
 
+    // Object for interacting with database endpoint
+    const authCtx = useContext(AuthContext);
+    const instance = authCtx.firebase;
+
     const formToggleHandler = () => {
         setShowForm(showForm => !showForm);
     }
@@ -53,7 +57,7 @@ const Plan = (props) => {
         if(isClockActive) {
             // Update current plan
             console.log("Updating the database...");
-            axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/seconds.json`, seconds);
+            instance.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/seconds.json`, seconds);
 
             // Update parent plans
             const addedSeconds = seconds - secondsBeforeStart;
@@ -66,7 +70,7 @@ const Plan = (props) => {
                 let plan_id = parent_plans_ids_seconds[i][0];
                 let seconds = parent_plans_ids_seconds[i][1];
                 console.log("Updating the database...");
-                axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${plan_id}/seconds.json`, seconds+addedSeconds);
+                instance.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${plan_id}/seconds.json`, seconds+addedSeconds);
             }
         }
         setIsClockActive(isClockActive => !isClockActive);
@@ -86,7 +90,7 @@ const Plan = (props) => {
         // Update the plan with the date
         console.log("Updating the database...");
         const config = { headers: {'Content-Type': 'application/json'} };
-        axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/date.json`, date.toISOString().slice(0,10), config);
+        instance.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/date.json`, date.toISOString().slice(0,10), config);
     }
 
     const addPlansOfTodayHandler = (plan) => {
@@ -143,7 +147,7 @@ const Plan = (props) => {
 
         deleted_plans.forEach(plan => {
             console.log("Updating the database...");
-            axios.delete(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${plan}.json`)
+            instance.delete(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${plan}.json`)
             .then(response => {
                 if(response.status === 200) {
                     setPlanDeleted(true);
@@ -164,7 +168,7 @@ const Plan = (props) => {
             }
 
             console.log("Updating the database...");
-            axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan.parent}/children.json`, new_children)
+            instance.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan.parent}/children.json`, new_children)
             .then(response => {
                 if(response.status === 200) {
                     setParentPlanUpdated(true);
@@ -192,7 +196,7 @@ const Plan = (props) => {
         checked_plans.forEach(plan => {
             // Use the completion date for categorizing the history plans
             console.log("Updating the database...");
-            axios.post(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/history_plans.json`, plan);
+            instance.post(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/history_plans.json`, plan);
         })
 
         // Delete the plan and its children plans from active_plans
@@ -203,12 +207,12 @@ const Plan = (props) => {
     const expectedHoursChangeHandler = (event) => {
         setExpectedHours(expectedHours => event.target.value);
         console.log("Updating the database...");
-        axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/expected_hours.json`, event.target.value);
+        instance.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/expected_hours.json`, event.target.value);
     }
     const expectedMinutesChangeHandler = (event) => {
         setExpectedMinutes(expectedMinutes => event.target.value);
         console.log("Updating the database...");
-        axios.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/expected_minutes.json`, event.target.value);
+        instance.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/expected_minutes.json`, event.target.value);
     }
 
     if(planDeleted === true && parentPlanUpdated === true) {
@@ -319,8 +323,8 @@ export default Plan;
 
 
 /* ========== Learning ========== */
-/* axios update string value */
-// For some reasons, axios.put cannot update string value though it
+/* instance update string value */
+// For some reasons, instance.put cannot update string value though it
 // can update number/boolean value directly
 
 /* setState and callback */
