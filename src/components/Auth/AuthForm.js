@@ -12,20 +12,20 @@ const AuthForm = (props) => {
 
     // Consume the context by using the useContext hook
     const authCtx = useContext(AuthContext);
-    
+
     const [isLogin, setIsLogin] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const switchAuthModeHandler = () => {
         setIsLogin((prevState) => !prevState);
     }
 
     const submitHandler = (event) => {
         event.preventDefault();
-        
+
         const enteredEmail = emailInputRef.current.value;
         const enteredPassword = passwordInputRef.current.value
-        
+
         setIsLoading(true)
         let url;
         if(isLogin) {
@@ -68,7 +68,7 @@ const AuthForm = (props) => {
             alert(err.message)
         })
     }
-    
+
     return(
         <section className={classes.auth}>
             <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
@@ -91,7 +91,7 @@ const AuthForm = (props) => {
                         ref={passwordInputRef}
                     />
                 </div>
-                
+
                 <div className={classes.actions}>
                     {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
                     { isLoading && <p>Sending request...</p> }
