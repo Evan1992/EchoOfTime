@@ -6,6 +6,7 @@ import NewPlan from '../NewPlan/NewPlan';
 import TodayPlans from '../TodayPlans/TodayPlans';
 import { PlansOfTodayContextProvider } from '../../../store/plans-of-today-context';
 import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
+import TomorrowPlanSummary from '../TomorrowPlans/TomorrowPlanSummary';
 import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
@@ -202,6 +203,13 @@ const Plans = (props) => {
             <TodayPlanSummary
                 all_plans = {plans}
                 total_planned_time = {totalPlannedTimeToday}
+            />
+
+            {/* Separation between TodayPlanSummary and TomorrowPlanSummary*/}
+            <div style={{height: "25px"}} />
+
+            <TomorrowPlanSummary
+                all_plans = {plans}
             />
         </React.Fragment>
     )
