@@ -5,6 +5,7 @@ import AuthContext from '../../store/auth-context';
 
 /* ========== import css ========== */
 import classes from './AuthForm.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const AuthForm = (props) => {
     const emailInputRef    = useRef();
@@ -15,6 +16,7 @@ const AuthForm = (props) => {
 
     const [isLogin, setIsLogin] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const switchAuthModeHandler = () => {
         setIsLogin((prevState) => !prevState);
@@ -63,9 +65,11 @@ const AuthForm = (props) => {
         })
         .then(data => {
             authCtx.login(data.idToken, data.localId);
+            // Redirect to home page after log in successfully
+            navigate('/');
         })
         .catch(err => {
-            alert(err.message)
+            alert(err.message);
         })
     }
 
