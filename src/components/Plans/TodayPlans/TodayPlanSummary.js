@@ -27,7 +27,11 @@ const TodayPlanSummary = (props) => {
         return `${hour}:${minute}:${second}`
     }
 
-    const calExpectedTimeSum = (plans) => {
+    const calTotalPlannedTime = (seconds) => {
+        return secondsToHMS(seconds);
+    }
+
+    const calRemainingTime = (plans) => {
         let expectedTimeSum = 0
         for (let json_object of plans.values()){
             const is_today = isToday(json_object.date)
@@ -38,7 +42,7 @@ const TodayPlanSummary = (props) => {
         return secondsToHMS(expectedTimeSum)
     }
 
-    const calUsedTimeSum = (plans) => {
+    const calTotalUsedTime = (plans) => {
         let usedTimeSum = 0
         for (let json_object of plans.values()){
             const is_today = isToday(json_object.date)
@@ -60,11 +64,18 @@ const TodayPlanSummary = (props) => {
                 </Row>
                 <Row>
                     <Col xs={1} />
-                    <Col>Expected Time Sum: {calExpectedTimeSum(props.all_plans)}</Col>
+                    {/* Total Planned Time is: Time for active plans of today + Time for finished plans of today  */}
+                    <Col>Total Planned Time: {calTotalPlannedTime(props.total_planned_time)} </Col>
                 </Row>
                 <Row>
                     <Col xs={1} />
-                    <Col>Used Time Sum: {calUsedTimeSum(props.all_plans)}</Col>
+                    {/* Remaining Time is: Time for active plans of today */}
+                    <Col>Remaining Time: {calRemainingTime(props.all_plans)}</Col>
+                </Row>
+                <Row>
+                    <Col xs={1} />
+                    {/* Total Used Time is: Time actually used for plans of today */}
+                    <Col>Total Used Time: {calTotalUsedTime(props.all_plans)}</Col>
                 </Row>
             </Container>
         </React.Fragment>

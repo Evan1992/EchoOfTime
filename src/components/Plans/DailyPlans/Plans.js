@@ -22,6 +22,8 @@ const Plans = (props) => {
     // ordered_plans is a 2D array, each element is [plan_id, plan]
     const [ordered_plans, setOrderedPlans] = useState([]);
     const [today_plans, setTodayPlans] = useState([]);
+    // totalPlannedTimeToday is: Time for active plans of today + Time for finished plans of today
+    const [totalPlannedTimeToday, setTotalPlannedTimeToday] = useState(0);
     const [exist_today_plans, setExistTodayPlans] = useState(true);
     const [isFetch, setIsFetch] = useState(false);
 
@@ -57,11 +59,14 @@ const Plans = (props) => {
     }
 
     const setTodayPlansHandler = (all_plans) => {
+        // Push plans of today to a list as well as update the
         const _today_plans = []
+        let plans_of_today_expected_seconds_remote = 0;
         all_plans.forEach((plan) => {
             const is_today = isToday(plan.date)
             if(is_today) {
                 _today_plans.push(plan)
+                plans_of_today_expected_seconds_remote += plan.expected_hours * 3600 + plan.expected_minutes * 60;
             }
         })
 
@@ -69,6 +74,14 @@ const Plans = (props) => {
             setExistTodayPlans(false)
         }
         setTodayPlans(today_plans => _today_plans)
+
+        // set totalPlannedTimeToday so the Total Planned Time can be shown at the component TodayPlanSummary
+        let plans_of_today_expected_seconds_local = 0;
+        if(localStorage.getItem('plannedTimeToday') !== null) {
+            // localStorage.getItem() will return either String or null
+            plans_of_today_expected_seconds_local = Number(localStorage.getItem('plannedTimeToday'));
+        }
+        setTotalPlannedTimeToday(plans_of_today_expected_seconds_local + plans_of_today_expected_seconds_remote);
     }
 
     // this function get called when hiding all the children plans
@@ -178,7 +191,9 @@ const Plans = (props) => {
 
             {/* Component for plans of today */}
             <div>
-                <TodayPlans today_plans={today_plans} />
+                <TodayPlans 
+                    today_plans={today_plans} 
+                />
             </div>
 
             {/* Separation between TodayPlans and TodayPlanSummary*/}
@@ -186,6 +201,7 @@ const Plans = (props) => {
 
             <TodayPlanSummary
                 all_plans = {plans}
+                total_planned_time = {totalPlannedTimeToday}
             />
         </React.Fragment>
     )
@@ -215,3 +231,10 @@ export default Plans
 /* Number of render of this page */
 // Number of render of this page depends on how many times we setState
 // Each time when a new state is set, the page will be re-rendered
+
+
+/* ========== Design ========== */
+/* How to handle the data store for active plans of today and completed plans of today */
+// For active plans of today, get the info, specifically, the expected completion time from database
+// For completed plans of today, get the expected completion time from localStorage. Each time
+// when we check a plan, we store the expected time of that plan locally.

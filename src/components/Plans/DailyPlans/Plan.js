@@ -194,6 +194,26 @@ const Plan = (props) => {
 
         // Post the plan and its children plans to history_plans
         checked_plans.forEach(plan => {
+            /**
+             * The condition chunk below is for storing the expected completion time of
+             * current checked plan locally
+             */
+            if(isToday(plan.date)) {
+                const today_date = plan.date
+                if(localStorage.getItem('date') === null) {
+                    localStorage.setItem('date', today_date);
+                    localStorage.setItem('plannedTimeToday', plan.expected_hours * 3600 + plan.expected_minutes * 60);
+                } else {
+                    // If local date is ahead of today's date, update local date as well as reset local plannedTimeToday
+                    if(localStorage.getItem('date') < today_date) {
+                        localStorage.setItem('plannedTimeToday', plan.expected_hours * 3600 + plan.expected_minutes * 60);
+                        localStorage.setItem('date', today_date);
+                    } else if (localStorage.getItem('date') === today_date) {
+                        localStorage.setItem('plannedTimeToday', Number(localStorage.getItem('plannedTimeToday')) + plan.expected_hours * 3600 + plan.expected_minutes * 60);
+                    }
+                }
+            }
+
             // Use the completion date for categorizing the history plans
             console.log("Updating the database...");
             instance.post(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/history_plans.json`, plan);
