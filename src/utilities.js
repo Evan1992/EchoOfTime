@@ -28,7 +28,22 @@ const isToday = (plan_date) => {
     return false
 }
 
-export { isToday };
+const isTomorrow = (plan_date) => {
+    if(plan_date) {
+        const dd = plan_date.split("-")[2];
+
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+        const tomorrow_date = date.getDate();
+
+        if(Number(dd) === tomorrow_date) {
+            return true
+        }
+    }
+    return false
+}
+
+export { isToday, isTomorrow };
 
 /* ========== Learning ========== */
 /* Export functions */
