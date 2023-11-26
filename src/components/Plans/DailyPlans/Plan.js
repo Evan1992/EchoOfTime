@@ -195,21 +195,26 @@ const Plan = (props) => {
         // Post the plan and its children plans to history_plans
         checked_plans.forEach(plan => {
             /**
-             * The condition chunk below is for storing the expected completion time of
-             * current checked plan locally
+             * The condition chunk below is for storing the expected completion time and
+             * used time of current checked plan locally. Since it disappears from the page
+             * and is not part of the response we get by querying the database endpoint, we
+             * should store the info locally
              */
             if(isToday(plan.date)) {
                 const today_date = plan.date
                 if(localStorage.getItem('date') === null) {
                     localStorage.setItem('date', today_date);
                     localStorage.setItem('plannedTimeToday', plan.expected_hours * 3600 + plan.expected_minutes * 60);
+                    localStorage.setItem('usedTimeToday', plan.seconds);
                 } else {
                     // If local date is ahead of today's date, update local date as well as reset local plannedTimeToday
                     if(localStorage.getItem('date') < today_date) {
-                        localStorage.setItem('plannedTimeToday', plan.expected_hours * 3600 + plan.expected_minutes * 60);
                         localStorage.setItem('date', today_date);
+                        localStorage.setItem('plannedTimeToday', plan.expected_hours * 3600 + plan.expected_minutes * 60);
+                        localStorage.setItem('usedTimeToday', plan.seconds);
                     } else if (localStorage.getItem('date') === today_date) {
                         localStorage.setItem('plannedTimeToday', Number(localStorage.getItem('plannedTimeToday')) + plan.expected_hours * 3600 + plan.expected_minutes * 60);
+                        localStorage.setItem('usedTimeToday', plan.seconds);
                     }
                 }
             }
