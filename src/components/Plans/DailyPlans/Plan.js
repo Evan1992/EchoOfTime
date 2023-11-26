@@ -201,21 +201,15 @@ const Plan = (props) => {
              * should store the info locally
              */
             if(isToday(plan.date)) {
-                const today_date = plan.date
+                const today_date = new Date().toLocaleDateString();
                 if(localStorage.getItem('date') === null) {
                     localStorage.setItem('date', today_date);
                     localStorage.setItem('plannedTimeToday', plan.expected_hours * 3600 + plan.expected_minutes * 60);
                     localStorage.setItem('usedTimeToday', plan.seconds);
                 } else {
-                    // If local date is ahead of today's date, update local date as well as reset local plannedTimeToday
-                    if(localStorage.getItem('date') < today_date) {
-                        localStorage.setItem('date', today_date);
-                        localStorage.setItem('plannedTimeToday', plan.expected_hours * 3600 + plan.expected_minutes * 60);
-                        localStorage.setItem('usedTimeToday', plan.seconds);
-                    } else if (localStorage.getItem('date') === today_date) {
-                        localStorage.setItem('plannedTimeToday', Number(localStorage.getItem('plannedTimeToday')) + plan.expected_hours * 3600 + plan.expected_minutes * 60);
-                        localStorage.setItem('usedTimeToday', plan.seconds);
-                    }
+                    // localStorage.getItem('date') now only equals to today_date
+                    localStorage.setItem('plannedTimeToday', Number(localStorage.getItem('plannedTimeToday')) + plan.expected_hours * 3600 + plan.expected_minutes * 60);
+                    localStorage.setItem('usedTimeToday', Number(localStorage.getItem('usedTimeToday')) + plan.seconds);
                 }
             }
 

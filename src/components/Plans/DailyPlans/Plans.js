@@ -79,6 +79,14 @@ const Plans = (props) => {
         }
         setTodayPlans(today_plans => _today_plans)
 
+        // If date stored in localStorage is ahead of today's date, update local date as well as reset plannedTimeToday and usedTimeToday stored locally
+        const today_date = new Date().toLocaleDateString();
+        if(localStorage.getItem('date') !== null && localStorage.getItem('date') < today_date) {
+            localStorage.setItem('date', today_date);
+            localStorage.setItem('plannedTimeToday', 0);
+            localStorage.setItem('usedTimeToday', 0);
+        }
+
         // set totalPlannedTimeToday so the Total Planned Time can be shown at the component TodayPlanSummary
         let plans_of_today_expected_seconds_local = 0;
         if(localStorage.getItem('plannedTimeToday') !== null) {
