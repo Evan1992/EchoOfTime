@@ -87,7 +87,10 @@ const Plan = (props) => {
             removePlansOfTodayHandler(props.plan);
         }
 
-        // Update the plan with the date
+        // Update the plan with the date. Update both the local variable and database
+        // Update the local variable
+        props.plan.date = date.toISOString().slice(0,10);
+        // Update database
         console.log("Updating the database...");
         const config = { headers: {'Content-Type': 'application/json'} };
         instance.put(`long_term_plans/active_plans/${props.long_term_plan_id}/short_term_plans/active_plans/${props.short_term_plan_id}/daily_plans/active_plans/${props.plan_id}/date.json`, date.toISOString().slice(0,10), config);
@@ -206,10 +209,11 @@ const Plan = (props) => {
                     localStorage.setItem('date', today_date);
                     localStorage.setItem('plannedTimeToday', plan.expected_hours * 3600 + plan.expected_minutes * 60);
                     localStorage.setItem('usedTimeToday', plan.seconds);
-                } else {
-                    // localStorage.getItem('date') now only equals to today_date
+                }
+                // localStorage.getItem('date') now only equals to today_date
+                else{
                     localStorage.setItem('plannedTimeToday', Number(localStorage.getItem('plannedTimeToday')) + plan.expected_hours * 3600 + plan.expected_minutes * 60);
-                    localStorage.setItem('usedTimeToday', Number(localStorage.getItem('usedTimeToday')) + plan.seconds);
+                    localStorage.setItem('usedTimeToday', Number(localStorage.getItem('usedTimeToday')) + seconds);
                 }
             }
 
