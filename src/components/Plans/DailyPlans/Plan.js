@@ -213,7 +213,7 @@ const Plan = (props) => {
                 // localStorage.getItem('date') now only equals to today_date
                 else{
                     localStorage.setItem('plannedTimeToday', Number(localStorage.getItem('plannedTimeToday')) + plan.expected_hours * 3600 + plan.expected_minutes * 60);
-                    localStorage.setItem('usedTimeToday', Number(localStorage.getItem('usedTimeToday')) + seconds);
+                    localStorage.setItem('usedTimeToday', Number(localStorage.getItem('usedTimeToday')) + secondsBeforeStart);
                 }
             }
 
