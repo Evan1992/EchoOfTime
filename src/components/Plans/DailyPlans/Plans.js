@@ -7,6 +7,7 @@ import TodayPlans from '../TodayPlans/TodayPlans';
 import { PlansOfTodayContextProvider } from '../../../store/plans-of-today-context';
 import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 import TomorrowPlanSummary from '../TomorrowPlans/TomorrowPlanSummary';
+import Focus from '../../Focus/Focus';
 import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
@@ -23,6 +24,7 @@ const Plans = (props) => {
     // ordered_plans is a 2D array, each element is [plan_id, plan]
     const [ordered_plans, setOrderedPlans] = useState([]);
     const [today_plans, setTodayPlans] = useState([]);
+
     // totalPlannedTimeToday is: Time for active plans of today + Time for finished plans of today
     const [totalPlannedTimeToday, setTotalPlannedTimeToday] = useState(0);
     const [usedTimeToday, setUsedTimeToday] = useState(0);
@@ -147,6 +149,11 @@ const Plans = (props) => {
         setPlans(plans => new_plans);
     }
 
+    const [isClockActiveGlobal, setIsClockActiveGlobal] = useState(false);
+    const clockActiveToggleHandler = () => {
+        setIsClockActiveGlobal(isClockActiveGlobal => !isClockActiveGlobal);
+    }
+
     // get the data from database as soon as user visit the home page
     useEffect(() => {
         fetchPlansHandler();
@@ -194,6 +201,7 @@ const Plans = (props) => {
                                                 plan_id={element[0]}
                                                 plan={element[1]}
                                                 show_children={show_children}
+                                                clockActiveToggleHandler={clockActiveToggleHandler}
                                                 childrenToggleHandler={event => childrenToggleHandler(event, element[0])}
                                             />
                                         </PlansOfTodayContextProvider>
@@ -215,7 +223,7 @@ const Plans = (props) => {
                 />
             </div>
 
-            {/* Separation between TodayPlans and TodayPlanSummary*/}
+            {/* Separation between TodayPlans and TodayPlanSummary */}
             <div style={{height: "25px"}} /> 
 
             <TodayPlanSummary
@@ -224,11 +232,18 @@ const Plans = (props) => {
                 used_time = {usedTimeToday}
             />
 
-            {/* Separation between TodayPlanSummary and TomorrowPlanSummary*/}
+            {/* Separation between TodayPlanSummary and TomorrowPlanSummary */}
             <div style={{height: "25px"}} />
 
             <TomorrowPlanSummary
                 all_plans = {plans}
+            />
+
+            {/* Separation between TomorrowPlanSummary and Focus */}
+            <div style={{height: "25px"}} />
+
+            <Focus 
+                isClockActiveGlobal = {isClockActiveGlobal}
             />
         </React.Fragment>
     )
