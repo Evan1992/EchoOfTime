@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useTimer } from "react-use-precision-timer";
 
 const TimerForFocus = (props) => {
-    const [seconds, setSeconds] = useState(0)
+    const [seconds, setSeconds] = useState(0);
+
+    const callback = useCallback(() => setSeconds((prevSeconds) => prevSeconds + 1), []);
+    // The callback will be called every 1000 milliseconds.
+    const timer = useTimer({ delay: 1000 }, callback);
 
     const formatToTwoDigits = (n) => {
         if(n < 10 ){
@@ -24,16 +29,13 @@ const TimerForFocus = (props) => {
     }
 
     useEffect(() => {
-        let interval = null;
         if(props.isClockActiveGlobal) {
-            interval = setInterval(() => {
-                setSeconds((preSeconds) => preSeconds + 1);
-            }, 1000);
+            timer.start();
         } else {
+            timer.stop();
             setSeconds(0);
         }
-        return () => clearInterval(interval);
-    }, [props])
+    }, [props, timer])
 
     return (
         <div>
