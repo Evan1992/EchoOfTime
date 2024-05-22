@@ -1,18 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'; // reduxjs/toolkit already includes redux
 
-
-// const initialState = {
-//     title: null,
-//     description: null,
-//     date: null,
-//     short_term_plans: []
-// }
-
 const initialState = {
     title: "",
     description: "",
     date: null,
-    short_term_plans: []
+    short_term_plans: [],
+    changed: false
 }
 
 const activePlanSlice = createSlice({
@@ -24,11 +17,14 @@ const activePlanSlice = createSlice({
             state.description = action.payload.description;
             state.date = action.payload.date;
             state.short_term_plans = action.payload.short_term_plans;
+            state.changed = true;
         }
     }
 })
 
 export default activePlanSlice;
+export const activePlanActions = activePlanSlice.actions;
+
 
 
 
@@ -37,3 +33,9 @@ export default activePlanSlice;
 // No asynchronous operation within reducer function, like
 // http request. Instead, there are two ways to perform http
 // reuqest, one is "useEffect()"", another one is "action creator thunk"
+
+/* Mutate the state within reducer function */
+// By all means, we should not mutate the state directly within redux functions.
+// For this module, we mutate the state directly because that's under the help
+// of reduxjs/toolkit, behind the scene, reduxjs/toolkit also doesn't mutate
+// the state directly

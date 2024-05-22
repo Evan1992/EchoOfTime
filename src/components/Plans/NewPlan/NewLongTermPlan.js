@@ -1,44 +1,40 @@
 /* ========== import React and React hooks ========== */
-import React, { useState, useRef, useContext } from 'react'
+import React, { useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
-import AuthContext from '../../../store/auth-context';
+// import AuthContext from '../../../store/auth-context';
+import { activePlanActions } from '../../../store/slices/active-plan-slice';
+import { sendPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './NewLongTermPlan.module.css';
 
 
 const NewLongTermPlan = () => {
+    const plan = useSelector((state) => state.activePlan);
+    const dispatch = useDispatch();
+
     let inputTitle = useRef();
     let inputDescription = useRef();
-    const [isLoading, setIsLoading] = useState(false);
 
-    // Object for interacting with database endpoint
-    const authCtx = useContext(AuthContext);
-    const instance = authCtx.firebase;
+    useEffect(() => {
+        if(plan.changed) {
+            dispatch(sendPlanData(plan));
+        }
+    }, [plan, dispatch])
 
-    const postPlanHandler= (event) => {
+    const postPlanHandler = (event) => {
         event.preventDefault();
 
-        const enteredTitle = inputTitle.current.value;
-        const enteredDescription = inputDescription.current.value;
-
-        setIsLoading(true);
-
-        const target = {
-            title: enteredTitle,
-            description: enteredDescription,
-            date: new Date().toISOString().slice(0,10),
-            short_term_plans: {}
-        };
-        console.log("Updating the database...");
-        instance.post(`/long_term_plans/active_plans.json`, target)
-        .then(res => {
-            setIsLoading(false);
-            
-            // Refresh the page after posting the data
-            window.location.reload();
-        })
+        dispatch(
+            activePlanActions.addPlan({
+                title: inputTitle.current.value,
+                description: inputDescription.current.value,
+                date: new Date().toISOString().slice(0,10),
+                short_term_plans: {}
+            })
+        )
     }
 
     return (
@@ -56,8 +52,7 @@ const NewLongTermPlan = () => {
                 </div>
 
                 <div className={classes.actions}>
-                    {!isLoading && <button>Submit</button>}
-                    {isLoading && <p>Sending request...</p>}
+                    <button>Submit</button>
                 </div>
             </form>
         </section>
@@ -70,3 +65,8 @@ export default NewLongTermPlan
 /* ========== Learning ========== */
 /* html tag textarea */
 // Reference: https://www.w3schools.com/tags/tag_textarea.asp
+
+/* useEffect() to update the database */
+// plan is a global variable from the redux slice, as a result,
+// whenever plan changes, useEffect() will be invoked and sendPlanData()
+// will be called, then the database will be updated
