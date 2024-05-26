@@ -1,3 +1,5 @@
+import { activePlanActions } from "./active-plan-slice";
+
 export const sendPlanData = (plan) => {
     return async (dispatch) => {
         const postData = async () => {
@@ -21,6 +23,40 @@ export const sendPlanData = (plan) => {
 
         console.log("Updating the database...");
         await postData();
+    }
+}
+
+export const fetchPlanData = () => {
+    return async (dispatch) => {
+        const fetchData = async () => {
+            const response = await fetch(
+                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan.json'
+            )
+
+            if(!response.ok) {
+                throw new Error('Fetching data failed')
+            }
+
+            const data = await response.json();
+            return data;
+        }
+
+        const planData = await fetchData();
+
+        // short_term_plans could be undefined, if so, assign [] to it
+        let short_term_plans = planData.short_term_plans;
+        if(planData.short_term_plans === undefined) {
+            short_term_plans = [];
+        }
+
+        dispatch(
+            activePlanActions.addPlan({
+                title: planData.title,
+                description: planData.description,
+                date: planData.date,
+                short_term_plans: short_term_plans
+            })
+        )
     }
 }
 
