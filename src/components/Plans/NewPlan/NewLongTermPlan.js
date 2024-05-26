@@ -3,7 +3,6 @@ import React, { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
-// import AuthContext from '../../../store/auth-context';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import { sendPlanData } from '../../../store/slices/active-plan-actions';
 
