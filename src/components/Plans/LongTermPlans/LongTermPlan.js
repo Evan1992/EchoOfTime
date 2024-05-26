@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
 import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
-import ShortTermPlans from '../ShortTermPlans/ShortTermPlans';
+import ShortTermPlan from '../ShortTermPlans/ShortTermPlan';
 
 /* ========== import other libraries ========== */
 import { fetchPlanData, archivePlanData, sendPlanData } from '../../../store/slices/active-plan-actions';
@@ -43,7 +43,7 @@ const LongTermPlan = () => {
                 <h5>{plan.title}</h5>
                 <div>{plan.description}</div>
             </section>
-            <ShortTermPlans />
+            <ShortTermPlan />
         </div>
     )
 

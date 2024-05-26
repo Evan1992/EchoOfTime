@@ -9,9 +9,9 @@ import InlineEdit from '../../UI/InlineEdit';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
 
 /* ========== import css ========== */
-import classes from './ShortTermPlans.module.css';
+import classes from './ShortTermPlan.module.css';
 
-const ShortTermPlans = (props) => {
+const ShortTermPlan = (props) => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
@@ -48,7 +48,7 @@ const ShortTermPlans = (props) => {
     )
 }
 
-export default ShortTermPlans
+export default ShortTermPlan
 
 /* ========== Learning ========== */
 /* Posting data and asynchronous call */
