@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
 
 /* ========== import other libraries ========== */
-import { fetchPlanData } from '../../../store/slices/active-plan-actions';
+import { fetchPlanData, archivePlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './LongTermPlan.module.css';
@@ -15,12 +15,14 @@ const LongTermPlan = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
+    // get the data from database as soon as user visit the home page
     useEffect(() => {
         dispatch(fetchPlanData());
     }, [dispatch])
 
+    // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
     const archivePlan = () => {
-        // TODO
+        dispatch(archivePlanData(plan));
     }
 
     const showLongTermPlan = (

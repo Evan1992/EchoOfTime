@@ -52,19 +52,67 @@ export const fetchPlanData = () => {
 
         const planData = await fetchData();
 
-        // short_term_plans could be undefined, if so, assign [] to it
-        let short_term_plans = planData.short_term_plans;
-        if(planData.short_term_plans === undefined) {
-            short_term_plans = [];
+        // planData might be empty if no active plan present
+        if(planData) {
+            // short_term_plans could be undefined, if so, assign [] to it
+            let short_term_plans = planData.short_term_plans;
+            if(planData.short_term_plans === undefined) {
+                short_term_plans = [];
+            }
+
+            dispatch(
+                activePlanActions.addPlan({
+                    title: planData.title,
+                    description: planData.description,
+                    date: planData.date,
+                    short_term_plans: short_term_plans
+                })
+            )
         }
 
+    }
+}
+
+// Archive the active plan
+export const archivePlanData = (plan) => {
+    return async (dispatch) => {
+        const archiveActivePlan = async () => {
+            const response = await fetch(
+                'https://sound-of-time-2-default-rtdb.firebaseio.com/archived_plans.json',
+                {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        title: plan.title,
+                        description: plan.description,
+                        date: plan.date,
+                        short_term_plans: plan.short_term_plans
+                    })
+                }
+            )
+            if(!response.ok) {
+                throw new Error('Archiving data failed')
+            }
+        }
+
+        const deleteActivePlan = async () => {
+            const response = await fetch(
+                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan.json',
+                {
+                    method: 'DELETE'
+                }
+            )
+            if(!response.ok) {
+                throw new Error('Deleting data failed')
+            }
+        }
+
+        console.log("Updating the database...");
+        await archiveActivePlan();
+        console.log("Updating the database...");
+        await deleteActivePlan();
+
         dispatch(
-            activePlanActions.addPlan({
-                title: planData.title,
-                description: planData.description,
-                date: planData.date,
-                short_term_plans: short_term_plans
-            })
+            activePlanActions.removePlan()
         )
     }
 }
@@ -81,4 +129,4 @@ export const fetchPlanData = () => {
 // Reference: https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript
 // if(variable) will check for all "false-like" value null/undefined/""/false/0/NaN
 // if (variable === null) check for null SPECIFICALLY
-// if (variable === '') check for empty string SPECIFICALLy
+// if (variable === '') check for empty string SPECIFICALLY

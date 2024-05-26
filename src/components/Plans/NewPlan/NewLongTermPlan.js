@@ -1,6 +1,6 @@
 /* ========== import React and React hooks ========== */
 import React, { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 /* ========== import other libraries ========== */
 import { sendPlanData } from '../../../store/slices/active-plan-actions';
@@ -10,7 +10,6 @@ import classes from './NewLongTermPlan.module.css';
 
 
 const NewLongTermPlan = () => {
-    const plan = useSelector((state) => state.activePlan);
     const dispatch = useDispatch();
 
     let inputTitle = useRef();
