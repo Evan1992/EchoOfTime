@@ -3,27 +3,27 @@ import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 /* ========== import other libraries ========== */
-import { sendPlanData } from '../../../store/slices/active-plan-actions';
+import { activePlanActions } from '../../../store/slices/active-plan-slice';
 
 /* ========== import css ========== */
 import classes from './NewLongTermPlan.module.css';
 
-
 const NewLongTermPlan = () => {
     const dispatch = useDispatch();
-
     let inputTitle = useRef();
     let inputDescription = useRef();
 
     const postPlanHandler = (event) => {
         event.preventDefault();
-        const target = {
-            title: inputTitle.current.value,
-            description: inputDescription.current.value,
-            date: new Date().toISOString().slice(0,10),
-            short_term_plans: []
-        }
-        dispatch(sendPlanData(target));
+
+        dispatch(
+            activePlanActions.addPlan({
+                title: inputTitle.current.value,
+                description: inputDescription.current.value,
+                date: new Date().toISOString().slice(0,10),
+                short_term_plans: []
+            })
+        )
     }
 
     return (

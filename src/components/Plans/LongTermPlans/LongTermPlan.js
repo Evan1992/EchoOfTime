@@ -7,7 +7,7 @@ import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
 import ShortTermPlans from '../ShortTermPlans/ShortTermPlans';
 
 /* ========== import other libraries ========== */
-import { fetchPlanData, archivePlanData } from '../../../store/slices/active-plan-actions';
+import { fetchPlanData, archivePlanData, sendPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './LongTermPlan.module.css';
@@ -16,7 +16,14 @@ const LongTermPlan = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
-    // get the data from database as soon as user visit the home page
+    // Send the data to database after user input
+    useEffect(() => {
+        if(plan.changed === true) {
+            dispatch(sendPlanData(plan));
+        }
+    }, [dispatch, plan])
+
+    // Get the data from database as soon as user visit the home page
     useEffect(() => {
         dispatch(fetchPlanData());
     }, [dispatch])
@@ -53,3 +60,22 @@ export default LongTermPlan
 /* ========== Learning ========== */
 /* html tag span vs div */
 // A div is a block element; a span is an inline element
+
+/* useEffect() to update the database */
+// plan is a global variable from the redux slice, as a result,
+// whenever plan changes, useEffect() will be invoked and sendPlanData()
+// will be called, then the database will be updated. We mutate the state
+// in the component - NewLongTermPlan while perform the side effect
+// sendPlanData() in this component
+// Benefit: This will separate the process of updating global state and updating
+// the database. As a result, the end user will see a fast UI change instead of
+// waiting for the complete of database update.
+
+/*
+    const archivePlan = () => {
+        dispatch(archivePlanData(plan));
+    }
+*/
+// The above code snippet does NOT perform side effect within useEffect(),
+// as a result, user have to wait for the communication to database to complete,
+// then see the UI changes
