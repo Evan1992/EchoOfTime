@@ -23,6 +23,15 @@ export const sendPlanData = (plan) => {
 
         console.log("Updating the database...");
         await postData();
+
+        dispatch(
+            activePlanActions.addPlan({
+                title: plan.title,
+                description: plan.description,
+                date: plan.date,
+                short_term_plans: plan.short_term_plans
+            })
+        )
     }
 }
 
