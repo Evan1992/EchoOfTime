@@ -76,3 +76,9 @@ export const fetchPlanData = () => {
 // so before we perform dispatch, we can run side effect
 // code, like http request. It's not within reducer function,
 // and we are good to perform the side effect
+
+/* Javascript: check for null/undefined/""/false/0/NaN */
+// Reference: https://stackoverflow.com/questions/6003884/how-do-i-check-for-null-values-in-javascript
+// if(variable) will check for all "false-like" value null/undefined/""/false/0/NaN
+// if (variable === null) check for null SPECIFICALLY
+// if (variable === '') check for empty string SPECIFICALLy
