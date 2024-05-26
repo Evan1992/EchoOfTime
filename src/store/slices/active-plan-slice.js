@@ -33,6 +33,7 @@ const activePlanSlice = createSlice({
             state.short_term_plan.description = action.payload.short_term_plan.description;
             state.short_term_plan.date = action.payload.short_term_plan.date;
             state.short_term_plan.daily_plans = action.payload.daily_plans;
+            state.changed = true;
         }
     }
 })

@@ -11,7 +11,6 @@ import { activePlanActions } from '../../../store/slices/active-plan-slice';
 /* ========== import css ========== */
 import classes from './ShortTermPlans.module.css';
 
-
 const ShortTermPlans = (props) => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);

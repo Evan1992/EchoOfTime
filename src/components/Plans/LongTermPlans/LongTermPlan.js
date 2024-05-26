@@ -1,5 +1,5 @@
 /* ========== import React and React hooks ========== */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
@@ -13,17 +13,15 @@ import { fetchPlanData, archivePlanData, sendPlanData } from '../../../store/sli
 import classes from './LongTermPlan.module.css';
 
 const LongTermPlan = () => {
-    const [initialLoading, setInitialLoading] = useState(true);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
     // Send the data to database after user input
     useEffect(() => {
-        if(initialLoading === true && plan.changed === true) {
-            setInitialLoading(false);
+        if(plan.changed === true) {
             dispatch(sendPlanData(plan));
         }
-    }, [dispatch, initialLoading, plan])
+    }, [dispatch, plan])
 
     // Get the data from database as soon as user visit the home page
     useEffect(() => {
