@@ -18,6 +18,10 @@ const activePlanSlice = createSlice({
             state.date = action.payload.date;
             state.short_term_plans = action.payload.short_term_plans;
             state.changed = true;
+        },
+        // Reset to initialState when the active plan is finished
+        removePlan() {
+            return initialState;
         }
     }
 })
