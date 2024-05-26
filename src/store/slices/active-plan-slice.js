@@ -4,7 +4,10 @@ const initialState = {
     title: "",
     description: "",
     date: null,
-    short_term_plan: {},
+    short_term_plan: {
+        title: "",
+        description: ""
+    },
     changed: false
 }
 
