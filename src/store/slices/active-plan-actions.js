@@ -56,6 +56,7 @@ export const fetchPlanData = () => {
                     title: planData.title,
                     description: planData.description,
                     date: planData.date,
+                    changed: false,
                     short_term_plans: short_term_plans
                 })
             )

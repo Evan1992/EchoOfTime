@@ -21,6 +21,7 @@ const NewLongTermPlan = () => {
                 title: inputTitle.current.value,
                 description: inputDescription.current.value,
                 date: new Date().toISOString().slice(0,10),
+                changed: true,
                 short_term_plans: []
             })
         )
