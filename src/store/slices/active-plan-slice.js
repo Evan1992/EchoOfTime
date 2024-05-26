@@ -6,7 +6,9 @@ const initialState = {
     date: null,
     short_term_plan: {
         title: "",
-        description: ""
+        description: "",
+        date: null,
+        daily_plans: []
     },
     changed: false
 }
@@ -25,6 +27,12 @@ const activePlanSlice = createSlice({
         // Reset to initialState when the active plan is finished
         removePlan() {
             return initialState;
+        },
+        addShortTermPlan(state, action){
+            state.short_term_plan.title = action.payload.short_term_plan.title;
+            state.short_term_plan.description = action.payload.short_term_plan.description;
+            state.short_term_plan.date = action.payload.short_term_plan.date;
+            state.short_term_plan.daily_plans = action.payload.daily_plans;
         }
     }
 })

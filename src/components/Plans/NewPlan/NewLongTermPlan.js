@@ -24,7 +24,9 @@ const NewLongTermPlan = () => {
                 changed: true,
                 short_term_plan: {
                     title: "",
-                    description: ""
+                    description: "",
+                    date: null,
+                    daily_plans: []
                 }
             })
         )

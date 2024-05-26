@@ -32,7 +32,7 @@ const InlineEdit = (props) => {
     }
 
     const onBlur = () => {
-        props.postPlan(inputTitle, inputDescription, inputDescriptionHeight);
+        props.postPlan(inputTitle, inputDescription);
     }
 
     const onKeyDown = (event) => {
