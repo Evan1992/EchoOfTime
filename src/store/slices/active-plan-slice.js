@@ -4,7 +4,7 @@ const initialState = {
     title: "",
     description: "",
     date: null,
-    short_term_plans: [],
+    short_term_plan: {},
     changed: false
 }
 
@@ -16,8 +16,8 @@ const activePlanSlice = createSlice({
             state.title = action.payload.title;
             state.description = action.payload.description;
             state.date = action.payload.date;
-            state.short_term_plans = action.payload.short_term_plans;
-            state.changed = true;
+            state.short_term_plan = action.payload.short_term_plan;
+            state.changed = action.payload.changed;
         },
         // Reset to initialState when the active plan is finished
         removePlan() {

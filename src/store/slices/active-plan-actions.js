@@ -11,7 +11,7 @@ export const sendPlanData = (plan) => {
                         title: plan.title,
                         description: plan.description,
                         date: plan.date,
-                        short_term_plans: plan.short_term_plans
+                        short_term_plan: plan.short_term_plan
                     })
                 }
             )
@@ -45,10 +45,10 @@ export const fetchPlanData = () => {
 
         // planData might be empty if no active plan present
         if(planData) {
-            // short_term_plans could be undefined, if so, assign [] to it
-            let short_term_plans = planData.short_term_plans;
-            if(planData.short_term_plans === undefined) {
-                short_term_plans = [];
+            // short_term_plan could be undefined, if so, assign [] to it
+            let short_term_plan = planData.short_term_plan;
+            if(planData.short_term_plan === undefined) {
+                short_term_plan = [];
             }
 
             dispatch(
@@ -57,7 +57,7 @@ export const fetchPlanData = () => {
                     description: planData.description,
                     date: planData.date,
                     changed: false,
-                    short_term_plans: short_term_plans
+                    short_term_plan: short_term_plan
                 })
             )
         }
