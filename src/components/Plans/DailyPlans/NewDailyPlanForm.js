@@ -1,4 +1,8 @@
 import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
+
+/* ========== import other libraries ========== */
+import { activePlanActions } from '../../../store/slices/active-plan-slice';
 
 /* ========== import react components ========== */
 import Backdrop from '../../UI/Backdrop';
@@ -13,9 +17,22 @@ const NewDailyPlanForm = (props) => {
      * and re-render the page for every keystroke
      */
     let inputPlan = useRef();
+    const dispatch = useDispatch();
     
     const postPlanHandler = () => {
-        // TODO
+        const newDailyPlan = {
+            title: inputPlan.current.value,
+            comment: "",
+            date: null,
+            seconds: 0,
+            expected_hours: 0,
+            expected_minutes: 0
+        }
+        dispatch(
+            activePlanActions.addDailyPlan({
+                daily_plan:newDailyPlan
+            })
+        );
     }
 
     return (

@@ -43,6 +43,13 @@ const activePlanSlice = createSlice({
                 daily_plans: []
             };
             state.changed = true;
+        },
+        addDailyPlan(state, action) {
+            // state.short_term_plan.daily_plans could be undefined
+            if(!state.short_term_plan.daily_plans) {
+                state.short_term_plan.daily_plans = []
+                state.short_term_plan.daily_plans.push(action.payload.daily_plan)
+            }
         }
     }
 })
