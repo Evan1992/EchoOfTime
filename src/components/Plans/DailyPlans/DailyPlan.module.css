@@ -1,0 +1,63 @@
+.expand_collapse {
+    float:left;
+    color: gray;
+    width: 20px;
+    height: 20px;
+}
+
+.expand_collapse_img {
+    width: 60%;
+    height: 60%;
+}
+
+.expand_collapse_img:hover {
+    filter: opacity(0.3);
+    transform: scale(1.8);
+}
+
+.plan_add_button{
+    float:right;
+    color: gray;
+}
+.plan_add_button:hover{
+    transform: scale(1.8);
+}
+
+/* Set one CSS for two tags */
+.plan_clock_button,
+.plan_deletion_button,
+.plan_check_button{
+    vertical-align: middle;
+    width:20px;
+    height:20px;
+}
+
+/* Set one CSS for two tags */
+.plan_clock_button:hover,
+.plan_deletion_button:hover,
+.plan_check_button:hover{
+    transform: scale(1.8);
+}
+
+.plan_calendar{
+    position:fixed;
+    top: 20%;
+    right: 10%;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.plan_calendar_icon {
+    vertical-align: middle;
+    width:20px;
+    height:20px;
+}
+
+.plan_calendar_icon:hover {
+    filter: opacity(0.3);
+    transform: scale(1.5);
+}
+
+.input_time {
+    width: 15%;
+}
