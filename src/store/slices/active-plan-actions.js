@@ -103,6 +103,33 @@ export const archivePlanData = (plan) => {
     }
 }
 
+// Method for updating active_plan.short_term_plan
+export const sendShortTermPlanData = (plan) => {
+    return async (dispatch) => {
+        const postData = async () => {
+            const response = await fetch(
+                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan/short_term_plan.json',
+                {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        title: plan.short_term_plan.title,
+                        description: plan.short_term_plan.description,
+                        date: plan.short_term_plan.date,
+                        daily_plans: plan.short_term_plan.daily_plans
+                    })
+                }
+            )
+            if(!response.ok) {
+                throw new Error('Sending data failed')
+            }
+        }
+
+        console.log("Updating the database...");
+        await postData();
+    }
+}
+
+
 
 /* ========== Learning ========== */
 /* Action creator thunk */
