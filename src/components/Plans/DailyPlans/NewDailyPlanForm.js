@@ -29,6 +29,7 @@ const NewDailyPlanForm = (props) => {
 
     const postPlanHandler = () => {
         const newDailyPlan = {
+            id: crypto.randomUUID(),
             title: inputPlan.current.value,
             comment: "",
             date: null,

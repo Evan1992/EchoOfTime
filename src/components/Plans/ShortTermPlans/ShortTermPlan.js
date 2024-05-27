@@ -12,7 +12,7 @@ import { activePlanActions } from '../../../store/slices/active-plan-slice';
 /* ========== import css ========== */
 import classes from './ShortTermPlan.module.css';
 
-const ShortTermPlan = (props) => {
+const ShortTermPlan = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
