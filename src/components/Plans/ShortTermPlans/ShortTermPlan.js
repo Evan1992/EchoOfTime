@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
 import InlineEdit from '../../UI/InlineEdit';
+import DailyPlans from '../DailyPlans/DailyPlans';
 
 /* ========== import other libraries ========== */
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
@@ -44,6 +45,11 @@ const ShortTermPlan = (props) => {
                     postPlan={addShortTermPlanHandler}
                 />
             </section>
+
+            {/* Show daily_plans if short_term_plan exists */}
+            {plan.short_term_plan.title &&
+                <DailyPlans />
+            }
         </React.Fragment>   
     )
 }
