@@ -27,7 +27,7 @@ const NewDailyPlanForm = (props) => {
         }
     }, [dispatch, plan])
 
-    const postPlanHandler = () => {
+    const addPlanHandler = () => {
         const newDailyPlan = {
             id: crypto.randomUUID(),
             title: inputPlan.current.value,
@@ -42,6 +42,8 @@ const NewDailyPlanForm = (props) => {
                 daily_plan:newDailyPlan
             })
         );
+        // Empty the input box after submission
+        inputPlan.current.value = "";
     }
 
     return (
@@ -50,7 +52,7 @@ const NewDailyPlanForm = (props) => {
             <Backdrop onClick={props.formToggler} />
             <div className={classes.control}>
                 <input type="text" ref={inputPlan} />
-                <button onClick={postPlanHandler}>Add</button>
+                <button onClick={addPlanHandler}>Add</button>
                 <button onClick={props.formToggler}>Cancel</button>
             </div>
         </React.Fragment>
