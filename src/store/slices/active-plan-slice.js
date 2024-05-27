@@ -49,8 +49,8 @@ const activePlanSlice = createSlice({
             // state.short_term_plan.daily_plans could be undefined
             if(!state.short_term_plan.daily_plans) {
                 state.short_term_plan.daily_plans = [];
-                state.short_term_plan.daily_plans.push(action.payload.daily_plan);
             }
+            state.short_term_plan.daily_plans.push(action.payload.daily_plan);
             state.short_term_plan.changed = true;
         }
     }
