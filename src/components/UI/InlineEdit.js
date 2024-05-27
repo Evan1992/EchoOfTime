@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 /* ========== import react components ========== */
 // import Backdrop from './Backdrop';
@@ -7,11 +7,19 @@ import React, { useState, useRef } from 'react';
 import classes from './InlineEdit.module.css';
 
 const InlineEdit = (props) => {
+    const [initialLoading, setInitialLoading] = useState(true);
     const [inputTitle, setInputTitle] = useState(props.inputTitle);
     const [inputDescription, setInputDescription] = useState(props.inputDescription);
     const [inputDescriptionHeight, setInputDescriptionHeight] = useState(props.inputDescriptionHeight)
-    let newInputTitle = useRef(props.inputTitle);
-    let newInputDescription = useRef(props.inputDescription);
+
+    useEffect(() => {
+        if(initialLoading === false) {
+            setInputTitle(props.inputTitle);
+            setInputDescription(props.inputDescription);
+        } else {
+            setInitialLoading(false);
+        }
+    }, [props, initialLoading])
 
     const titleChangeHandler = (event) => {
         setInputTitle(inputTitle => event.target.value);
@@ -51,7 +59,7 @@ const InlineEdit = (props) => {
                 <input className={classes.input_title}
                     type = "text"
                     aria-label = "Title"
-                    ref = {newInputTitle}
+                    // ref = {newInputTitle}
                     value = {inputTitle}
                     onChange = {titleChangeHandler}
                     onBlur={onBlur}
@@ -63,7 +71,7 @@ const InlineEdit = (props) => {
                     type = "text"
                     style = {inlineStyle}
                     aria-label = "Description"
-                    ref = {newInputDescription}
+                    // ref = {newInputDescription}
                     value = {inputDescription}
                     onChange = {descriptionChangeHandler}
                     onInput = {onInput}
@@ -79,3 +87,8 @@ export default InlineEdit
 /* ========== Learning ========== */
 /* aria-label */
 // The aria-label attribute defines a string value that labels an interactive element
+
+/* useState() will only be called once */
+// React saves the initial state once and ignores it on the next renders.
+// As a result, for `const [inputTitle, setInputTitle] = useState(props.inputTitle);`,
+// inputTitle won't be reseted even though `props.inputTitle` changes

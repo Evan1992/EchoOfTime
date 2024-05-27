@@ -27,7 +27,7 @@ const ShortTermPlan = (props) => {
     }
 
     const archivePlanHandler = () => {
-        // TODO
+        dispatch(activePlanActions.removeShortTermPlan());
     }
 
     return (
