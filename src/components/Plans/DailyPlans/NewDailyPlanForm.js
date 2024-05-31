@@ -36,7 +36,7 @@ const NewDailyPlanForm = (props) => {
             expected_hours: 0,
             expected_minutes: 0,
             show_children: false,
-            children: []
+            children: null
         }
         dispatch(
             activePlanActions.addDailyPlan({

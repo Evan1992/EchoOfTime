@@ -17,16 +17,20 @@ const DailyPlan = (props) => {
         setShowForm(!showForm);
     }
 
+    const childrenToggleHandler = () => {
+        // TODO
+    }
+
     return (
         <React.Fragment>
             <Row>
                 <Col xs={1} />
                 <Col xs='auto'>
-                    <div className={classes.expand_collapse} onClick={props.childrenToggleHandler} >
+                    <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
                         {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
                         {
                             // do not show the expand/shrink icon if no children
-                            (typeof props.plan.children !== 'undefined') &&
+                            (props.plan.children) &&
                             (
                                 props.show_children ?
                                 <img className={classes.expand_collapse_img} src='https://img.icons8.com/ios-filled/50/000000/collapse-arrow.png'  alt='collapse' /> :
