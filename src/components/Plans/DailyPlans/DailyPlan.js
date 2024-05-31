@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
+/* ========== import React components ========== */
+import NewDailyPlanForm from './NewDailyPlanForm';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 
 /* ========== import css ========== */
 import classes from './DailyPlan.module.css';
 
 const DailyPlan = (props) => {
+    const [showForm, setShowForm] = useState(false);
+
+    const formToggleHandler = () => {
+        setShowForm(!showForm);
+    }
+
     return (
         <React.Fragment>
             <Row>
@@ -30,6 +39,26 @@ const DailyPlan = (props) => {
                 <Col xs={{ span: 4}} style={{display:'flex', justifyContent:'left'}}>
                     <div>{props.plan.title || 'No title'}</div>
                 </Col>
+
+                <Col xs="auto" style={{padding: 0}}>
+                    <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
+                </Col>
+            </Row>
+
+            <Row>
+                {
+                    showForm &&
+                    <Container fluid>
+                        <Row>
+                            <Col xs={1}></Col>
+                            <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
+                                <NewDailyPlanForm
+                                    formToggler={formToggleHandler}
+                                />
+                            </Col>
+                        </Row>
+                    </Container>
+                }
             </Row>
         </React.Fragment>
     )

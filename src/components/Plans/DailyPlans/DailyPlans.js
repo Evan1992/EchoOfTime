@@ -15,16 +15,25 @@ import classes from './DailyPlans.module.css';
 const DailyPlans = () => {
     const plan = useSelector((state) => state.activePlan);
 
+    let ordered_daily_plans = []
+    let ordered_daily_plans_id = []
+    if(plan.short_term_plan.daily_plans !== undefined) {
+        for(const id in plan.short_term_plan.daily_plans) {
+            ordered_daily_plans_id.push(id)
+            ordered_daily_plans.push(plan.short_term_plan.daily_plans[id])
+        }
+    }
+
     return (
         <React.Fragment>
             {/* Component for all active plans */}
             <div className={classes.plans}>
                 <Container fluid className={classes.container}>
                     {
-                        plan.short_term_plan.daily_plans &&
-                        plan.short_term_plan.daily_plans.map((dailyPlan) => {
+                        ordered_daily_plans &&
+                        ordered_daily_plans.map((dailyPlan, index) => {
                             return <DailyPlan
-                                        key={dailyPlan.id}
+                                        key={ordered_daily_plans_id[index]}
                                         plan={dailyPlan}
                                     />
                         })

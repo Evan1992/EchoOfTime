@@ -55,7 +55,6 @@ export const fetchPlanData = () => {
                 })
             )
         }
-
     }
 }
 
@@ -104,18 +103,22 @@ export const archivePlanData = (plan) => {
 }
 
 // Method for updating active_plan.short_term_plan
-export const sendShortTermPlanData = (plan) => {
+export const sendDailyPlanData = (plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
-                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan/short_term_plan.json',
+                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan/short_term_plan/daily_plans.json',
                 {
-                    method: 'PUT',
+                    method: 'POST',
                     body: JSON.stringify({
-                        title: plan.short_term_plan.title,
-                        description: plan.short_term_plan.description,
-                        date: plan.short_term_plan.date,
-                        daily_plans: plan.short_term_plan.daily_plans
+                        title: plan.short_term_plan.daily_plans.at(-1).title,
+                        comment: "",
+                        date: new Date().toISOString().slice(0,10),
+                        seconds: 0,
+                        expected_hours: 0,
+                        expected_minutes: 0,
+                        show_children: false,
+                        children: []
                     })
                 }
             )

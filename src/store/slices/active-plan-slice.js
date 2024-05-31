@@ -46,7 +46,6 @@ const activePlanSlice = createSlice({
             state.changed = true;
         },
         addDailyPlan(state, action) {
-            // state.short_term_plan.daily_plans could be undefined
             if(!state.short_term_plan.daily_plans) {
                 state.short_term_plan.daily_plans = [];
             }

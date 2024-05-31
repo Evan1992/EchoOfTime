@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
-import { sendShortTermPlanData } from '../../../store/slices/active-plan-actions';
+import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import react components ========== */
 import Backdrop from '../../UI/Backdrop';
@@ -23,19 +23,20 @@ const NewDailyPlanForm = (props) => {
 
     useEffect(() => {
         if(plan.short_term_plan.changed) {
-            dispatch(sendShortTermPlanData(plan));
+            dispatch(sendDailyPlanData(plan));
         }
     }, [dispatch, plan])
 
     const addPlanHandler = () => {
         const newDailyPlan = {
-            id: crypto.randomUUID(),
             title: inputPlan.current.value,
             comment: "",
-            date: null,
+            date: new Date().toISOString().slice(0,10),
             seconds: 0,
             expected_hours: 0,
-            expected_minutes: 0
+            expected_minutes: 0,
+            show_children: false,
+            children: []
         }
         dispatch(
             activePlanActions.addDailyPlan({
