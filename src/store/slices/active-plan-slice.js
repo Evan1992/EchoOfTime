@@ -24,6 +24,13 @@ const activePlanSlice = createSlice({
             state.date = action.payload.date;
             state.short_term_plan = action.payload.short_term_plan;
             state.changed = action.payload.changed;
+            if(action.payload.short_term_plan.daily_plans !== undefined) {
+                let daily_plans = []
+                for(let id in action.payload.short_term_plan.daily_plans) {
+                    daily_plans.push(action.payload.short_term_plan.daily_plans[id])
+                }
+                state.short_term_plan.daily_plans = daily_plans;
+            }
         },
         // Reset to initialState when the active plan is finished
         removePlan() {

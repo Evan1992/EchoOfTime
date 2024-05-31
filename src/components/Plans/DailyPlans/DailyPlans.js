@@ -34,6 +34,7 @@ const DailyPlans = () => {
                         ordered_daily_plans.map((dailyPlan, index) => {
                             return <DailyPlan
                                         key={ordered_daily_plans_id[index]}
+                                        id={ordered_daily_plans_id[index]}
                                         plan={dailyPlan}
                                     />
                         })
