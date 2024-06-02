@@ -56,3 +56,7 @@ export default DailyPlans
 // When displaying multiple similar components from a collection of data,
 // we can use the JavaScript array methods filter() and map() to manipulate
 // an array of data
+
+/* Each child in a list should have a unique "key" prop */
+// We cannot use index directly or daily_plan_ids[index] indirectly as the key,
+// if so, although the key is provided, we still see the error
