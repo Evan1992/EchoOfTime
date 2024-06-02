@@ -95,6 +95,24 @@ const activePlanSlice = createSlice({
                 state.short_term_plan.daily_plans = [];
             }
             state.short_term_plan.daily_plans.push(action.payload.daily_plan);
+
+            // The new daily plan is the root plan if action.payload.index is undefined
+            if(action.payload.index === undefined) {
+                state.short_term_plan.ordered_daily_plans.push(action.payload.daily_plan);
+            } else {
+                if(action.payload.index+1 == state.short_term_plan.ordered_daily_plans.length) {
+                    state.short_term_plan.ordered_daily_plans.push(action.payload.daily_plan);
+                } else {
+                    // Given the index of the parent, insert the new daily plan to the last of all the child plans of the parent
+                    for(let i = action.payload.index+1; i < state.short_term_plan.ordered_daily_plans.length; i++) {
+                        if(state.short_term_plan.ordered_daily_plans[i].parent_id != action.payload.parent_id) {
+                            state.short_term_plan.ordered_daily_plans = state.short_term_plan.ordered_daily_plans.toSpliced(i, 0, action.payload.daily_plan);
+                            break;
+                        }
+                    }
+                }
+            }
+
         }
     }
 })

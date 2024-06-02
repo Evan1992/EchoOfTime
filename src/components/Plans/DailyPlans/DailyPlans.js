@@ -22,9 +22,10 @@ const DailyPlans = () => {
                 <Container fluid className={classes.container}>
                     {
                         plan.short_term_plan.ordered_daily_plans &&
-                        plan.short_term_plan.ordered_daily_plans.map((dailyPlan) => {
+                        plan.short_term_plan.ordered_daily_plans.map((dailyPlan, index) => {
                             return <DailyPlan
                                         key={dailyPlan.id}
+                                        index={index} // used to decide where to insert the new daily plan to ordered_daily_plans
                                         id={dailyPlan.id}
                                         plan={dailyPlan}
                                     />

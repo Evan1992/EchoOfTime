@@ -43,7 +43,9 @@ const NewDailyPlanForm = (props) => {
         }
         dispatch(
             activePlanActions.addDailyPlan({
-                daily_plan:newDailyPlan
+                daily_plan:newDailyPlan,
+                index:props.index,
+                parent_id: props.parent_id
             })
         );
         setIsAddNewPlan(true);

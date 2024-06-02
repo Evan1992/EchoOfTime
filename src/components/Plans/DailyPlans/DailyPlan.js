@@ -58,6 +58,7 @@ const DailyPlan = (props) => {
                             <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
                                 <NewDailyPlanForm
                                     parent_id={props.id}
+                                    index={props.index} // used to decide where to insert the new daily plan to ordered_daily_plans
                                     formToggler={formToggleHandler}
                                 />
                             </Col>
