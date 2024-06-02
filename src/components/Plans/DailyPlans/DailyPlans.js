@@ -21,11 +21,11 @@ const DailyPlans = () => {
             <div className={classes.plans}>
                 <Container fluid className={classes.container}>
                     {
-                        plan.short_term_plan.ordered_daily_plans &&
-                        plan.short_term_plan.ordered_daily_plans.map((dailyPlan, index) => {
+                        plan.short_term_plan.daily_plans &&
+                        plan.short_term_plan.daily_plans.map((dailyPlan, index) => {
                             return <DailyPlan
                                         key={dailyPlan.id}
-                                        index={index} // used to decide where to insert the new daily plan to ordered_daily_plans
+                                        index={index} // used to decide where to insert the new daily plan to daily_plans
                                         id={dailyPlan.id}
                                         plan={dailyPlan}
                                     />
