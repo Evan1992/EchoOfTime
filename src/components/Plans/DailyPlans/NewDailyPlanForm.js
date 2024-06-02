@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
@@ -18,14 +18,16 @@ const NewDailyPlanForm = (props) => {
      * and re-render the page for every keystroke
      */
     let inputPlan = useRef();
+    const [isAddNewPlan, setIsAddNewPlan] = useState(false);
     const plan = useSelector((state) => state.activePlan);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if(plan.short_term_plan.changed) {
+        if(isAddNewPlan) {
             dispatch(sendDailyPlanData(plan));
+            setIsAddNewPlan(false);
         }
-    }, [dispatch, plan])
+    }, [dispatch, plan, isAddNewPlan])
 
     const addPlanHandler = () => {
         const newDailyPlan = {
@@ -44,6 +46,7 @@ const NewDailyPlanForm = (props) => {
                 daily_plan:newDailyPlan
             })
         );
+        setIsAddNewPlan(true);
         // Empty the input box after submission
         inputPlan.current.value = "";
     }
