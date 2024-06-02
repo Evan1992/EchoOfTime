@@ -117,11 +117,12 @@ export const sendDailyPlanData = (plan) => {
                         seconds: 0,
                         expected_hours: 0,
                         expected_minutes: 0,
+                        parent_id: plan.short_term_plan.daily_plans.at(-1).parent_id,
                         show_children: false,
-                        children: []
                     })
                 }
             )
+
             if(!response.ok) {
                 throw new Error('Sending data failed')
             }
