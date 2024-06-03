@@ -23,12 +23,22 @@ const DailyPlans = () => {
                     {
                         plan.short_term_plan.daily_plans &&
                         plan.short_term_plan.daily_plans.map((dailyPlan, index) => {
-                            return <DailyPlan
-                                        key={dailyPlan.id}
-                                        index={index} // used to decide where to insert the new daily plan to daily_plans
-                                        id={dailyPlan.id}
-                                        plan={dailyPlan}
-                                    />
+                            let show_children = false;
+                            if(dailyPlan.has_children) {
+                                if(index+1 < plan.short_term_plan.daily_plans.length && plan.short_term_plan.daily_plans[index+1].show_plan) {
+                                    show_children = true;
+                                }
+                            }
+                            if(dailyPlan.show_plan) {
+                                return <DailyPlan
+                                    key={dailyPlan.id}
+                                    index={index} // used to decide where to insert the new daily plan to daily_plans
+                                    id={dailyPlan.id}
+                                    plan={dailyPlan}
+                                    show_children={show_children}
+                                />
+                            }
+                            return <div key={dailyPlan.id} />
                         })
                     }
                     <NewDailyPlan />

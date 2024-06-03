@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 /* ========== import React components ========== */
 import NewDailyPlanForm from './NewDailyPlanForm';
 
@@ -6,11 +8,13 @@ import NewDailyPlanForm from './NewDailyPlanForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import { activePlanActions } from '../../../store/slices/active-plan-slice';
 
 /* ========== import css ========== */
 import classes from './DailyPlan.module.css';
 
 const DailyPlan = (props) => {
+    const dispatch = useDispatch();
     const [showForm, setShowForm] = useState(false);
 
     const formToggleHandler = () => {
@@ -18,7 +22,22 @@ const DailyPlan = (props) => {
     }
 
     const childrenToggleHandler = () => {
-        // TODO
+        if(props.show_children) {
+            dispatch(
+                activePlanActions.hideChildPlan({
+                    id:props.id,
+                    index:props.index
+                })
+            )
+        } else {
+            dispatch(
+                activePlanActions.showChildPlan({
+                    id:props.id,
+                    index:props.index
+                })
+            );
+        }
+
     }
 
     return (
@@ -30,7 +49,7 @@ const DailyPlan = (props) => {
                         {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
                         {
                             // do not show the expand/shrink icon if no children
-                            (props.plan.children) &&
+                            (props.plan.has_children) &&
                             (
                                 props.show_children ?
                                 <img className={classes.expand_collapse_img} src='https://img.icons8.com/ios-filled/50/000000/collapse-arrow.png'  alt='collapse' /> :
