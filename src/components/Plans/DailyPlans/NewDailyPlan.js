@@ -32,7 +32,8 @@ const NewDailyPlan = () => {
 
                 { showForm &&
                     <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
-                        <NewDailyPlanForm 
+                        <NewDailyPlanForm
+                            rank={0}
                             formToggler={formToggleHandler}
                         />
                     </Col>

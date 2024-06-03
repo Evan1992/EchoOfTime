@@ -60,7 +60,7 @@ const DailyPlan = (props) => {
                 </Col>
 
                 <Col xs={{ span: 4}} style={{display:'flex', justifyContent:'left'}}>
-                    <div>{props.plan.title || 'No title'}</div>
+                    <div style={{'textIndent':`calc(${props.plan.rank} * 20px)`}}>{props.plan.title || 'No title'}</div>
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>
@@ -77,6 +77,7 @@ const DailyPlan = (props) => {
                             <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
                                 <NewDailyPlanForm
                                     parent_id={props.id}
+                                    rank={props.rank+1}
                                     index={props.index} // used to decide where to insert the new daily plan to daily_plans
                                     formToggler={formToggleHandler}
                                 />
