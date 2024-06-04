@@ -34,7 +34,8 @@ const DailyPlans = () => {
                                     key={dailyPlan.id}
                                     index={index} // used to decide where to insert the new daily plan to daily_plans
                                     id={dailyPlan.id}
-                                    plan={dailyPlan}
+                                    plan={plan}
+                                    daily_plan={dailyPlan}
                                     rank={dailyPlan.rank}
                                     show_children={show_children}
                                 />

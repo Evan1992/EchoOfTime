@@ -93,6 +93,12 @@ const activePlanSlice = createSlice({
                     }
                 }
             }
+        },
+        setExpectedHours(state, action) {
+            state.short_term_plan.daily_plans[action.payload.index].expected_hours = action.payload.hours;
+        },
+        setExpectedMinutes(state, action) {
+            state.short_term_plan.daily_plans[action.payload.index].expected_minutes = action.payload.minutes;
         }
     }
 })
