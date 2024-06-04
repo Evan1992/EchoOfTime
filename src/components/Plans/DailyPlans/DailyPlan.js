@@ -4,13 +4,16 @@ import { useDispatch } from 'react-redux';
 /* ========== import React components ========== */
 import NewDailyPlanForm from './NewDailyPlanForm';
 import Timer from '../../Timer/Timer';
+import Backdrop from '../../UI/Backdrop';
 
 /* ========== import other libraries ========== */
+import Calendar from 'react-calendar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
+import { isToday } from '../../../utilities';
 
 /* ========== import css ========== */
 import classes from './DailyPlan.module.css';
@@ -22,6 +25,8 @@ const DailyPlan = (props) => {
     const [seconds, setSeconds] = useState(props.daily_plan.seconds);
     const [isClockActive, setIsClockActive] = useState(false);
     const [showForm, setShowForm] = useState(false);
+    const [_date, setDate] = useState(props.plan.date);
+    const [showCalendar, setShowCalendar] = useState(false);
 
     useEffect(() => {
         if(dailyPlanChanged === true) {
@@ -72,6 +77,22 @@ const DailyPlan = (props) => {
         setDailyPlanChanged(true);
     }
 
+    const calendarToggleHandler = () => {
+        setShowCalendar(showCalendar => !showCalendar)
+    }
+
+    const dateChangeHandler = (date) => {
+        // Show the date on the page
+        setDate(_date => date.toISOString().slice(0,10));
+
+        // Determine if add/remove plan to/from a global state plans_of_today
+        if(isToday(date.toISOString().slice(0,10))) {
+            // TODO
+        } else {
+            // TODO
+        }
+    }
+
     return (
         <React.Fragment>
             <Row>
@@ -108,6 +129,18 @@ const DailyPlan = (props) => {
 
                 <Col xs={2}>
                     <Timer seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
+                </Col>
+
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_calendar_icon} onClick={calendarToggleHandler} src="https://img.icons8.com/windows/32/000000/calendar.png" alt='calendar' />
+                    {showCalendar &&
+                        <React.Fragment>
+                            <Backdrop onClick={calendarToggleHandler} />
+                            <div className={classes.plan_calendar}>
+                                <Calendar onChange={dateChangeHandler}/>
+                            </div>
+                        </React.Fragment>
+                    }
                 </Col>
             </Row>
 
