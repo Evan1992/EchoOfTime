@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 
 /* ========== import React components ========== */
 import NewDailyPlanForm from './NewDailyPlanForm';
+import Timer from '../../Timer/Timer';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
@@ -16,8 +17,10 @@ import classes from './DailyPlan.module.css';
 
 
 const DailyPlan = (props) => {
-    const [dailyPlanChanged, setDailyPlanChanged] = useState(false);
     const dispatch = useDispatch();
+    const [dailyPlanChanged, setDailyPlanChanged] = useState(false);
+    const [seconds, setSeconds] = useState(props.daily_plan.seconds);
+    const [isClockActive, setIsClockActive] = useState(false);
     const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
@@ -101,6 +104,10 @@ const DailyPlan = (props) => {
                         <input className={classes.input_time} type="number" onChange={expectedHoursChangeHandler} value={props.daily_plan.expected_hours} />:
                         <input className={classes.input_time} type="number" onChange={expectedMinutesChangeHandler} value={props.daily_plan.expected_minutes} />
                     </div>
+                </Col>
+
+                <Col xs={2}>
+                    <Timer seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
                 </Col>
             </Row>
 
