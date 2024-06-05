@@ -141,6 +141,20 @@ const DailyPlan = (props) => {
         setIsClockActive(isClockActive => !isClockActive);
     }
 
+    const deletePlanHandler = () => {
+        // Delete current plan and all its children plans
+        dispatch(
+            activePlanActions.deleteDailyPlan({
+                index:props.index
+            })
+        )
+        // setDailyPlanChanged(true) does NOT trigger useEffect any more
+        // because the daily plan is deleted and DailyPlan component will
+        // NOT be re-rendered. We are supposed to update the database on
+        // the upper layer DailyPlans
+        props.set_plan_deleted(true);
+    }
+
     return (
         <React.Fragment>
             <Row>
@@ -198,6 +212,11 @@ const DailyPlan = (props) => {
 
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_clock_button} onClick={clockToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
+                </Col>
+
+                {/* Delete a plan */}
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
                 </Col>
             </Row>
 

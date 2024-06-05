@@ -1,6 +1,6 @@
 /* ========== import React and React hooks ========== */
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
 import NewDailyPlan from './NewDailyPlan';
@@ -8,12 +8,23 @@ import DailyPlan from './DailyPlan';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
+import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './DailyPlans.module.css';
 
+
 const DailyPlans = () => {
+    const [planDeleted, setPlanDeleted] = useState(false);
+    const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
+
+    useEffect(() => {
+        if(planDeleted === true) {
+            dispatch(sendDailyPlanData(plan))
+            setPlanDeleted(false);
+        }
+    }, [dispatch, plan, planDeleted])
 
     return (
         <React.Fragment>
@@ -38,6 +49,7 @@ const DailyPlans = () => {
                                     daily_plan={dailyPlan}
                                     rank={dailyPlan.rank}
                                     show_children={show_children}
+                                    set_plan_deleted={setPlanDeleted}
                                 />
                             }
                             return <div key={dailyPlan.id} />

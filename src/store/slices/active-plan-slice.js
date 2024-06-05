@@ -75,6 +75,22 @@ const activePlanSlice = createSlice({
                 }
             }
         },
+        deleteDailyPlan(state, action) {
+            // Delete current plan and all its children plans
+            const new_daily_plans = [];
+            let id = state.short_term_plan.daily_plans[action.payload.index].id;
+            const parent_ids = new Set([id])
+
+            for(const daily_plan of state.short_term_plan.daily_plans) {
+                if(daily_plan.id !== id && !parent_ids.has(daily_plan.parent_id) ) {
+                    new_daily_plans.push(daily_plan);
+                } else {
+                    parent_ids.add(daily_plan.id);
+                }
+            }
+
+            state.short_term_plan.daily_plans = new_daily_plans;
+        },
         showChildPlan(state, action) {
             for(let i = action.payload.index+1; i < state.short_term_plan.daily_plans.length; i++) {
                 if(state.short_term_plan.daily_plans[i].parent_id === action.payload.id) {
