@@ -13,11 +13,9 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
-import { isToday } from '../../../utilities';
 
 /* ========== import css ========== */
 import classes from './DailyPlan.module.css';
-
 
 const DailyPlan = (props) => {
     const dispatch = useDispatch();
@@ -126,6 +124,23 @@ const DailyPlan = (props) => {
         }
     }
 
+    const clockToggleHandler = () => {
+        if(isClockActive === true) {
+            // Update both current plan and its parent plans
+            dispatch(
+                activePlanActions.updateTime({
+                    index:props.index,
+                    seconds:seconds,
+                    new_seconds: seconds-props.daily_plan.seconds
+                })
+            )
+            // Upload the latest time to database after stopping the timer
+            setDailyPlanChanged(true);
+        }
+
+        setIsClockActive(isClockActive => !isClockActive);
+    }
+
     return (
         <React.Fragment>
             <Row>
@@ -179,6 +194,10 @@ const DailyPlan = (props) => {
                             </div>
                         </React.Fragment>
                     }
+                </Col>
+
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_clock_button} onClick={clockToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
                 </Col>
             </Row>
 

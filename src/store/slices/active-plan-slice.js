@@ -102,6 +102,24 @@ const activePlanSlice = createSlice({
         },
         setDate(state, action) {
             state.short_term_plan.daily_plans[action.payload.index].date = action.payload.date;
+        },
+        updateTime(state, action) {
+            // Update both current plan and its parent plans
+            let index = action.payload.index;
+            state.short_term_plan.daily_plans[index].seconds = action.payload.seconds;
+            while(index) {
+                if(state.short_term_plan.daily_plans[index].parent_id !== undefined) {
+                    for(let i in state.short_term_plan.daily_plans) {
+                        if(state.short_term_plan.daily_plans[i].id === state.short_term_plan.daily_plans[index].parent_id) {
+                            index = i;
+                            state.short_term_plan.daily_plans[i].seconds += action.payload.new_seconds;
+                            break
+                        }
+                    }
+                } else {
+                    index = null;
+                }
+            }
         }
     }
 })
