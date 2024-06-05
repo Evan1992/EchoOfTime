@@ -99,6 +99,9 @@ const activePlanSlice = createSlice({
         },
         setExpectedMinutes(state, action) {
             state.short_term_plan.daily_plans[action.payload.index].expected_minutes = action.payload.minutes;
+        },
+        setDate(state, action) {
+            state.short_term_plan.daily_plans[action.payload.index].date = action.payload.date;
         }
     }
 })

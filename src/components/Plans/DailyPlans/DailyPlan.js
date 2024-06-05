@@ -25,7 +25,7 @@ const DailyPlan = (props) => {
     const [seconds, setSeconds] = useState(props.daily_plan.seconds);
     const [isClockActive, setIsClockActive] = useState(false);
     const [showForm, setShowForm] = useState(false);
-    const [_date, setDate] = useState(props.plan.date);
+    const [_date, setDate] = useState(props.daily_plan.date);
     const [showCalendar, setShowCalendar] = useState(false);
 
     useEffect(() => {
@@ -85,11 +85,44 @@ const DailyPlan = (props) => {
         // Show the date on the page
         setDate(_date => date.toISOString().slice(0,10));
 
-        // Determine if add/remove plan to/from a global state plans_of_today
-        if(isToday(date.toISOString().slice(0,10))) {
-            // TODO
+        // Update the plan with the date.
+        dispatch(
+            activePlanActions.setDate({
+                index:props.index,
+                date:date.toISOString().slice(0,10)
+            })
+        )
+        setDailyPlanChanged(true);
+    }
+
+    const dateTransformHandler = (date) => {
+        /**
+         * date's format is yyyy-mm-dd, somehow, new Date(date) will use UTC to parse it,
+         * while if date's format is mm/dd/yyyy, new Date(date) will use local time zone to parse it.
+         * As a result, we should convert yyyy-mm-dd to mm/dd/yyyy first
+         */
+        let plan_date
+        if(date) {
+            const splitted_date = date.split("-")
+            const yy = splitted_date[0]
+            const mm = splitted_date[1]
+            const dd = splitted_date[2]
+            plan_date = mm.concat("/", dd, "/", yy)
+        }
+
+        const cur_date = new Date().toLocaleDateString()
+
+        const cur_date_to_time = new Date(cur_date).getTime()
+        const plan_date_to_time = new Date(plan_date).getTime()
+
+        if(plan_date_to_time - cur_date_to_time === -86400000){
+            return "Yesterday"
+        } else if(plan_date_to_time - cur_date_to_time === 0) {
+            return "Today"
+        } else if(plan_date_to_time - cur_date_to_time === 86400000) {
+            return "Tomorrow"
         } else {
-            // TODO
+            return date
         }
     }
 
@@ -129,6 +162,11 @@ const DailyPlan = (props) => {
 
                 <Col xs={2}>
                     <Timer seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
+                </Col>
+
+                {/* Show the date of the plan */}
+                <Col xs={1}>
+                    <div>{dateTransformHandler(_date)}</div>
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>
