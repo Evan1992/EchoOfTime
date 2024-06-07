@@ -68,6 +68,9 @@ const activePlanSlice = createSlice({
                             if(state.short_term_plan.daily_plans[i].parent_id !== action.payload.parent_id) {
                                 state.short_term_plan.daily_plans = state.short_term_plan.daily_plans.toSpliced(i, 0, action.payload.daily_plan);
                                 break;
+                            } else if (i+1 === state.short_term_plan.daily_plans.length) {
+                                state.short_term_plan.daily_plans.push(action.payload.daily_plan);
+                                break; // if not break, we'll fall into infinite loop
                             }
                         }
                     }
