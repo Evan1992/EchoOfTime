@@ -84,11 +84,31 @@ const activePlanSlice = createSlice({
             let id = state.short_term_plan.daily_plans[action.payload.index].id;
             const parent_ids = new Set([id])
 
+            // The two variables below are used to update current plan's parent plan's attribute has_children
+            const parent_id = state.short_term_plan.daily_plans[action.payload.index].parent_id;
+            let has_children = false;
+
             for(const daily_plan of state.short_term_plan.daily_plans) {
+                // Not adding current plan and all its children plans to the new_daily_plans
                 if(daily_plan.id !== id && !parent_ids.has(daily_plan.parent_id) ) {
                     new_daily_plans.push(daily_plan);
                 } else {
                     parent_ids.add(daily_plan.id);
+                }
+
+                // If parent plan still has children under it other than current plan
+                if(daily_plan.id !== id && parent_id !== undefined && daily_plan.parent_id === parent_id) {
+                    has_children = true;
+                }
+            }
+
+            // Update parent plan's has_chidlren attribute
+            if(has_children === false) {
+                for(const daily_plan of state.short_term_plan.daily_plans) {
+                    if(daily_plan.id === parent_id) {
+                        daily_plan.has_children = false;
+                        break;
+                    }
                 }
             }
 
