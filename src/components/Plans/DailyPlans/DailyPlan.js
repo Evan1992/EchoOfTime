@@ -155,6 +155,15 @@ const DailyPlan = (props) => {
         props.set_plan_deleted(true);
     }
 
+    const checkPlanHandler = () => {
+        dispatch(
+            activePlanActions.deleteDailyPlan({
+                index:props.index
+            })
+        )
+        props.set_plan_deleted(true);
+    }
+
     return (
         <React.Fragment>
             <Row>
@@ -217,6 +226,11 @@ const DailyPlan = (props) => {
                 {/* Delete a plan */}
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
+                </Col>
+
+                {/* Check a plan */}
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                 </Col>
             </Row>
 
