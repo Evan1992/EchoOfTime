@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 import { isToday } from '../../../utilities';
 
-const TodayPlans = (props) => {
+const TodayPlans = () => {
     const plan = useSelector((state) => state.activePlan);
     const today_plans = []
     if(plan.short_term_plan.daily_plans !== undefined) {

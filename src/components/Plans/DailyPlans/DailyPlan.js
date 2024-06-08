@@ -157,7 +157,7 @@ const DailyPlan = (props) => {
 
     const checkPlanHandler = () => {
         dispatch(
-            activePlanActions.deleteDailyPlan({
+            activePlanActions.checkDailyPlan({
                 index:props.index
             })
         )

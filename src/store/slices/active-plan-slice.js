@@ -14,6 +14,45 @@ const initialState = {
     changed: false
 }
 
+/* Reducer function outside of createSlice() so we can reuse this function */
+const deleteDailyPlan = (state, action) => {
+    // Delete current plan and all its children plans
+    const new_daily_plans = [];
+    let id = state.short_term_plan.daily_plans[action.payload.index].id;
+    const parent_ids = new Set([id])
+
+    // The two variables below are used to update current plan's parent plan's attribute has_children
+    const parent_id = state.short_term_plan.daily_plans[action.payload.index].parent_id;
+    let has_children = false;
+
+    for(const daily_plan of state.short_term_plan.daily_plans) {
+        // Not adding current plan and all its children plans to the new_daily_plans
+        if(daily_plan.id !== id && !parent_ids.has(daily_plan.parent_id) ) {
+            new_daily_plans.push(daily_plan);
+        } else {
+            parent_ids.add(daily_plan.id);
+        }
+
+        // If parent plan still has children under it other than current plan
+        if(daily_plan.id !== id && parent_id !== undefined && daily_plan.parent_id === parent_id) {
+            has_children = true;
+        }
+    }
+
+    // Update parent plan's has_chidlren attribute
+    if(has_children === false) {
+        for(const daily_plan of state.short_term_plan.daily_plans) {
+            if(daily_plan.id === parent_id) {
+                daily_plan.has_children = false;
+                break;
+            }
+        }
+    }
+
+    state.short_term_plan.daily_plans = new_daily_plans;
+}
+
+
 const activePlanSlice = createSlice({
     name: 'activePlan',
     initialState, // Modern javascript syntax, it's equavilent to initialState: initialState
@@ -78,41 +117,9 @@ const activePlanSlice = createSlice({
                 }
             }
         },
-        deleteDailyPlan(state, action) {
-            // Delete current plan and all its children plans
-            const new_daily_plans = [];
-            let id = state.short_term_plan.daily_plans[action.payload.index].id;
-            const parent_ids = new Set([id])
-
-            // The two variables below are used to update current plan's parent plan's attribute has_children
-            const parent_id = state.short_term_plan.daily_plans[action.payload.index].parent_id;
-            let has_children = false;
-
-            for(const daily_plan of state.short_term_plan.daily_plans) {
-                // Not adding current plan and all its children plans to the new_daily_plans
-                if(daily_plan.id !== id && !parent_ids.has(daily_plan.parent_id) ) {
-                    new_daily_plans.push(daily_plan);
-                } else {
-                    parent_ids.add(daily_plan.id);
-                }
-
-                // If parent plan still has children under it other than current plan
-                if(daily_plan.id !== id && parent_id !== undefined && daily_plan.parent_id === parent_id) {
-                    has_children = true;
-                }
-            }
-
-            // Update parent plan's has_chidlren attribute
-            if(has_children === false) {
-                for(const daily_plan of state.short_term_plan.daily_plans) {
-                    if(daily_plan.id === parent_id) {
-                        daily_plan.has_children = false;
-                        break;
-                    }
-                }
-            }
-
-            state.short_term_plan.daily_plans = new_daily_plans;
+        deleteDailyPlan,
+        checkDailyPlan(state, action) {
+            deleteDailyPlan(state, action);
         },
         showChildPlan(state, action) {
             for(let i = action.payload.index+1; i < state.short_term_plan.daily_plans.length; i++) {
@@ -180,3 +187,8 @@ export const activePlanActions = activePlanSlice.actions;
 // For this module, we mutate the state directly because that's under the help
 // of reduxjs/toolkit, behind the scene, reduxjs/toolkit also doesn't mutate
 // the state directly, instead, it creats a new object and return that one
+
+/* Reuse the reducer function */
+// Reference: https://stackoverflow.com/questions/63564530/is-it-possible-to-call-a-reducer-function-from-another-reducer-function-within
+// We can define the reducer function outside the createSlice call and
+// call the function within createSlice, so we can reuse the function
