@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 /* ========== import React components ========== */
 import NewDailyPlan from './NewDailyPlan';
 import DailyPlan from './DailyPlan';
+import TodayPlans from '../TodayPlans/TodayPlans';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
@@ -57,6 +58,11 @@ const DailyPlans = () => {
                     }
                     <NewDailyPlan />
                 </Container>
+            </div>
+
+            {/* Component for plans of today */}
+            <div>
+                <TodayPlans />
             </div>
         </React.Fragment>
     )
