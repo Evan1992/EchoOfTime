@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'; // reduxjs/toolkit already includes redux
+import { isToday } from '../../utilities';
 
 const initialState = {
     title: "",
@@ -119,6 +120,22 @@ const activePlanSlice = createSlice({
         },
         deleteDailyPlan,
         checkDailyPlan(state, action) {
+            // When checking a plan, store the expected time and used time locally
+            // If date stored in localStorage is ahead of today's date, reset locally
+            const todayDate = new Date().toLocaleDateString();
+            if(isToday(state.short_term_plan.daily_plans[action.payload.index].date)) {
+                if(localStorage.getItem('date') === null || (localStorage.getItem('date') !== null && localStorage.getItem('date') < todayDate)) {
+                    localStorage.setItem('date', todayDate);
+                    localStorage.setItem('expectedHoursChecked', state.short_term_plan.daily_plans[action.payload.index].expected_hours);
+                    localStorage.setItem('expectedMinutesChecked', state.short_term_plan.daily_plans[action.payload.index].expected_minutes);
+                    localStorage.setItem('usedTime', state.short_term_plan.daily_plans[action.payload.index].seconds);
+                } else {
+                    localStorage.setItem('expectedHoursChecked', localStorage.getItem('expectedHoursChecked') + state.short_term_plan.daily_plans[action.payload.index].expected_hours);
+                    localStorage.setItem('expectedMinutesChecked', localStorage.getItem('expectedMinutesChecked') + state.short_term_plan.daily_plans[action.payload.index].expected_minutes);
+                    localStorage.setItem('usedTime', localStorage.getItem('usedTime') + state.short_term_plan.daily_plans[action.payload.index].seconds);
+                }
+            }
+
             deleteDailyPlan(state, action);
         },
         showChildPlan(state, action) {
