@@ -199,7 +199,7 @@ const DailyPlan = (props) => {
                 </Col>
 
                 <Col xs={2}>
-                    <Timer seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
+                    <Timer used_seconds={props.daily_plan.seconds} seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
                 </Col>
 
                 {/* Show the date of the plan */}

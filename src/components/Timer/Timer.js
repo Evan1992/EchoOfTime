@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const Timer = (props) => {
+    const [startTime, setStartTime] = useState(Date.now());
+    const [startTimeSetted, setStartTimeSetted] = useState(false);
+
     const formatToTwoDigits = (n) => {
         if(n < 10 ){
             return `0${n}`;
@@ -21,15 +24,24 @@ const Timer = (props) => {
         return `${hour}:${minute}:${second}`
     }
 
+    if(props.isClockActive === true && startTimeSetted === false) {
+        setStartTime(Date.now());
+        setStartTimeSetted(true);
+    }
+
     useEffect(() => {
+        let elapsedMilliseconds = Date.now() - startTime;
+        let elapsedSeconds = Math.ceil(elapsedMilliseconds / 1000);
         let interval = null;
-        if(props.isClockActive) {
+        if(props.isClockActive === true) {
             interval = setInterval(() => {
-                props.setSeconds((preSeconds) => preSeconds + 1);
+                props.setSeconds(props.used_seconds + elapsedSeconds);
             }, 1000);
+        } else {
+            setStartTimeSetted(false);
         }
         return () => clearInterval(interval);
-    }, [props])
+    }, [props, startTime])
 
     return (
         <div>
@@ -39,3 +51,11 @@ const Timer = (props) => {
 }
 
 export default Timer;
+
+
+
+/* ========== Learning ========== */
+/* Timer/setInterval stops working when switching tabs */
+// Reference: https://stackoverflow.com/questions/72433878/my-counter-stop-when-i-switch-tab-reactjs
+// When the application's tab is inactive, most browsers will throttle tab activities to preserve resources.
+// As a result, timer will stop working in this case
