@@ -1,10 +1,11 @@
 import { activePlanActions } from "./active-plan-slice";
 
+const userID = localStorage.getItem('userID');
 export const sendPlanData = (plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
-                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan.json',
+                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan.json`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
@@ -30,7 +31,7 @@ export const fetchPlanData = () => {
     return async (dispatch) => {
         const fetchData = async () => {
             const response = await fetch(
-                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan.json'
+                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan.json`
             )
 
             if(!response.ok) {
@@ -81,7 +82,7 @@ export const archivePlanData = (plan) => {
 
         const deleteActivePlan = async () => {
             const response = await fetch(
-                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan.json',
+                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan.json`,
                 {
                     method: 'DELETE'
                 }
@@ -107,7 +108,7 @@ export const sendDailyPlanData = (plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
-                'https://sound-of-time-2-default-rtdb.firebaseio.com/active_plan/short_term_plan.json',
+                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan/short_term_plan.json`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
