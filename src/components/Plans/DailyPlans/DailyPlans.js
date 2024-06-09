@@ -10,7 +10,7 @@ import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
-import { isTomorrow } from '../../../utilities';
+import { isToday, isTomorrow } from '../../../utilities';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
@@ -23,11 +23,15 @@ const DailyPlans = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
-    const tomorrow_plans = []
+    const todayPlans = [];
+    const tomorrowPlans = []
     if(plan.short_term_plan.daily_plans !== undefined) {
         for(const daily_plan of plan.short_term_plan.daily_plans) {
+            if(isToday(daily_plan.date)) {
+                todayPlans.push(daily_plan);
+            }
             if(isTomorrow(daily_plan.date)) {
-                tomorrow_plans.push(daily_plan)
+                tomorrowPlans.push(daily_plan)
             }
         }
     }
@@ -74,16 +78,20 @@ const DailyPlans = () => {
 
             {/* Component for plans of today */}
             <div>
-                <TodayPlans />
+                <TodayPlans
+                    today_plans={todayPlans}
+                />
             </div>
 
-            <TodayPlanSummary />
+            <TodayPlanSummary
+                today_plans={todayPlans}
+            />
 
             {/* Separation between TodayPlanSummary and TomorrowPlanSummary */}
             <div style={{height: "25px"}} />
 
             <TomorrowPlanSummary
-                tomorrow_plans={tomorrow_plans}
+                tomorrow_plans={tomorrowPlans}
             />
         </React.Fragment>
     )

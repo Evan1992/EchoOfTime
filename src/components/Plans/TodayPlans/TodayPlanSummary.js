@@ -1,31 +1,23 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
-import { isToday } from '../../../utilities';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 
 
-const TodayPlanSummary = () => {
-    const plan = useSelector((state) => state.activePlan);
-
-    let expectedHoursToday = localStorage.getItem('expectedHoursChecked') === null ? 0 : localStorage.getItem('expectedHoursChecked')
-    let expectedMinutesToday = localStorage.getItem('expectedMinutesChecked') === null ? 0 : localStorage.getItem('expectedMinutesChecked')
-    let usedTime = localStorage.getItem('usedTime') === null ? 0 : localStorage.getItem('usedTime')
+const TodayPlanSummary = (props) => {
+    let expectedHoursToday = localStorage.getItem('expectedHoursChecked') === null ? 0 : Number(localStorage.getItem('expectedHoursChecked'));
+    let expectedMinutesToday = localStorage.getItem('expectedMinutesChecked') === null ? 0 : Number(localStorage.getItem('expectedMinutesChecked'));
+    let usedTime = localStorage.getItem('usedTime') === null ? 0 : Number(localStorage.getItem('usedTime'));
     let remainingTime = 0;
-    if(plan.short_term_plan.daily_plans !== undefined) {
-        for(const daily_plan of plan.short_term_plan.daily_plans) {
-            if(isToday(daily_plan.date)) {
-                expectedHoursToday += daily_plan.expected_hours;
-                expectedMinutesToday += daily_plan.expected_minutes;
-                remainingTime += daily_plan.expected_hours * 60 * 60 + daily_plan.expected_minutes * 60;
-                usedTime += daily_plan.seconds;
-            }
-        }
+    for(const daily_plan of props.today_plans) {
+        expectedHoursToday += Number(daily_plan.expected_hours);
+        expectedMinutesToday += Number(daily_plan.expected_minutes);
+        remainingTime += daily_plan.expected_hours * 60 * 60 + daily_plan.expected_minutes * 60;
+        usedTime += Number(daily_plan.seconds);
     }
-    const expectedTimeToday = expectedHoursToday * 60 * 60 + expectedMinutesToday * 60
+    const expectedTimeToday = expectedHoursToday * 60 * 60 + expectedMinutesToday * 60;
 
     const formatToTwoDigits = (n) => {
         if(n < 10 ){
