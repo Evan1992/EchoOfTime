@@ -10,16 +10,27 @@ import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
+import { isTomorrow } from '../../../utilities';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './DailyPlans.module.css';
+import TomorrowPlanSummary from '../TomorrowPlans/TomorrowPlanSummary';
 
 
 const DailyPlans = () => {
     const [planDeleted, setPlanDeleted] = useState(false);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
+
+    const tomorrow_plans = []
+    if(plan.short_term_plan.daily_plans !== undefined) {
+        for(const daily_plan of plan.short_term_plan.daily_plans) {
+            if(isTomorrow(daily_plan.date)) {
+                tomorrow_plans.push(daily_plan)
+            }
+        }
+    }
 
     useEffect(() => {
         if(planDeleted === true) {
@@ -66,7 +77,14 @@ const DailyPlans = () => {
                 <TodayPlans />
             </div>
 
-            <TodayPlanSummary/>
+            <TodayPlanSummary />
+
+            {/* Separation between TodayPlanSummary and TomorrowPlanSummary */}
+            <div style={{height: "25px"}} />
+
+            <TomorrowPlanSummary
+                tomorrow_plans={tomorrow_plans}
+            />
         </React.Fragment>
     )
 }
