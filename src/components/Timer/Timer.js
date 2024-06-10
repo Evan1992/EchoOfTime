@@ -31,7 +31,7 @@ const Timer = (props) => {
 
     useEffect(() => {
         let elapsedMilliseconds = Date.now() - startTime;
-        let elapsedSeconds = Math.ceil(elapsedMilliseconds / 1000);
+        let elapsedSeconds = Math.ceil(elapsedMilliseconds / 1000) === 0 ? 1 : Math.ceil(elapsedMilliseconds / 1000)
         let interval = null;
         if(props.isClockActive === true) {
             interval = setInterval(() => {
