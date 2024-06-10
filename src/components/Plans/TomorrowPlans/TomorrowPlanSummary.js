@@ -1,5 +1,8 @@
 import React from 'react';
 
+/* ========== import React components ========== */
+import TodayPlan from '../TodayPlans/TodayPlan';
+
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -40,6 +43,16 @@ const TomorrowPlanSummary = (props) => {
                         <h4>Todo Tomorrow</h4>
                     </Col>
                 </Row>
+
+                {
+                    props.tomorrow_plans.map((tomorrow_plan) => {
+                        return <TodayPlan
+                            key={tomorrow_plan.id}
+                            plan={tomorrow_plan}
+                        />
+                    })
+                }
+
                 <Row>
                     <Col xs={1} />
                     {/* Total Planned Time is: Time for active plans of today + Time for finished plans of today  */}
