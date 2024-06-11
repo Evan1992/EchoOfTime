@@ -7,6 +7,7 @@ import NewDailyPlan from './NewDailyPlan';
 import DailyPlan from './DailyPlan';
 import TodayPlans from '../TodayPlans/TodayPlans';
 import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
+import Focus from '../../Focus/Focus';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
@@ -93,6 +94,11 @@ const DailyPlans = () => {
             <TomorrowPlanSummary
                 tomorrow_plans={tomorrowPlans}
             />
+
+            {/* Separation between TomorrowPlanSummary and Focus */}
+            <div style={{height: "25px"}} />
+
+            <Focus />
         </React.Fragment>
     )
 }

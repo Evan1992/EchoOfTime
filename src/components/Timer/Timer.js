@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
+import { focusTimerActions } from '../../store/slices/focus-timer-slice';
+import { useDispatch } from 'react-redux';
 
 const Timer = (props) => {
+    const dispatch = useDispatch();
     const [startTime, setStartTime] = useState(Date.now());
     const [startTimeSetted, setStartTimeSetted] = useState(false);
 
@@ -35,13 +38,21 @@ const Timer = (props) => {
         let interval = null;
         if(props.isClockActive === true) {
             interval = setInterval(() => {
+                dispatch(
+                    focusTimerActions.startTimer({
+                        seconds: elapsedSeconds
+                    })
+                )
                 props.setSeconds(props.used_seconds + elapsedSeconds);
             }, 1000);
         } else {
+            dispatch(
+                focusTimerActions.stopTimer()
+            )
             setStartTimeSetted(false);
         }
         return () => clearInterval(interval);
-    }, [props, startTime])
+    }, [props, dispatch, startTime])
 
     return (
         <div>
