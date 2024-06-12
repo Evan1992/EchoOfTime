@@ -53,7 +53,8 @@ export const fetchPlanData = () => {
                     description: planData.description,
                     date: planData.date,
                     changed: false,
-                    short_term_plan: planData.short_term_plan
+                    short_term_plan: planData.short_term_plan,
+                    expected_time_checked_today: planData.expected_time_checked_today
                 })
             )
         }

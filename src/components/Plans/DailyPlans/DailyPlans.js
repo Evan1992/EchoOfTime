@@ -12,7 +12,7 @@ import Focus from '../../Focus/Focus';
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
 import { isToday, isTomorrow } from '../../../utilities';
-import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
+import { sendDailyPlanData, sendPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './DailyPlans.module.css';
@@ -40,6 +40,7 @@ const DailyPlans = () => {
     useEffect(() => {
         if(planDeleted === true) {
             dispatch(sendDailyPlanData(plan))
+            dispatch(sendPlanData(plan))
             setPlanDeleted(false);
         }
     }, [dispatch, plan, planDeleted])
@@ -85,6 +86,7 @@ const DailyPlans = () => {
             </div>
 
             <TodayPlanSummary
+                expected_time_checked_today={plan.expected_time_checked_today.seconds}
                 today_plans={todayPlans}
             />
 

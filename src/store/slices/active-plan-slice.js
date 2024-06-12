@@ -67,6 +67,7 @@ const activePlanSlice = createSlice({
             state.description = action.payload.description;
             state.date = action.payload.date;
             state.short_term_plan = action.payload.short_term_plan;
+            state.expected_time_checked_today = action.payload.expected_time_checked_today;
             state.changed = action.payload.changed;
 
             // state.short_term_plan.daily_plans could be undefined
@@ -124,19 +125,19 @@ const activePlanSlice = createSlice({
         },
         deleteDailyPlan,
         checkDailyPlan(state, action) {
-            // When checking a plan, store the expected time and used time locally
-            // If date stored in localStorage is ahead of today's date, reset locally
-            const todayDate = new Date().toLocaleDateString();
+            // When checking a plan, store the expected time and used time in the database
             if(isToday(state.short_term_plan.daily_plans[action.payload.index].date)) {
-                if(localStorage.getItem('date') === null || (localStorage.getItem('date') !== null && localStorage.getItem('date') < todayDate)) {
-                    localStorage.setItem('date', todayDate);
-                    localStorage.setItem('expectedHoursChecked', state.short_term_plan.daily_plans[action.payload.index].expected_hours);
-                    localStorage.setItem('expectedMinutesChecked', state.short_term_plan.daily_plans[action.payload.index].expected_minutes);
-                    localStorage.setItem('usedTime', state.short_term_plan.daily_plans[action.payload.index].seconds);
+                if(state.expected_time_checked_today.date && isToday(state.expected_time_checked_today.date)) {
+                    state.expected_time_checked_today.seconds += (
+                        state.short_term_plan.daily_plans[action.payload.index].expected_hours * 60 * 60 +
+                        state.short_term_plan.daily_plans[action.payload.index].expected_minutes * 60
+                    )
                 } else {
-                    localStorage.setItem('expectedHoursChecked', localStorage.getItem('expectedHoursChecked') + state.short_term_plan.daily_plans[action.payload.index].expected_hours);
-                    localStorage.setItem('expectedMinutesChecked', localStorage.getItem('expectedMinutesChecked') + state.short_term_plan.daily_plans[action.payload.index].expected_minutes);
-                    localStorage.setItem('usedTime', localStorage.getItem('usedTime') + state.short_term_plan.daily_plans[action.payload.index].seconds);
+                    state.expected_time_checked_today.date = state.short_term_plan.daily_plans[action.payload.index].date
+                    state.expected_time_checked_today.seconds = (
+                        state.short_term_plan.daily_plans[action.payload.index].expected_hours * 60 * 60 +
+                        state.short_term_plan.daily_plans[action.payload.index].expected_minutes * 60
+                    )
                 }
             }
 
