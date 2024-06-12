@@ -12,6 +12,10 @@ const initialState = {
         daily_plans: [],
         changed: false
     },
+    expected_time_checked_today: {
+        date: "",
+        seconds: 0
+    },
     changed: false
 }
 

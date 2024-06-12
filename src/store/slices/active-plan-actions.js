@@ -12,7 +12,8 @@ export const sendPlanData = (plan) => {
                         title: plan.title,
                         description: plan.description,
                         date: plan.date,
-                        short_term_plan: plan.short_term_plan
+                        short_term_plan: plan.short_term_plan,
+                        expected_time_checked_today: plan.expected_time_checked_today
                     })
                 }
             )
