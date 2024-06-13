@@ -12,9 +12,10 @@ const initialState = {
         daily_plans: [],
         changed: false
     },
-    expected_time_checked_today: {
+    checked_tasks_today: {
         date: "",
-        seconds: 0
+        expected_time: 0,
+        used_time: 0
     },
     changed: false
 }
@@ -66,8 +67,8 @@ const activePlanSlice = createSlice({
             state.title = action.payload.title;
             state.description = action.payload.description;
             state.date = action.payload.date;
+            state.checked_tasks_today = action.payload.checked_tasks_today;
             state.short_term_plan = action.payload.short_term_plan;
-            state.expected_time_checked_today = action.payload.expected_time_checked_today;
             state.changed = action.payload.changed;
 
             // state.short_term_plan.daily_plans could be undefined
@@ -127,20 +128,21 @@ const activePlanSlice = createSlice({
         checkDailyPlan(state, action) {
             // When checking a plan, store the expected time and used time in the database
             if(isToday(state.short_term_plan.daily_plans[action.payload.index].date)) {
-                if(state.expected_time_checked_today.date && isToday(state.expected_time_checked_today.date)) {
-                    state.expected_time_checked_today.seconds += (
+                if(state.checked_tasks_today.date && isToday(state.checked_tasks_today.date)) {
+                    state.checked_tasks_today.expected_time += (
                         state.short_term_plan.daily_plans[action.payload.index].expected_hours * 60 * 60 +
                         state.short_term_plan.daily_plans[action.payload.index].expected_minutes * 60
                     )
+                    state.checked_tasks_today.used_time += state.short_term_plan.daily_plans[action.payload.index].seconds;
                 } else {
-                    state.expected_time_checked_today.date = state.short_term_plan.daily_plans[action.payload.index].date
-                    state.expected_time_checked_today.seconds = (
+                    state.checked_tasks_today.date = state.short_term_plan.daily_plans[action.payload.index].date
+                    state.checked_tasks_today.expected_time = (
                         state.short_term_plan.daily_plans[action.payload.index].expected_hours * 60 * 60 +
                         state.short_term_plan.daily_plans[action.payload.index].expected_minutes * 60
                     )
+                    state.checked_tasks_today.used_time = state.short_term_plan.daily_plans[action.payload.index].seconds;
                 }
             }
-
             deleteDailyPlan(state, action);
         },
         showChildPlan(state, action) {

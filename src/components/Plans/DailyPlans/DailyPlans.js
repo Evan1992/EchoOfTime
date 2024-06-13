@@ -86,7 +86,8 @@ const DailyPlans = () => {
             </div>
 
             <TodayPlanSummary
-                expected_time_checked_today={plan.expected_time_checked_today.seconds}
+                used_time_checked_today={plan.checked_tasks_today.used_time}
+                expected_time_checked_today={plan.checked_tasks_today.expected_time}
                 today_plans={todayPlans}
             />
 

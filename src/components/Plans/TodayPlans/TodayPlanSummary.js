@@ -8,12 +8,12 @@ import Container from 'react-bootstrap/esm/Container';
 
 const TodayPlanSummary = (props) => {
     let expectedTimeToday = props.expected_time_checked_today;
-    let usedTime = localStorage.getItem('usedTime') === null ? 0 : Number(localStorage.getItem('usedTime'));
+    let usedTime = props.used_time_checked_today;
     let remainingTime = 0;
     for(const daily_plan of props.today_plans) {
         expectedTimeToday += daily_plan.expected_hours * 60 * 60 + daily_plan.expected_minutes * 60
         remainingTime += daily_plan.expected_hours * 60 * 60 + daily_plan.expected_minutes * 60;
-        usedTime += Number(daily_plan.seconds);
+        usedTime += daily_plan.seconds;
     }
 
     const formatToTwoDigits = (n) => {

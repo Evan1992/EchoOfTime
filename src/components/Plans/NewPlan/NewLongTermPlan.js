@@ -22,6 +22,11 @@ const NewLongTermPlan = () => {
                 description: inputDescription.current.value,
                 date: new Date().toISOString().slice(0,10),
                 changed: true,
+                checked_tasks_today: {
+                    date: "",
+                    expected_time: 0,
+                    used_time: 0
+                },
                 short_term_plan: {
                     title: "",
                     description: "",
