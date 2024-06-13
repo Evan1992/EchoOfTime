@@ -15,6 +15,7 @@ import classes from './ShortTermPlan.module.css';
 const ShortTermPlan = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
+    const daily_plans = (plan.short_term_plan.daily_plans !== undefined) ? plan.short_term_plan.daily_plans : [];
 
     const addShortTermPlanHandler= (inputTitle, inputDescription) => {
         dispatch(activePlanActions.addShortTermPlan({
@@ -22,7 +23,7 @@ const ShortTermPlan = () => {
                 title: inputTitle,
                 description: inputDescription,
                 date: new Date().toISOString().slice(0,10),
-                daily_plans: []
+                daily_plans: daily_plans
             }
         }))
     }
