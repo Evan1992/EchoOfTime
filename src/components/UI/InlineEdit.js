@@ -10,7 +10,6 @@ const InlineEdit = (props) => {
     const [initialLoading, setInitialLoading] = useState(true);
     const [inputTitle, setInputTitle] = useState(props.inputTitle);
     const [inputDescription, setInputDescription] = useState(props.inputDescription);
-    const [inputDescriptionHeight, setInputDescriptionHeight] = useState(props.inputDescriptionHeight)
 
     useEffect(() => {
         if(initialLoading === false) {
@@ -26,11 +25,12 @@ const InlineEdit = (props) => {
     }
 
     const descriptionChangeHandler = (event) => {
-        // Update the description height
-        setInputDescriptionHeight(inputDescriptionHeight => event.target.style.height)
-
         // Update the description
         setInputDescription(inputDescription => event.target.value);
+    }
+
+    const onFocus = (event) => {
+        event.target.style.height = event.target.scrollHeight + "px";
     }
 
     const onInput = (event) => {
@@ -49,17 +49,12 @@ const InlineEdit = (props) => {
         }
     }
 
-    const inlineStyle = {
-        height: `${inputDescriptionHeight}`
-    }
-
     return (
         <React.Fragment >
             <div className={classes.inline_edit}>
                 <input className={classes.input_title}
                     type = "text"
                     aria-label = "Title"
-                    // ref = {newInputTitle}
                     value = {inputTitle}
                     onChange = {titleChangeHandler}
                     onBlur={onBlur}
@@ -69,10 +64,9 @@ const InlineEdit = (props) => {
             <div className={classes.inline_edit}>
                 <textarea className={classes.input_description}
                     type = "text"
-                    style = {inlineStyle}
                     aria-label = "Description"
-                    // ref = {newInputDescription}
                     value = {inputDescription}
+                    onFocus={onFocus}
                     onChange = {descriptionChangeHandler}
                     onInput = {onInput}
                     onBlur = {onBlur}
