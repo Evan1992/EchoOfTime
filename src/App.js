@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /* ========== import React components ========== */
 import Layout from './components/Layout/Layout';
-import Plans from './components/Plans/DailyPlans/Plans';
 import LongTermPlan from './components/Plans/LongTermPlans/LongTermPlan';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage.js';
@@ -29,10 +28,6 @@ const App = () => {
             
             {isLoggedIn && (
               <Route path='/' element={<LongTermPlan />} />
-            )}
-
-            {isLoggedIn && (
-              <Route path='/plans' element={<Plans />} />
             )}
           </Routes>
         </Layout>

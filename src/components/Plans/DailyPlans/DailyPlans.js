@@ -15,6 +15,7 @@ import { isToday, isTomorrow } from '../../../utilities';
 import { sendDailyPlanData, sendPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
+import 'bootstrap/dist/css/bootstrap.min.css';
 import classes from './DailyPlans.module.css';
 import TomorrowPlanSummary from '../TomorrowPlans/TomorrowPlanSummary';
 
@@ -120,3 +121,15 @@ export default DailyPlans
 /* Each child in a list should have a unique "key" prop */
 // We cannot use index directly or daily_plan_ids[index] indirectly as the key,
 // if so, although the key is provided, we still see the error
+
+/* Pass function with parameters to child component */
+// pass the function like the below will call the function directly
+// childrenToggleHandler={childrenToggleHandler(element)}
+
+/* Javascript loop through an object vs Javascript loop through an array */
+// Loop through an object: for(const property in object)
+// Loop through an array:  for(const element in array)
+
+/* Number of render of this page */
+// Number of render of this page depends on how many times we setState
+// Each time when a new state is set, the page will be re-rendered

@@ -256,3 +256,25 @@ const DailyPlan = (props) => {
 }
 
 export default DailyPlan;
+
+
+
+/* ========== Learning ========== */
+/* instance update string value */
+// For some reasons, instance.put cannot update string value though it
+// can update number/boolean value directly
+
+/* setState and callback */
+// After setState, like setExpectedHours(expectedHours => event.target.value);
+// The expectedHours is not immediately changed. So if we want to perform an
+// action immediately after setting state on a state variable and then return
+// a result, a callback will be useful. However, useState() Hooks doesn't support
+// the second callback argument. To execute a side effect after rendering, declare
+// it in the component body with useEffect().
+// Reference: https://stackoverflow.com/questions/42038590/when-to-use-react-setstate-callback
+
+/* update database with string value */
+// For the key-value pair stored in firebase, when we want to update
+// the string value, we are supposed to specify the headers. Otherwise,
+// the put request will fail
+// Reference: https://stackoverflow.com/questions/43573297/put-request-with-simple-string-as-request-body
