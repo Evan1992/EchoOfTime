@@ -166,8 +166,7 @@ const DailyPlan = (props) => {
 
     return (
         <React.Fragment>
-            <Row>
-                <Col xs={1} />
+            <Row className={classes.row}>
                 <Col xs='auto'>
                     <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
                         {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}

@@ -1,3 +1,7 @@
+.row:hover {
+    background-color: lightgray;
+}
+
 .expand_collapse {
     float:left;
     color: gray;

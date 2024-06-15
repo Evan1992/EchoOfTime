@@ -18,7 +18,6 @@ const NewDailyPlan = () => {
     return (
         <React.Fragment>
             <Row>
-                <Col xs={1} />
                 <Col xs='auto' >
                     <div className={classes.expand_collapse}></div>
                 </Col>
