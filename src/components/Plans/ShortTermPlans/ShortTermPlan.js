@@ -18,11 +18,14 @@ const ShortTermPlan = () => {
     const daily_plans = (plan.short_term_plan.daily_plans !== undefined) ? plan.short_term_plan.daily_plans : [];
 
     const addShortTermPlanHandler= (inputTitle, inputDescription) => {
+        const dateToday = new Date().toLocaleDateString();
+        const split = dateToday.split("/");
+        const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1]);
         dispatch(activePlanActions.addShortTermPlan({
             short_term_plan:{
                 title: inputTitle,
                 description: inputDescription,
-                date: new Date().toISOString().slice(0,10),
+                date: dateTodayISO,
                 daily_plans: daily_plans
             }
         }))

@@ -128,7 +128,7 @@ const activePlanSlice = createSlice({
         checkDailyPlan(state, action) {
             // When checking a plan, store the expected time and used time in the database
             if(isToday(state.short_term_plan.daily_plans[action.payload.index].date)) {
-                if(state.checked_tasks_today.date && isToday(state.checked_tasks_today.date)) {
+                if(isToday(state.checked_tasks_today.date)) {
                     state.checked_tasks_today.expected_time += (
                         state.short_term_plan.daily_plans[action.payload.index].expected_hours * 60 * 60 +
                         state.short_term_plan.daily_plans[action.payload.index].expected_minutes * 60

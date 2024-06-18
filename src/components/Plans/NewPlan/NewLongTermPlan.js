@@ -16,14 +16,18 @@ const NewLongTermPlan = () => {
     const postPlanHandler = (event) => {
         event.preventDefault();
 
+        const dateToday = new Date().toLocaleDateString();
+        const split = dateToday.split("/");
+        const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1]);
+
         dispatch(
             activePlanActions.addPlan({
                 title: inputTitle.current.value,
                 description: inputDescription.current.value,
-                date: new Date().toISOString().slice(0,10),
+                date: dateTodayISO,
                 changed: true,
                 checked_tasks_today: {
-                    date: "",
+                    date: dateTodayISO,
                     expected_time: 0,
                     used_time: 0
                 },
