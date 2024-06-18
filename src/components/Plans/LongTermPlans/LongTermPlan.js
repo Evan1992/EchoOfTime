@@ -7,7 +7,8 @@ import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
 import ShortTermPlan from '../ShortTermPlans/ShortTermPlan';
 
 /* ========== import other libraries ========== */
-import { fetchPlanData, archivePlanData, sendPlanData } from '../../../store/slices/active-plan-actions';
+import { isToday } from '../../../utilities';
+import { fetchPlanData, archivePlanData, sendPlanData, updateCheckedTasksToday } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './LongTermPlan.module.css';
@@ -27,6 +28,13 @@ const LongTermPlan = () => {
     useEffect(() => {
         dispatch(fetchPlanData());
     }, [dispatch])
+
+    // Update checked_tasks_today if date fetched from database is not today
+    useEffect(() => {
+        if(plan.checked_tasks_today.date !== "" && !isToday(plan.checked_tasks_today.date)) {
+            dispatch(updateCheckedTasksToday());
+        }
+    }, [dispatch, plan])
 
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
     const archivePlan = () => {

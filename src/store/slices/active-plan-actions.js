@@ -61,6 +61,35 @@ export const fetchPlanData = () => {
     }
 }
 
+export const updateCheckedTasksToday = () => {
+    console.log("updateCheckedTasksToday")
+    return async (dispatch) => {
+        const postData = async () => {
+            const dateToday = new Date().toLocaleDateString();
+            const split = dateToday.split("/")
+            const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1])
+            const response = await fetch(
+                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan/checked_tasks_today.json`,
+                {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        date: dateTodayISO,
+                        expected_time: 0,
+                        used_time: 0
+                    })
+                }
+            )
+
+            if(!response.ok) {
+                throw new Error('Sending data failed')
+            }
+        }
+
+        console.log("Updating the database...");
+        await postData();
+    }
+}
+
 // Archive the active plan
 export const archivePlanData = (plan) => {
     return async (dispatch) => {
