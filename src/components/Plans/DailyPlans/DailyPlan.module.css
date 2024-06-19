@@ -1,3 +1,7 @@
+.row {
+    justify-content:center;
+}
+
 .row:hover {
     background-color: lightgray;
 }
@@ -63,5 +67,5 @@
 }
 
 .input_time {
-    width: 15%;
+    width: 50px
 }

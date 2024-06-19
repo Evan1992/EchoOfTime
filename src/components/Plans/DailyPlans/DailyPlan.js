@@ -190,14 +190,12 @@ const DailyPlan = (props) => {
                     <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
                 </Col>
 
-                <Col xs="auto" style={{padding: 0}}>
-                    <div>
-                        <input className={classes.input_time} type="number" onChange={expectedHoursChangeHandler} value={props.daily_plan.expected_hours} />:
-                        <input className={classes.input_time} type="number" onChange={expectedMinutesChangeHandler} value={props.daily_plan.expected_minutes} />
-                    </div>
+                <Col xs="auto">
+                    <input className={classes.input_time} type="number" onChange={expectedHoursChangeHandler} value={props.daily_plan.expected_hours} />:
+                    <input className={classes.input_time} type="number" onChange={expectedMinutesChangeHandler} value={props.daily_plan.expected_minutes} />
                 </Col>
 
-                <Col xs={2}>
+                <Col xs={1} style={{padding: 0}}>
                     <Timer used_seconds={props.daily_plan.seconds} seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
                 </Col>
 
