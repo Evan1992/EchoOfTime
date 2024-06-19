@@ -50,7 +50,7 @@ const DailyPlans = () => {
         <React.Fragment>
             {/* Component for all active plans */}
             <div className={classes.plans}>
-                <Container fluid className={classes.container}>
+                <Container>
                     {
                         plan.short_term_plan.daily_plans &&
                         plan.short_term_plan.daily_plans.map((dailyPlan, index) => {
