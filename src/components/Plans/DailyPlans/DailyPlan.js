@@ -276,3 +276,8 @@ export default DailyPlan;
 // the string value, we are supposed to specify the headers. Otherwise,
 // the put request will fail
 // Reference: https://stackoverflow.com/questions/43573297/put-request-with-simple-string-as-request-body
+
+/* CSS style - size of <input> */
+// We can specify the size of the <input> if the type is text, like <input type="text">
+// We cannot specify the size of the <input> if the type is number, like <input type="number">
+// Reference: https://stackoverflow.com/questions/22709792/input-type-number-wont-resize

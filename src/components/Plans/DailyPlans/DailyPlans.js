@@ -133,3 +133,9 @@ export default DailyPlans
 /* Number of render of this page */
 // Number of render of this page depends on how many times we setState
 // Each time when a new state is set, the page will be re-rendered
+
+/* CSS style: fluid */
+// <Container fluid /> means the width is always 100% across all viewport and
+// device sizes.
+// <Container fluid="md"> sets the Container as fluid until the specified
+// breakpoint
