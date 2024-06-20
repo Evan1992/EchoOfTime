@@ -200,8 +200,8 @@ const DailyPlan = (props) => {
                 </Col>
 
                 {/* Show the date of the plan */}
-                <Col xs={1}>
-                    <div>{dateTransformHandler(_date)}</div>
+                <Col style={{'max-width': "10%"}}>
+                    {dateTransformHandler(_date)}
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>
@@ -229,6 +229,7 @@ const DailyPlan = (props) => {
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                 </Col>
+
             </Row>
 
             <Row>
