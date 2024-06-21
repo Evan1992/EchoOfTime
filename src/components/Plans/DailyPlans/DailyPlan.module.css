@@ -49,10 +49,7 @@
 
 .calendar{
     position:fixed;
-    top: 20%;
-    right: 10%;
     z-index: 100;
-    overflow: hidden;
 }
 
 .calendar_icon {
@@ -69,3 +66,8 @@
 .input_time {
     width: 50px
 }
+
+
+
+/* ========== Learning ========== */
+/* z-index: 100 is to make sure the component is always on the top the stack */
