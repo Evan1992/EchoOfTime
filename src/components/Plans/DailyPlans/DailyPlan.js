@@ -200,7 +200,7 @@ const DailyPlan = (props) => {
                 </Col>
 
                 {/* Show the date of the plan */}
-                <Col style={{'max-width': "10%"}}>
+                <Col style={{'maxWidth': "10%"}}>
                     {dateTransformHandler(_date)}
                 </Col>
 

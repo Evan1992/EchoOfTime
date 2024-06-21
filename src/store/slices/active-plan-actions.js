@@ -62,7 +62,6 @@ export const fetchPlanData = () => {
 }
 
 export const updateCheckedTasksToday = () => {
-    console.log("updateCheckedTasksToday")
     return async (dispatch) => {
         const postData = async () => {
             const dateToday = new Date().toLocaleDateString();
