@@ -47,7 +47,7 @@
     transform: scale(1.8);
 }
 
-.plan_calendar{
+.calendar{
     position:fixed;
     top: 20%;
     right: 10%;
@@ -55,13 +55,13 @@
     overflow: hidden;
 }
 
-.plan_calendar_icon {
+.calendar_icon {
     vertical-align: middle;
     width:20px;
     height:20px;
 }
 
-.plan_calendar_icon:hover {
+.calendar_icon:hover {
     filter: opacity(0.3);
     transform: scale(1.5);
 }

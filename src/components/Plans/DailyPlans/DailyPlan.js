@@ -16,6 +16,7 @@ import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './DailyPlan.module.css';
+import 'react-calendar/dist/Calendar.css';   // import this css file to auto style the calendar
 
 const DailyPlan = (props) => {
     const dispatch = useDispatch();
@@ -209,12 +210,13 @@ const DailyPlan = (props) => {
                     {dateTransformHandler(_date)}
                 </Col>
 
+                {/* Calendar */}
                 <Col xs="auto" style={{padding: 0}}>
-                    <img className={classes.plan_calendar_icon} onClick={calendarToggleHandler} src="https://img.icons8.com/windows/32/000000/calendar.png" alt='calendar' />
+                    <img className={classes.calendar_icon} onClick={calendarToggleHandler} src="https://img.icons8.com/windows/32/000000/calendar.png" alt='calendar' />
                     {showCalendar &&
                         <React.Fragment>
                             <Backdrop onClick={calendarToggleHandler} />
-                            <div className={classes.plan_calendar}>
+                            <div className={classes.calendar}>
                                 <Calendar onChange={dateChangeHandler}/>
                             </div>
                         </React.Fragment>
