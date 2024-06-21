@@ -80,14 +80,18 @@ const DailyPlan = (props) => {
     }
 
     const dateChangeHandler = (date) => {
-        // Show the date on the page
-        setDate(_date => date.toISOString().slice(0,10));
+        const dateISO = date.toISOString().slice(0,10);
+        if(_date === dateISO) {
+            setDate(_date => "");
+        } else {
+            setDate(_date => date.toISOString().slice(0,10));
+        }
 
         // Update the plan with the date.
         dispatch(
             activePlanActions.setDate({
                 index:props.index,
-                date:date.toISOString().slice(0,10)
+                date:_date
             })
         )
         setDailyPlanChanged(true);
@@ -109,7 +113,6 @@ const DailyPlan = (props) => {
         }
 
         const cur_date = new Date().toLocaleDateString()
-
         const cur_date_to_time = new Date(cur_date).getTime()
         const plan_date_to_time = new Date(plan_date).getTime()
 
