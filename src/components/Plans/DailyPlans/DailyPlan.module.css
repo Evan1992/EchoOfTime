@@ -48,7 +48,7 @@
 }
 
 .calendar{
-    position:fixed;
+    position:absolute;
     z-index: 100;
 }
 
