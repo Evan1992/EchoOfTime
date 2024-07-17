@@ -54,6 +54,20 @@ const Timer = (props) => {
         return () => clearInterval(interval);
     }, [props, dispatch, startTime])
 
+    // Used to update parent's used time
+    /**
+     * Why we need this?
+     * const [seconds, setSeconds] = useState(props.daily_plan.seconds);
+     * The initial state will only be set when first rendering the component DailyPlan.
+     * After the child task stop the timer, although props.daily_plan.seconds already reflect
+     * all tasks' most recent used seconds, state for seconds won't be updated.
+     */
+    useEffect(() => {
+        if(props.isClockActive === false && props.used_seconds !== props.seconds) {
+            props.setSeconds(props.used_seconds);
+        }
+    })
+
     return (
         <div>
             {secondsToHMS(props.seconds)}
