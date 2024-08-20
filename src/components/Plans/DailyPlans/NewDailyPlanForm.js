@@ -51,8 +51,7 @@ const NewDailyPlanForm = (props) => {
             })
         );
         setIsAddNewPlan(true);
-        // Empty the input box after submission
-        inputPlan.current.value = "";
+        props.formToggler();   // Hide the form after add a new plan
     }
 
     return (

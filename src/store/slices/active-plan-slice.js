@@ -212,7 +212,7 @@ export const activePlanActions = activePlanSlice.actions;
 
 /* Mutate the state within reducer function */
 // By all means, we should not mutate the state directly within redux functions.
-// For this module, we mutate the state directly because that's under the help
+// For this module, we can mutate the state directly because that's under the help
 // of reduxjs/toolkit, behind the scene, reduxjs/toolkit also doesn't mutate
 // the state directly, instead, it creats a new object and return that one
 
