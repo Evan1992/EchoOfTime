@@ -30,13 +30,16 @@ const isToday = (plan_date) => {
 
 const isTomorrow = (plan_date) => {
     if(plan_date) {
-        const dd = plan_date.split("-")[2];
+        const year = plan_date.split("-")[0];
+        const month = plan_date.split("-")[1];
+        const day = plan_date.split("-")[2];
 
         const date = new Date();
         date.setDate(date.getDate() + 1);
-        const tomorrow_date = date.getDate();
 
-        if(Number(dd) === tomorrow_date) {
+        if(Number(year) === date.getFullYear() &&
+           Number(month) === date.getMonth()+1 &&   // Note: getMonth() will return 0 for January
+           Number(day) === date.getDate()) {
             return true
         }
     }
