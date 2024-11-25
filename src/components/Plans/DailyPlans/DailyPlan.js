@@ -80,13 +80,20 @@ const DailyPlan = (props) => {
         setShowCalendar(showCalendar => !showCalendar)
     }
 
-    const dateChangeHandler = (date) => {
-        const dateISO = date.toISOString().slice(0,10);
+    const dateChangeHandler = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();       // Gets the year
+        const month = date.getMonth() + 1;     // Gets the month (0-indexed, so add 1)
+        const day = date.getDate();            // Gets the day of the month
+        // Format the date as needed, for example: "YYYY-MM-DD"
+        const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+        // Toggle the date
         let dateToSet;
-        if(_date === dateISO) {
+        if(_date === formattedDate) {
             dateToSet = "";
         } else {
-            dateToSet = dateISO
+            dateToSet = formattedDate
         }
 
         setDate(_date => dateToSet);
