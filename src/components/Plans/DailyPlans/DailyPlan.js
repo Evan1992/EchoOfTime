@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 
 /* ========== import React components ========== */
 import NewDailyPlanForm from './NewDailyPlanForm';
 import Timer from '../../Timer/Timer';
 import Backdrop from '../../UI/Backdrop';
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import Calendar from 'react-calendar';
@@ -19,6 +20,7 @@ import classes from './DailyPlan.module.css';
 import 'react-calendar/dist/Calendar.css';   // import this css file to auto style the calendar
 
 const DailyPlan = (props) => {
+    const authCtx = useContext(AuthContext);
     const dispatch = useDispatch();
     const [dailyPlanChanged, setDailyPlanChanged] = useState(false);
     const [seconds, setSeconds] = useState(props.daily_plan.seconds);
@@ -29,7 +31,7 @@ const DailyPlan = (props) => {
 
     useEffect(() => {
         if(dailyPlanChanged === true) {
-            dispatch(sendDailyPlanData(props.plan))
+            dispatch(sendDailyPlanData(authCtx.userID, props.plan))
             setDailyPlanChanged(false);
         }
     }, [dispatch, props.plan, dailyPlanChanged])

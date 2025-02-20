@@ -1,10 +1,11 @@
 /* ========== import React and React hooks ========== */
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
 import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
 import ShortTermPlan from '../ShortTermPlans/ShortTermPlan';
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import { isToday } from '../../../utilities';
@@ -14,31 +15,32 @@ import { fetchPlanData, archivePlanData, sendPlanData, updateCheckedTasksToday }
 import classes from './LongTermPlan.module.css';
 
 const LongTermPlan = () => {
+    const authCtx = useContext(AuthContext);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
     // Send the data to database after user input
     useEffect(() => {
         if(plan.changed === true) {
-            dispatch(sendPlanData(plan));
+            dispatch(sendPlanData(authCtx.userID, plan));
         }
     }, [dispatch, plan])
 
     // Get the data from database as soon as user visit the home page
     useEffect(() => {
-        dispatch(fetchPlanData());
+        dispatch(fetchPlanData(authCtx.userID));
     }, [dispatch])
 
     // Update checked_tasks_today if date fetched from database is not today
     useEffect(() => {
         if(plan.checked_tasks_today.date !== "" && !isToday(plan.checked_tasks_today.date)) {
-            dispatch(updateCheckedTasksToday());
+            dispatch(updateCheckedTasksToday(authCtx.userID));
         }
     }, [dispatch, plan])
 
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
     const archivePlan = () => {
-        dispatch(archivePlanData(plan));
+        dispatch(archivePlanData(authCtx.userID, plan));
     }
 
     const showLongTermPlan = (
@@ -81,7 +83,7 @@ export default LongTermPlan
 
 /*
     const archivePlan = () => {
-        dispatch(archivePlanData(plan));
+        dispatch(archivePlanData(authCtx.userID, plan));
     }
 */
 // The above code snippet does NOT perform side effect within useEffect(),

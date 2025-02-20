@@ -1,5 +1,5 @@
 /* ========== import React and React hooks ========== */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
@@ -8,6 +8,7 @@ import DailyPlan from './DailyPlan';
 import TodayPlans from '../TodayPlans/TodayPlans';
 import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
 import Focus from '../../Focus/Focus';
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
@@ -21,6 +22,7 @@ import TomorrowPlanSummary from '../TomorrowPlans/TomorrowPlanSummary';
 
 
 const DailyPlans = () => {
+    const authCtx = useContext(AuthContext);
     const [planDeleted, setPlanDeleted] = useState(false);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
@@ -40,8 +42,8 @@ const DailyPlans = () => {
 
     useEffect(() => {
         if(planDeleted === true) {
-            dispatch(sendDailyPlanData(plan))
-            dispatch(sendPlanData(plan))
+            dispatch(sendDailyPlanData(authCtx.userID, plan))
+            dispatch(sendPlanData(authCtx.userID, plan))
             setPlanDeleted(false);
         }
     }, [dispatch, plan, planDeleted])

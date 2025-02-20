@@ -1,7 +1,7 @@
 import { activePlanActions } from "./active-plan-slice";
 
-const userID = localStorage.getItem('userID');
-export const sendPlanData = (plan) => {
+
+export const sendPlanData = (userID, plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
@@ -28,7 +28,7 @@ export const sendPlanData = (plan) => {
     }
 }
 
-export const fetchPlanData = () => {
+export const fetchPlanData = (userID) => {
     return async (dispatch) => {
         const fetchData = async () => {
             const response = await fetch(
@@ -61,7 +61,7 @@ export const fetchPlanData = () => {
     }
 }
 
-export const updateCheckedTasksToday = () => {
+export const updateCheckedTasksToday = (userID) => {
     return async (dispatch) => {
         const postData = async () => {
             const dateToday = new Date().toLocaleDateString();
@@ -90,7 +90,7 @@ export const updateCheckedTasksToday = () => {
 }
 
 // Archive the active plan
-export const archivePlanData = (plan) => {
+export const archivePlanData = (userID, plan) => {
     return async (dispatch) => {
         const archiveActivePlan = async () => {
             const response = await fetch(
@@ -134,7 +134,7 @@ export const archivePlanData = (plan) => {
 }
 
 // Method for updating active_plan.short_term_plan
-export const sendDailyPlanData = (plan) => {
+export const sendDailyPlanData = (userID, plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(

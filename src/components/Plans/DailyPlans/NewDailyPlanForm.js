@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
@@ -7,11 +7,13 @@ import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import react components ========== */
 import Backdrop from '../../UI/Backdrop';
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import css ========== */
 import classes from './NewDailyPlanForm.module.css';
 
 const NewDailyPlanForm = (props) => {
+    const authCtx = useContext(AuthContext);
     /**
      * @note
      * useRef() hook will help avoid the redundant calls to setState() 
@@ -24,7 +26,7 @@ const NewDailyPlanForm = (props) => {
 
     useEffect(() => {
         if(isAddNewPlan) {
-            dispatch(sendDailyPlanData(plan));
+            dispatch(sendDailyPlanData(authCtx.userID, plan));
             setIsAddNewPlan(false);
         }
     }, [dispatch, plan, isAddNewPlan])
