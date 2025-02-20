@@ -22,7 +22,7 @@ export const AuthContextProvider = (props) => {
     // Given different users, call different database endpoints
     let firebase = axios.create({
         timeout: 5000,
-        baseURL: `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/`
+        baseURL: `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}`
     });
 
     const loginHandler = (token, userID) => {

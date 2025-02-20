@@ -5,7 +5,7 @@ export const sendPlanData = (plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
-                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
@@ -32,7 +32,7 @@ export const fetchPlanData = () => {
     return async (dispatch) => {
         const fetchData = async () => {
             const response = await fetch(
-                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan.json`
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json`
             )
 
             if(!response.ok) {
@@ -68,7 +68,7 @@ export const updateCheckedTasksToday = () => {
             const split = dateToday.split("/")
             const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1])
             const response = await fetch(
-                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan/checked_tasks_today.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/checked_tasks_today.json`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
@@ -94,7 +94,7 @@ export const archivePlanData = (plan) => {
     return async (dispatch) => {
         const archiveActivePlan = async () => {
             const response = await fetch(
-                'https://sound-of-time-2-default-rtdb.firebaseio.com/archived_plans.json',
+                'https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/archived_plans.json',
                 {
                     method: 'POST',
                     body: JSON.stringify({
@@ -112,7 +112,7 @@ export const archivePlanData = (plan) => {
 
         const deleteActivePlan = async () => {
             const response = await fetch(
-                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json`,
                 {
                     method: 'DELETE'
                 }
@@ -138,7 +138,7 @@ export const sendDailyPlanData = (plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
-                `https://sound-of-time-2-default-rtdb.firebaseio.com/${userID}/active_plan/short_term_plan.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/short_term_plan.json`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
