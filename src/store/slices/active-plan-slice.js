@@ -208,7 +208,7 @@ export const activePlanActions = activePlanSlice.actions;
 /* No asynchronous operation within reducer function */
 // No asynchronous operation within reducer function, like
 // http request. Instead, there are two ways to perform http
-// reuqest, one is "useEffect()"", another one is "action creator thunk"
+// request, one is "useEffect()"", another one is "action creator thunk"
 
 /* Mutate the state within reducer function */
 // By all means, we should not mutate the state directly within redux functions.
