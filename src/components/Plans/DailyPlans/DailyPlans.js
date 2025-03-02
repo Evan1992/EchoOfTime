@@ -46,7 +46,7 @@ const DailyPlans = () => {
             dispatch(sendPlanData(authCtx.userID, plan))
             setPlanDeleted(false);
         }
-    }, [dispatch, plan, planDeleted])
+    }, [dispatch, authCtx.userID, plan, planDeleted])
 
     return (
         <React.Fragment>

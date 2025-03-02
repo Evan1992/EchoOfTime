@@ -34,7 +34,7 @@ const DailyPlan = (props) => {
             dispatch(sendDailyPlanData(authCtx.userID, props.plan))
             setDailyPlanChanged(false);
         }
-    }, [dispatch, props.plan, dailyPlanChanged])
+    }, [dispatch, authCtx.userID, props.plan, dailyPlanChanged])
 
     const formToggleHandler = () => {
         setShowForm(!showForm);
