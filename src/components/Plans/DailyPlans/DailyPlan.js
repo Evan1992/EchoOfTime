@@ -24,7 +24,6 @@ const DailyPlan = (props) => {
     const dispatch = useDispatch();
     const [dailyPlanChanged, setDailyPlanChanged] = useState(false);
     const [seconds, setSeconds] = useState(props.daily_plan.seconds);
-    const [isClockActive, setIsClockActive] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [_date, setDate] = useState(props.daily_plan.date);
     const [showCalendar, setShowCalendar] = useState(false);
@@ -139,8 +138,16 @@ const DailyPlan = (props) => {
         }
     }
 
-    const clockToggleHandler = () => {
-        if(isClockActive === true) {
+    const timerToggleHandler = () => {
+        if(props.isTimerActive === false && props.timerHolder === null) {
+            props.setIsTimerActive(true);
+            props.setTimerHolder(props.id);
+        }
+        if(props.isTimerActive === true && props.timerHolder !== props.id) {
+            alert("Only one timer can be active at a time!")
+            return
+        }
+        if(props.isTimerActive === true && props.timerHolder === props.id) {
             // Update both current plan and its parent plans
             dispatch(
                 activePlanActions.updateTime({
@@ -151,9 +158,9 @@ const DailyPlan = (props) => {
             )
             // Upload the latest time to database after stopping the timer
             setDailyPlanChanged(true);
+            props.setIsTimerActive(false);
+            props.setTimerHolder(null);
         }
-
-        setIsClockActive(isClockActive => !isClockActive);
     }
 
     const deletePlanHandler = () => {
@@ -211,7 +218,13 @@ const DailyPlan = (props) => {
                 </Col>
 
                 <Col xs={1} style={{padding: 0}}>
-                    <Timer used_seconds={props.daily_plan.seconds} seconds={seconds} setSeconds={setSeconds} isClockActive={isClockActive} />
+                    <Timer
+                        id={props.id}
+                        used_seconds={props.daily_plan.seconds}
+                        seconds={seconds}
+                        setSeconds={setSeconds}
+                        isTimerActive={props.isTimerActive}
+                        timerHolder={props.timerHolder} />
                 </Col>
 
                 {/* Show the date of the plan */}
@@ -233,7 +246,7 @@ const DailyPlan = (props) => {
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>
-                    <img className={classes.plan_clock_button} onClick={clockToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
+                    <img className={classes.plan_timer_button} onClick={timerToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
                 </Col>
 
                 {/* Delete a plan */}

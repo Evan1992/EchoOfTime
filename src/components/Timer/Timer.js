@@ -27,7 +27,9 @@ const Timer = (props) => {
         return `${hour}:${minute}:${second}`
     }
 
-    if(props.isClockActive === true && startTimeSetted === false) {
+    if (props.isTimerActive === true &&
+        props.timerHolder === props.id &&
+        startTimeSetted === false) {
         setStartTime(Date.now());
         setStartTimeSetted(true);
     }
@@ -36,7 +38,7 @@ const Timer = (props) => {
         let elapsedMilliseconds = Date.now() - startTime;
         let elapsedSeconds = Math.ceil(elapsedMilliseconds / 1000) === 0 ? 1 : Math.ceil(elapsedMilliseconds / 1000)
         let interval = null;
-        if(props.isClockActive === true) {
+        if(props.isTimerActive === true && props.timerHolder === props.id) {
             interval = setInterval(() => {
                 dispatch(
                     focusTimerActions.startTimer({
@@ -45,7 +47,9 @@ const Timer = (props) => {
                 )
                 props.setSeconds(props.used_seconds + elapsedSeconds);
             }, 1000);
-        } else {
+        }
+        if(props.isTimerActive === false && props.timerHolder === props.id) {
+            console.log('Timer stopped');
             dispatch(
                 focusTimerActions.stopTimer()
             )
@@ -63,7 +67,7 @@ const Timer = (props) => {
      * all tasks' most recent used seconds, state for seconds won't be updated.
      */
     useEffect(() => {
-        if(props.isClockActive === false && props.used_seconds !== props.seconds) {
+        if(props.isTimerActive === false && props.used_seconds !== props.seconds) {
             props.setSeconds(props.used_seconds);
         }
     })

@@ -29,7 +29,7 @@ const TimerForFocus = (props) => {
     }
 
     useEffect(() => {
-        if(props.isClockActiveGlobal) {
+        if(props.isTimerActiveGlobal) {
             timer.start();
         } else {
             timer.stop();

@@ -24,6 +24,9 @@ import TomorrowPlanSummary from '../TomorrowPlans/TomorrowPlanSummary';
 const DailyPlans = () => {
     const authCtx = useContext(AuthContext);
     const [planDeleted, setPlanDeleted] = useState(false);
+    // Only one timer for a task can be active at a time
+    const [isTimerActive, setIsTimerActive] = useState(false);
+    const [timerHolder, setTimerHolder] = useState(null);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
@@ -72,6 +75,10 @@ const DailyPlans = () => {
                                     rank={dailyPlan.rank}
                                     show_children={show_children}
                                     set_plan_deleted={setPlanDeleted}
+                                    isTimerActive={isTimerActive}
+                                    setIsTimerActive={setIsTimerActive}
+                                    timerHolder={timerHolder}
+                                    setTimerHolder={setTimerHolder}
                                 />
                             }
                             return <div key={dailyPlan.id} />
