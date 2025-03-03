@@ -49,7 +49,6 @@ const Timer = (props) => {
             }, 1000);
         }
         if(props.isTimerActive === false && props.timerHolder === props.id) {
-            console.log('Timer stopped');
             dispatch(
                 focusTimerActions.stopTimer()
             )
