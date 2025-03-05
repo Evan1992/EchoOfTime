@@ -14,24 +14,40 @@ const MainNavigation = () => {
   
   return (
     <header className={classes.header}>
-      <Link to="/">
-        <div className={classes.logo}> EchoOfTime </div>
-      </Link>
-      <nav>
-        <ul>
-          {!isLoggedIn && (
+      <div className={classes.topNav}>
+        <Link to="/">
+          <div className={classes.logo}> EchoOfTime </div>
+        </Link>
+        <nav>
+          <ul>
+            {!isLoggedIn && (
+              <li>
+                <Link to='/auth'>Login</Link>
+              </li>
+            )}
+            {isLoggedIn && (
+              <li>
+                <button onClick={logoutHandler}>Logout</button>
+              </li>
+            )}
+          </ul>
+        </nav>
+      </div>
+      <div className={classes.mainNav}>
+        <nav>
+          <ul>
             <li>
-              <Link to='/auth'>Login</Link>
+              <Link to='/today'>Today</Link>
             </li>
-          )}
-          
-          {isLoggedIn && (
             <li>
-              <button onClick={logoutHandler}>Logout</button>
+              <Link to='/overview'>Overview</Link>
             </li>
-          )}
-        </ul>
-      </nav>
+            <li>
+              <Link to='/backlog'>Backlog</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   )
 }

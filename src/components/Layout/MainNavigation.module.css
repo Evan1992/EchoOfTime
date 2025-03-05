@@ -3,9 +3,6 @@
     height: 5rem;
     background-color: #f8f9fa;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 0 10%;
 }
 
@@ -14,6 +11,25 @@
     font-size: 1.5rem;
     color: black;
     margin: 0;
+}
+
+.topNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.mainNav ul {
+    display: flex;
+    justify-content: flex-start; /* Align items to the start */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.mainNav li {
+    margin-right: 1rem; /* Add space between each item */
 }
 
 .header ul {
@@ -40,7 +56,6 @@
     cursor: pointer;
 }
 
-
 .header a:hover {
     color: black;
 }
@@ -48,3 +63,7 @@
 .header button:hover {
     color: black;
 }
+
+/* =========== Learnings =========== */
+/* list-style: none */
+/* The css style above remove the default list styling where it has the bullet points */
