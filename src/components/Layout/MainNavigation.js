@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import AuthContext from '../../store/auth-context'
@@ -7,9 +7,14 @@ import classes from './MainNavigation.module.css'
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
-  
+  const [activeTab, setActiveTab] = useState('/today');
+
   const logoutHandler = () => {
     authCtx.logout();
+  }
+
+  const handleLinkClick = (link) => {
+    setActiveTab(link);
   }
   
   return (
@@ -37,13 +42,28 @@ const MainNavigation = () => {
         <nav>
           <ul>
             <li>
-              <Link to='/today'>Today</Link>
+              <Link
+                to='/today'
+                className={activeTab === '/today' ? classes.active : ''}
+                onClick={() => handleLinkClick('/today')}>
+                Today
+              </Link>
             </li>
             <li>
-              <Link to='/overview'>Overview</Link>
+              <Link
+                to='/overview'
+                className={activeTab === '/overview' ? classes.active : ''}
+                onClick={() => handleLinkClick('/overview')}>
+                Overview
+              </Link>
             </li>
             <li>
-              <Link to='/backlog'>Backlog</Link>
+              <Link
+                to='/backlog'
+                className={activeTab === '/backlog' ? classes.active : ''}
+                onClick={() => handleLinkClick('/backlog')}>
+                Backlog
+              </Link>
             </li>
           </ul>
         </nav>

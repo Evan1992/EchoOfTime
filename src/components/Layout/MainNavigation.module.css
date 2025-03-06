@@ -44,6 +44,7 @@
     text-decoration: none;
     color: rgba(0,0,0,.5);
     font-weight: bold;
+    padding-bottom: 0.5rem; /* Add padding to the bottom */
 }
 
 .header button {
@@ -64,6 +65,17 @@
     color: black;
 }
 
+.header a.active {
+    color: black;
+    border-bottom: 2px solid black; /* Add bottom border to active link */
+}
+
+
+
 /* =========== Learnings =========== */
 /* list-style: none */
 /* The css style above remove the default list styling where it has the bullet points */
+
+/* Conflict css style */
+/* ".header a" will override the css tyle in ".active" because it's more specific */
+/* If css style in .active has higher priority, we can make it more specific, like ".header a.active" */
