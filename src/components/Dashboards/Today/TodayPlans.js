@@ -1,11 +1,27 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
+/* ========== import React components ========== */
+import TodayPlan from './TodayPlan';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
+import { isToday } from '../../../utilities';
 
 const TodayPlans = () => {
+    const plan = useSelector((state) => state.activePlan);
+
+    const todayPlans = [];
+    if(plan.short_term_plan.daily_plans !== undefined) {
+        for(const daily_plan of plan.short_term_plan.daily_plans) {
+            if(isToday(daily_plan.date)) {
+                todayPlans.push(daily_plan);
+            }
+        }
+    }
+
     return (
         <React.Fragment>
             <Container fluid>
@@ -15,6 +31,14 @@ const TodayPlans = () => {
                         <h4>Todo Today</h4>
                     </Col>
                 </Row>
+                {
+                    todayPlans.map((today_plan) => {
+                        return <TodayPlan
+                            key={today_plan.id}
+                            plan={today_plan}
+                        />
+                    })
+                }
             </Container>
         </React.Fragment>
     )
