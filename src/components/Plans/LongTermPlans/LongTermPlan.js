@@ -19,17 +19,17 @@ const LongTermPlan = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
+    // Get the data from database as soon as user visit the home page
+    useEffect(() => {
+        dispatch(fetchPlanData(authCtx.userID));
+    }, [dispatch])
+
     // Send the data to database after user input
     useEffect(() => {
         if(plan.changed === true) {
             dispatch(sendPlanData(authCtx.userID, plan));
         }
     }, [dispatch, plan])
-
-    // Get the data from database as soon as user visit the home page
-    useEffect(() => {
-        dispatch(fetchPlanData(authCtx.userID));
-    }, [dispatch])
 
     // Update checked_tasks_today if date fetched from database is not today
     useEffect(() => {
