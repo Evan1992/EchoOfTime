@@ -48,7 +48,7 @@ const Timer = (props) => {
                 props.setSeconds(props.used_seconds + elapsedSeconds);
             }, 1000);
         }
-        if(props.isTimerActive === false && props.timerHolder === props.id) {
+        if(props.isTimerActive === false) {
             dispatch(
                 focusTimerActions.stopTimer()
             )
