@@ -114,24 +114,37 @@ const DailyPlan = (props) => {
          * while if date's format is mm/dd/yyyy, new Date(date) will use local time zone to parse it.
          * As a result, we should convert yyyy-mm-dd to mm/dd/yyyy first
          */
-        let plan_date
+        let plan_date_string
         if(date) {
             const splitted_date = date.split("-")
             const yy = splitted_date[0]
             const mm = splitted_date[1]
             const dd = splitted_date[2]
-            plan_date = mm.concat("/", dd, "/", yy)
+            plan_date_string = mm.concat("/", dd, "/", yy)
         }
 
-        const cur_date = new Date().toLocaleDateString()
-        const cur_date_to_time = new Date(cur_date).getTime()
-        const plan_date_to_time = new Date(plan_date).getTime()
+        const cur_date_string = new Date().toLocaleDateString();
+        const cur_date = new Date(cur_date_string);
+        const plan_date = new Date(plan_date_string);
 
-        if(plan_date_to_time - cur_date_to_time === -86400000){
+        // Set time components to zero
+        cur_date.setHours(0, 0, 0, 0);
+        plan_date.setHours(0, 0, 0, 0);
+
+        const cur_date_to_time = cur_date.getTime();
+        const plan_date_to_time = plan_date.getTime();
+
+        // Adjust for DST
+        const cur_date_offset = cur_date.getTimezoneOffset();
+        const plan_date_offset = plan_date.getTimezoneOffset();
+        const offset_difference = (cur_date_offset - plan_date_offset) * 60 * 1000;
+
+        const time_difference = plan_date_to_time - cur_date_to_time + offset_difference;
+        if(time_difference === -86400000){
             return "Yesterday"
-        } else if(plan_date_to_time - cur_date_to_time === 0) {
+        } else if(time_difference === 0) {
             return "Today"
-        } else if(plan_date_to_time - cur_date_to_time === 86400000) {
+        } else if(time_difference === 86400000) {
             return "Tomorrow"
         } else {
             return date
