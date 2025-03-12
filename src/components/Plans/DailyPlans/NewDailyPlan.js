@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+/* ========== import other libraries ========== */
+import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import React components ========== */
 import NewDailyPlanForm from './NewDailyPlanForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import css ========== */
 import classes from './NewDailyPlan.module.css';
 
 const NewDailyPlan = () => {
+    const dispatch = useDispatch();
+    const authCtx = useContext(AuthContext);
+    const plan = useSelector((state) => state.activePlan);
     const [showForm, setShowForm] = useState(false);
+    const [isAddNewPlan, setIsAddNewPlan] = useState(false);
+
+    useEffect(() => {
+        if(isAddNewPlan) {
+            dispatch(sendDailyPlanData(authCtx.userID, plan));
+            setIsAddNewPlan(false);
+        }
+    }, [dispatch, authCtx.userID, plan, isAddNewPlan])
 
     const formToggleHandler = () => {
         setShowForm(!showForm);
@@ -34,6 +50,7 @@ const NewDailyPlan = () => {
                         <NewDailyPlanForm
                             rank={0}
                             formToggler={formToggleHandler}
+                            setIsAddNewPlan={setIsAddNewPlan}
                         />
                     </Col>
                 }

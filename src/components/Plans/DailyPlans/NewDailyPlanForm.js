@@ -1,35 +1,23 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useRef } from 'react';
+import { useDispatch } from 'react-redux';
 
 /* ========== import other libraries ========== */
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
-import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import react components ========== */
 import Backdrop from '../../UI/Backdrop';
-import AuthContext from '../../../store/auth-context';
 
 /* ========== import css ========== */
 import classes from './NewDailyPlanForm.module.css';
 
 const NewDailyPlanForm = (props) => {
-    const authCtx = useContext(AuthContext);
     /**
      * @note
      * useRef() hook will help avoid the redundant calls to setState() 
      * and re-render the page for every keystroke
      */
     let inputPlan = useRef();
-    const [isAddNewPlan, setIsAddNewPlan] = useState(false);
-    const plan = useSelector((state) => state.activePlan);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        if(isAddNewPlan) {
-            dispatch(sendDailyPlanData(authCtx.userID, plan));
-            setIsAddNewPlan(false);
-        }
-    }, [dispatch, plan, isAddNewPlan])
 
     const addPlanHandler = () => {
         const newDailyPlan = {
@@ -52,7 +40,8 @@ const NewDailyPlanForm = (props) => {
                 parent_id: props.parent_id
             })
         );
-        setIsAddNewPlan(true);
+
+        props.setIsAddNewPlan(true);
         props.formToggler();   // Hide the form after add a new plan
     }
 
