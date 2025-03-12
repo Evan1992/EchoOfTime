@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
 import NewDailyPlanForm from './NewDailyPlanForm';
@@ -22,11 +22,13 @@ import 'react-calendar/dist/Calendar.css';   // import this css file to auto sty
 const DailyPlan = (props) => {
     const authCtx = useContext(AuthContext);
     const dispatch = useDispatch();
+    const plan = useSelector((state) => state.activePlan);
     const [dailyPlanChanged, setDailyPlanChanged] = useState(false);
     const [seconds, setSeconds] = useState(props.daily_plan.seconds);
     const [showForm, setShowForm] = useState(false);
     const [_date, setDate] = useState(props.daily_plan.date);
     const [showCalendar, setShowCalendar] = useState(false);
+    const [isAddNewPlan, setIsAddNewPlan] = useState(false);
 
     useEffect(() => {
         if(dailyPlanChanged === true) {
@@ -34,6 +36,13 @@ const DailyPlan = (props) => {
             setDailyPlanChanged(false);
         }
     }, [dispatch, authCtx.userID, props.plan, dailyPlanChanged])
+
+    useEffect(() => {
+        if(isAddNewPlan) {
+            dispatch(sendDailyPlanData(authCtx.userID, plan));
+            setIsAddNewPlan(false);
+        }
+    }, [dispatch, authCtx.userID, plan, isAddNewPlan])
 
     const formToggleHandler = () => {
         setShowForm(!showForm);
@@ -286,6 +295,7 @@ const DailyPlan = (props) => {
                                     rank={props.rank+1}
                                     index={props.index} // used to decide where to insert the new daily plan to daily_plans
                                     formToggler={formToggleHandler}
+                                    setIsAddNewPlan={setIsAddNewPlan}
                                 />
                             </Col>
                         </Row>
