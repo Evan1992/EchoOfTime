@@ -10,6 +10,9 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 import { isToday } from '../../../utilities';
 
+/* ========== import css ========== */
+import classes from './TodayPlans.module.css';
+
 const TodayPlans = () => {
     const plan = useSelector((state) => state.activePlan);
 
@@ -24,21 +27,31 @@ const TodayPlans = () => {
 
     return (
         <React.Fragment>
-            <Container fluid>
+            <Container className={classes.container}>
                 <Row>
-                    <Col xs={1} />
-                    <Col>
-                        <h4>Todo Today</h4>
+                    {/* <Col> has padding by default, use Bootstrap utility classes for no padding */}
+                    <Col className="p-0">
+                        <Container className={classes.tasks}>
+                            {
+                                todayPlans.map((today_plan) => {
+                                    return <TodayPlan
+                                        key={today_plan.id}
+                                        plan={today_plan}
+                                    />
+                                })
+                            }
+                        </Container>
+                    </Col>
+                    <Col className="p-0">
+                        <Container>
+                            <Row>
+                                <Col>
+                                    <h4>Placeholder</h4>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                 </Row>
-                {
-                    todayPlans.map((today_plan) => {
-                        return <TodayPlan
-                            key={today_plan.id}
-                            plan={today_plan}
-                        />
-                    })
-                }
             </Container>
         </React.Fragment>
     )

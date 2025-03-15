@@ -29,14 +29,13 @@ const TodayPlan = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Col xs={1} />
-                <Col>
+                <Col className="p-0">
                     <div>{props.plan.title}</div>
                 </Col>
-                <Col>
+                <Col className="p-0">
                     <div>{props.plan.expected_hours}:{props.plan.expected_minutes}</div>
                 </Col>
-                <Col>
+                <Col className="p-0">
                     <div>{secondsToHMS(props.plan.seconds)}</div>
                 </Col>
             </Row>
