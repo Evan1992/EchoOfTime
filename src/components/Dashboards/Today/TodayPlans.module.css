@@ -1,6 +1,7 @@
 .container {
     margin-left: 5% !important;
     margin-top: 2rem;
+    max-width: 2000px;
 }
 
 .task {

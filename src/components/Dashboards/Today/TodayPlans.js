@@ -30,7 +30,7 @@ const TodayPlans = () => {
             <Container className={classes.container}>
                 <Row>
                     {/* <Col> has padding by default, use Bootstrap utility classes for no padding */}
-                    <Col className="p-0">
+                    <Col xs={8} className="p-0">
                         <Container className={classes.tasks}>
                             {
                                 todayPlans.map((today_plan) => {
@@ -42,7 +42,7 @@ const TodayPlans = () => {
                             }
                         </Container>
                     </Col>
-                    <Col className="p-0">
+                    <Col xs={4} className="p-0">
                         <Container>
                             <Row>
                                 <Col>
