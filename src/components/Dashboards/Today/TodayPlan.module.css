@@ -1,0 +1,7 @@
+.row:hover {
+    background-color: lightgray;
+}
+
+.highlight {
+    background-color: #ebf5f0; /* Adjust the highlight color as needed */
+}

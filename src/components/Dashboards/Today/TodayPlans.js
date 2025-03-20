@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
@@ -15,6 +16,7 @@ import classes from './TodayPlans.module.css';
 
 const TodayPlans = () => {
     const plan = useSelector((state) => state.activePlan);
+    const [highlight, setHighlight] = useState(null);
 
     const todayPlans = [];
     if(plan.short_term_plan.daily_plans !== undefined) {
@@ -37,6 +39,8 @@ const TodayPlans = () => {
                                     return <TodayPlan
                                         key={today_plan.id}
                                         plan={today_plan}
+                                        highlight={highlight}
+                                        setHighlight={setHighlight}
                                     />
                                 })
                             }

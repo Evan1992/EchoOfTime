@@ -4,6 +4,9 @@ import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+/* ========== import css ========== */
+import classes from './TodayPlan.module.css';
+
 const TodayPlan = (props) => {
 
     const formatToTwoDigits = (n) => {
@@ -26,9 +29,16 @@ const TodayPlan = (props) => {
         return `${hour}:${minute}:${second}`
     }
 
+    const highlightHandler = () => {
+        props.setHighlight(props.plan.id);
+    }
+
     return (
         <React.Fragment>
-            <Row>
+            <Row
+                className={`${classes.row} ${props.highlight === props.plan.id ? classes.highlight : ''}`}
+                onClick={highlightHandler}
+            >
                 <Col className="p-0">
                     <div>{props.plan.title}</div>
                 </Col>
