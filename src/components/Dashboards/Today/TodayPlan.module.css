@@ -5,3 +5,19 @@
 .highlight {
     background-color: #ebf5f0; /* Adjust the highlight color as needed */
 }
+
+.calendar{
+    position:absolute;
+    z-index: 100;
+}
+
+.calendar_icon {
+    vertical-align: middle;
+    width:20px;
+    height:20px;
+}
+
+.calendar_icon:hover {
+    filter: opacity(0.3);
+    transform: scale(1.5);
+}

@@ -175,7 +175,18 @@ const activePlanSlice = createSlice({
             state.short_term_plan.daily_plans[action.payload.index].expected_minutes = action.payload.minutes;
         },
         setDate(state, action) {
-            state.short_term_plan.daily_plans[action.payload.index].date = action.payload.date;
+            // if condition is used by DailyPlans while else condition is used by Dashboard.TodayPlans.TodayPlan
+            // TODO: consolidate the two conditions
+            if (action.payload.index !== undefined) {
+                state.short_term_plan.daily_plans[action.payload.index].date = action.payload.date;
+            } else {
+                for (const daily_plan of state.short_term_plan.daily_plans) {
+                    if (daily_plan.id === action.payload.id) {
+                        daily_plan.date = action.payload.date;
+                        break;
+                    }
+                }
+            }
         },
         updateTime(state, action) {
             // Update both current plan and its parent plans
