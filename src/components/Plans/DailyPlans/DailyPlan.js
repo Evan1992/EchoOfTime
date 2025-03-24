@@ -30,6 +30,13 @@ const DailyPlan = (props) => {
     const [showCalendar, setShowCalendar] = useState(false);
     const [isAddNewPlan, setIsAddNewPlan] = useState(false);
 
+    // When changing parent plan's date, all its children plans' date should be updated
+    useEffect(() => {
+        if (_date !== props.daily_plan.date) {
+            setDate(props.daily_plan.date);
+        }
+    }, [_date, props.daily_plan.date])
+
     useEffect(() => {
         if(dailyPlanChanged === true) {
             dispatch(sendDailyPlanData(authCtx.userID, props.plan))
@@ -110,7 +117,7 @@ const DailyPlan = (props) => {
         // Update the plan with the date.
         dispatch(
             activePlanActions.setDate({
-                index:props.index,
+                id:props.id,
                 date:dateToSet
             })
         )

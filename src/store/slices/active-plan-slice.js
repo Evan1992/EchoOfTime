@@ -175,16 +175,23 @@ const activePlanSlice = createSlice({
             state.short_term_plan.daily_plans[action.payload.index].expected_minutes = action.payload.minutes;
         },
         setDate(state, action) {
-            // if condition is used by DailyPlans while else condition is used by Dashboard.TodayPlans.TodayPlan
-            // TODO: consolidate the two conditions
-            if (action.payload.index !== undefined) {
-                state.short_term_plan.daily_plans[action.payload.index].date = action.payload.date;
-            } else {
-                for (const daily_plan of state.short_term_plan.daily_plans) {
-                    if (daily_plan.id === action.payload.id) {
-                        daily_plan.date = action.payload.date;
-                        break;
+            for (const [index, daily_plan] of state.short_term_plan.daily_plans.entries()) {
+                if (daily_plan.id === action.payload.id) {
+                    daily_plan.date = action.payload.date;
+                    if (daily_plan.has_children) {
+                        const parent_plan_ids = new Set([daily_plan.id]);
+                        for (let i = index + 1; i < state.short_term_plan.daily_plans.length; i++) {
+                            if (parent_plan_ids.has(state.short_term_plan.daily_plans[i].parent_id)) {
+                                state.short_term_plan.daily_plans[i].date = action.payload.date;
+                                if (state.short_term_plan.daily_plans[i].has_children) {
+                                    parent_plan_ids.add(state.short_term_plan.daily_plans[i].id);
+                                }
+                            } else {
+                                break;
+                            }
+                        }
                     }
+                    break;
                 }
             }
         },
