@@ -22,21 +22,21 @@ const LongTermPlan = () => {
     // Get the data from database as soon as user visit the home page
     useEffect(() => {
         dispatch(fetchPlanData(authCtx.userID));
-    }, [dispatch])
+    }, [authCtx.userID, dispatch])
 
     // Send the data to database after user input
     useEffect(() => {
         if(plan.changed === true) {
             dispatch(sendPlanData(authCtx.userID, plan));
         }
-    }, [dispatch, plan])
+    }, [authCtx.userID, dispatch, plan])
 
     // Update checked_tasks_today if date fetched from database is not today
     useEffect(() => {
         if(plan.checked_tasks_today.date !== "" && !isToday(plan.checked_tasks_today.date)) {
             dispatch(updateCheckedTasksToday(authCtx.userID));
         }
-    }, [dispatch, plan])
+    }, [authCtx.userID, dispatch, plan])
 
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
     const archivePlan = () => {
