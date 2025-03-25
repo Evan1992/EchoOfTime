@@ -43,21 +43,6 @@ const DailyPlans = () => {
         }
     }
 
-    // Add event listener to update database before refreshing or closing the page
-    useEffect(() => {
-        const handleBeforeUnload = async (event) => {
-            dispatch(sendDailyPlanData(authCtx.userID, plan));
-            event.preventDefault();
-            event.returnValue = ''; // Required for modern browsers
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, [dispatch, authCtx.userID, plan]);
-
     useEffect(() => {
         if(planDeleted === true) {
             dispatch(sendDailyPlanData(authCtx.userID, plan))
