@@ -220,7 +220,7 @@ const DailyPlan = (props) => {
     return (
         <React.Fragment>
             <Row className={classes.row}>
-                <Col xs='auto'>
+                <Col xs='auto p-0'>
                     <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
                         {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
                         {
@@ -235,7 +235,7 @@ const DailyPlan = (props) => {
                     </div>
                 </Col>
 
-                <Col xs={{ span: 4}} style={{display:'flex', justifyContent:'left'}}>
+                <Col xs={{ span: 4 }} style={{display:'flex', justifyContent:'left', padding: 0}}>
                     <div style={{'textIndent':`calc(${props.daily_plan.rank} * 20px)`}}>{props.daily_plan.title || 'No title'}</div>
                 </Col>
 
