@@ -14,6 +14,8 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 /* ========== import css ========== */
 import classes from './DailyPlan.module.css';
@@ -226,8 +228,8 @@ const DailyPlan = (props) => {
                             (props.daily_plan.has_children) &&
                             (
                                 props.show_children ?
-                                <img className={classes.expand_collapse_img} src='https://img.icons8.com/ios-filled/50/000000/collapse-arrow.png'  alt='collapse' /> :
-                                <img className={classes.expand_collapse_img} src='https://img.icons8.com/material-rounded/24/000000/more-than.png' alt='expand' />
+                                <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretUp} color="#333" title="caretUp" />:
+                                <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretRight} color="#333" title="caretRight" />
                             )
                         }
                     </div>
