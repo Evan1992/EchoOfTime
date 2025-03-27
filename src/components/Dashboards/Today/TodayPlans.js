@@ -20,9 +20,9 @@ const TodayPlans = () => {
 
     const todayPlans = [];
     if(plan.short_term_plan.daily_plans !== undefined) {
-        for(const daily_plan of plan.short_term_plan.daily_plans) {
+        for(const [index, daily_plan] of plan.short_term_plan.daily_plans.entries()) {
             if(isToday(daily_plan.date)) {
-                todayPlans.push(daily_plan);
+                todayPlans.push([daily_plan, index]);
             }
         }
     }
@@ -36,12 +36,27 @@ const TodayPlans = () => {
                         <Container className={classes.tasks}>
                             {
                                 todayPlans.map((today_plan) => {
-                                    return <TodayPlan
-                                        key={today_plan.id}
-                                        plan={today_plan}
-                                        highlight={highlight}
-                                        setHighlight={setHighlight}
-                                    />
+                                    let show_children = false;
+                                    // today_plan[0] is the daily plan, today_plan[1] is the index of the daily plan
+                                    if(today_plan[0].has_children) {
+                                        const index = today_plan[1];
+                                        if(index+1 < plan.short_term_plan.daily_plans.length && plan.short_term_plan.daily_plans[index+1].show_plan) {
+                                            show_children = true;
+                                        }
+                                    }
+                                    if(today_plan[0].show_plan) {
+                                        return <TodayPlan
+                                            key={today_plan[0].id}
+                                            index={today_plan[1]}
+                                            plan={today_plan[0]}
+                                            show_children={show_children}
+                                            highlight={highlight}
+                                            setHighlight={setHighlight}
+                                        />
+                                    }
+                                    // Explicitly return null if the condition is not met to avoid warning
+                                    // "Array.prototype.map() expects a value to be returned at the end of arrow function"
+                                    return null;
                                 })
                             }
                         </Container>

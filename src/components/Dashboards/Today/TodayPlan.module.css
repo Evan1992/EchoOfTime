@@ -21,3 +21,20 @@
     filter: opacity(0.3);
     transform: scale(1.5);
 }
+
+.expand_collapse {
+    float:left;
+    color: gray;
+    width: 20px;
+    height: 20px;
+}
+
+.expand_collapse_img {
+    width: 60%;
+    height: 60%;
+}
+
+.expand_collapse_img:hover {
+    filter: opacity(0.3);
+    transform: scale(1.8);
+}

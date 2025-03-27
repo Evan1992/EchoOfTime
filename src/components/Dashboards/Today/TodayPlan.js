@@ -11,6 +11,8 @@ import Col from 'react-bootstrap/Col';
 import Calendar from 'react-calendar';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 /* ========== import css ========== */
 import classes from './TodayPlan.module.css';
@@ -47,6 +49,24 @@ const TodayPlan = (props) => {
         second = formatToTwoDigits(second);
 
         return `${hour}:${minute}:${second}`
+    }
+
+    const childrenToggleHandler = () => {
+        if(props.show_children) {
+            dispatch(
+                activePlanActions.hideChildPlan({
+                    id:props.plan.id,
+                    index:props.index
+                })
+            )
+        } else {
+            dispatch(
+                activePlanActions.showChildPlan({
+                    id:props.plan.id,
+                    index:props.index
+                })
+            );
+        }
     }
 
     const highlightHandler = () => {
@@ -133,6 +153,20 @@ const TodayPlan = (props) => {
                 className={`${classes.row} ${props.highlight === props.plan.id ? classes.highlight : ''}`}
                 onClick={highlightHandler}
             >
+                <Col xs='auto'>
+                    <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
+                        {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
+                        {
+                            // do not show the expand/shrink icon if no children
+                            (props.plan.has_children) &&
+                            (
+                                props.show_children ?
+                                <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretUp} color="#333" title="caretUp" />:
+                                <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretRight} color="#333" title="caretRight" />
+                            )
+                        }
+                    </div>
+                </Col>
                 {/* p-0: Padding of 0 */}
                 <Col className="p-0">
                     <div>{props.plan.title}</div>
