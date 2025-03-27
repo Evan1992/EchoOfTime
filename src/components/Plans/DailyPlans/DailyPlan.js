@@ -222,7 +222,8 @@ const DailyPlan = (props) => {
             <Row className={classes.row}>
                 {/* Set fixed width for this column */}
                 <Col xs={{ span: 4 }}>
-                    <div style={{display:'flex', justifyContent:'left', padding: 0, 'textIndent':`calc(${props.daily_plan.rank} * 20px)`}}>
+                    {/* Use paddingLeft instead of textIndent as it causes bug for the css style applied to the icon */}
+                    <div style={{display:'flex', justifyContent:'left', padding: 0, 'paddingLeft':`calc(${props.daily_plan.rank} * 20px)`}}>
                         <div className={classes.expand_collapse} onClick={childrenToggleHandler}  >
                             {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
                             {
