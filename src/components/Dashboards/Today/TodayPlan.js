@@ -31,27 +31,7 @@ const TodayPlan = (props) => {
             dispatch(sendDailyPlanData(authCtx.userID, props.plan))
             setTodayPlanChanged(false);
         }
-    }, [dispatch, authCtx.userID, props.today_plan, todayPlanChanged])
-
-    const formatToTwoDigits = (n) => {
-        if(n < 10 ){
-            return `0${n}`;
-        } else {
-            return `${n}`;
-        }
-    }
-
-    const secondsToHMS = (seconds) => {
-        let hour  = (seconds / 3600) >> 0;
-        let minute  = ((seconds % 3600) / 60) >> 0;
-        let second  = seconds % 60;
-
-        hour   = formatToTwoDigits(hour);
-        minute = formatToTwoDigits(minute);
-        second = formatToTwoDigits(second);
-
-        return `${hour}:${minute}:${second}`
-    }
+    }, [dispatch, authCtx.userID, props.plan, todayPlanChanged])
 
     const childrenToggleHandler = () => {
         if(props.show_children) {
