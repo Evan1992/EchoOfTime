@@ -16,6 +16,8 @@ import classes from './TodayPlans.module.css';
 
 const TodayPlans = () => {
     const plan = useSelector((state) => state.activePlan);
+    const [isTimerActive, setIsTimerActive] = useState(false);
+    const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
 
     const todayPlans = [];
@@ -48,8 +50,13 @@ const TodayPlans = () => {
                                         return <TodayPlan
                                             key={today_plan[0].id}
                                             index={today_plan[1]}
-                                            plan={today_plan[0]}
+                                            plan={plan}
+                                            today_plan={today_plan[0]}
                                             show_children={show_children}
+                                            isTimerActive={isTimerActive}
+                                            setIsTimerActive={setIsTimerActive}
+                                            timerHolder={timerHolder}
+                                            setTimerHolder={setTimerHolder}
                                             highlight={highlight}
                                             setHighlight={setHighlight}
                                         />

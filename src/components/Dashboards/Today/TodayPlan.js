@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 /* ========== import React components ========== */
 import Backdrop from '../../UI/Backdrop';
 import AuthContext from '../../../store/auth-context';
+import Timer from '../../Timer/Timer';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
@@ -20,8 +21,9 @@ import classes from './TodayPlan.module.css';
 const TodayPlan = (props) => {
     const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
+    const [seconds, setSeconds] = useState(props.today_plan.seconds);
     const [showCalendar, setShowCalendar] = useState(false);
-    const [_date, setDate] = useState(props.plan.date);
+    const [_date, setDate] = useState(props.today_plan.date);
     const [todayPlanChanged, setTodayPlanChanged] = useState(false);
 
     useEffect(() => {
@@ -29,7 +31,7 @@ const TodayPlan = (props) => {
             dispatch(sendDailyPlanData(authCtx.userID, props.plan))
             setTodayPlanChanged(false);
         }
-    }, [dispatch, authCtx.userID, props.plan, todayPlanChanged])
+    }, [dispatch, authCtx.userID, props.today_plan, todayPlanChanged])
 
     const formatToTwoDigits = (n) => {
         if(n < 10 ){
@@ -55,14 +57,14 @@ const TodayPlan = (props) => {
         if(props.show_children) {
             dispatch(
                 activePlanActions.hideChildPlan({
-                    id:props.plan.id,
+                    id:props.today_plan.id,
                     index:props.index
                 })
             )
         } else {
             dispatch(
                 activePlanActions.showChildPlan({
-                    id:props.plan.id,
+                    id:props.today_plan.id,
                     index:props.index
                 })
             );
@@ -70,7 +72,7 @@ const TodayPlan = (props) => {
     }
 
     const highlightHandler = () => {
-        props.setHighlight(props.plan.id);
+        props.setHighlight(props.today_plan.id);
     }
 
     const calendarToggleHandler = () => {
@@ -120,6 +122,31 @@ const TodayPlan = (props) => {
         }
     }
 
+    const timerToggleHandler = () => {
+        if(props.isTimerActive === false && props.timerHolder === null) {
+            props.setIsTimerActive(true);
+            props.setTimerHolder(props.today_plan.id);
+        }
+        if(props.isTimerActive === true && props.timerHolder !== props.today_plan.id) {
+            alert("Only one timer can be active at a time!")
+            return
+        }
+        if(props.isTimerActive === true && props.timerHolder === props.today_plan.id) {
+            // Update both current plan and its parent plans
+            dispatch(
+                activePlanActions.updateTime({
+                    index:props.index,
+                    seconds:seconds,
+                    new_seconds: seconds-props.today_plan.seconds
+                })
+            )
+            // Upload the latest time to database after stopping the timer
+            setTodayPlanChanged(true);
+            props.setIsTimerActive(false);
+            props.setTimerHolder(null);
+        }
+    }
+
     const dateChangeHandler = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();       // Gets the year
@@ -140,7 +167,7 @@ const TodayPlan = (props) => {
         // Update the plan with the date.
         dispatch(
             activePlanActions.setDate({
-                id:props.plan.id,
+                id:props.today_plan.id,
                 date:dateToSet
             })
         )
@@ -150,16 +177,16 @@ const TodayPlan = (props) => {
     return (
         <React.Fragment>
             <Row
-                className={`${classes.row} ${props.highlight === props.plan.id ? classes.highlight : ''}`}
+                className={`${classes.row} ${props.highlight === props.today_plan.id ? classes.highlight : ''}`}
                 onClick={highlightHandler}
             >
                 <Col xs={{ span: 4 }}>
-                    <div style={{display:'flex', justifyContent:'left', padding: 0, 'paddingLeft':`calc(${props.plan.rank} * 20px)`}}>
+                    <div style={{display:'flex', justifyContent:'left', padding: 0, 'paddingLeft':`calc(${props.today_plan.rank} * 20px)`}}>
                         <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
                             {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
                             {
                                 // do not show the expand/shrink icon if no children
-                                (props.plan.has_children) &&
+                                (props.today_plan.has_children) &&
                                 (
                                     props.show_children ?
                                     <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretUp} color="#333" title="caretUp" />:
@@ -167,15 +194,21 @@ const TodayPlan = (props) => {
                                 )
                             }
                         </div>
-                        <div>{props.plan.title || 'No title'}</div>
+                        <div>{props.today_plan.title || 'No title'}</div>
                     </div>
                 </Col>
                 {/* p-0: Padding of 0 */}
                 <Col className="p-0">
-                    <div>{props.plan.expected_hours}:{props.plan.expected_minutes}</div>
+                    <div>{props.today_plan.expected_hours}:{props.today_plan.expected_minutes}</div>
                 </Col>
-                <Col className="p-0">
-                    <div>{secondsToHMS(props.plan.seconds)}</div>
+                <Col xs={1} style={{padding: 0}}>
+                    <Timer
+                        id={props.today_plan.id}
+                        used_seconds={props.today_plan.seconds}
+                        seconds={seconds}
+                        setSeconds={setSeconds}
+                        isTimerActive={props.isTimerActive}
+                        timerHolder={props.timerHolder} />
                 </Col>
                 {/* Show the date of the plan */}
                 <Col style={{'maxWidth': "10%"}}>
@@ -192,6 +225,10 @@ const TodayPlan = (props) => {
                             </div>
                         </React.Fragment>
                     }
+                </Col>
+                {/* Timer */}
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_timer_button} onClick={timerToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
                 </Col>
             </Row>
         </React.Fragment>
