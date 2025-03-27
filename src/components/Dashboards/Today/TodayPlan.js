@@ -153,24 +153,24 @@ const TodayPlan = (props) => {
                 className={`${classes.row} ${props.highlight === props.plan.id ? classes.highlight : ''}`}
                 onClick={highlightHandler}
             >
-                <Col xs='auto'>
-                    <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
-                        {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
-                        {
-                            // do not show the expand/shrink icon if no children
-                            (props.plan.has_children) &&
-                            (
-                                props.show_children ?
-                                <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretUp} color="#333" title="caretUp" />:
-                                <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretRight} color="#333" title="caretRight" />
-                            )
-                        }
+                <Col xs={{ span: 4 }}>
+                    <div style={{display:'flex', justifyContent:'left', padding: 0, 'paddingLeft':`calc(${props.plan.rank} * 20px)`}}>
+                        <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
+                            {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
+                            {
+                                // do not show the expand/shrink icon if no children
+                                (props.plan.has_children) &&
+                                (
+                                    props.show_children ?
+                                    <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretUp} color="#333" title="caretUp" />:
+                                    <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretRight} color="#333" title="caretRight" />
+                                )
+                            }
+                        </div>
+                        <div>{props.plan.title || 'No title'}</div>
                     </div>
                 </Col>
                 {/* p-0: Padding of 0 */}
-                <Col className="p-0">
-                    <div>{props.plan.title}</div>
-                </Col>
                 <Col className="p-0">
                     <div>{props.plan.expected_hours}:{props.plan.expected_minutes}</div>
                 </Col>
