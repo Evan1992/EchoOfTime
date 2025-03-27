@@ -220,23 +220,23 @@ const DailyPlan = (props) => {
     return (
         <React.Fragment>
             <Row className={classes.row}>
-                <Col xs='auto p-0'>
-                    <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
-                        {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
-                        {
-                            // do not show the expand/shrink icon if no children
-                            (props.daily_plan.has_children) &&
-                            (
-                                props.show_children ?
-                                <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretUp} color="#333" title="caretUp" />:
-                                <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretRight} color="#333" title="caretRight" />
-                            )
-                        }
+                {/* Set fixed width for this column */}
+                <Col xs={{ span: 4 }}>
+                    <div style={{display:'flex', justifyContent:'left', padding: 0, 'textIndent':`calc(${props.daily_plan.rank} * 20px)`}}>
+                        <div className={classes.expand_collapse} onClick={childrenToggleHandler}  >
+                            {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
+                            {
+                                // do not show the expand/shrink icon if no children
+                                (props.daily_plan.has_children) &&
+                                (
+                                    props.show_children ?
+                                    <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretUp} color="#333" title="caretUp" />:
+                                    <FontAwesomeIcon className={classes.expand_collapse_img} icon={faCaretRight} color="#333" title="caretRight" />
+                                )
+                            }
+                        </div>
+                        <div>{props.daily_plan.title || 'No title'}</div>
                     </div>
-                </Col>
-
-                <Col xs={{ span: 4 }} style={{display:'flex', justifyContent:'left', padding: 0}}>
-                    <div style={{'textIndent':`calc(${props.daily_plan.rank} * 20px)`}}>{props.daily_plan.title || 'No title'}</div>
                 </Col>
 
                 <Col xs="auto" style={{padding: 0}}>
