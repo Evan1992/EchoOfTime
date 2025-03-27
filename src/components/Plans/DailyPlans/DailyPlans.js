@@ -27,6 +27,7 @@ const DailyPlans = () => {
     // Only one timer for a task can be active at a time
     const [isTimerActive, setIsTimerActive] = useState(false);
     const [timerHolder, setTimerHolder] = useState(null);
+    const [highlight, setHighlight] = useState(null);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
@@ -79,6 +80,8 @@ const DailyPlans = () => {
                                     setIsTimerActive={setIsTimerActive}
                                     timerHolder={timerHolder}
                                     setTimerHolder={setTimerHolder}
+                                    highlight={highlight}
+                                    setHighlight={setHighlight}
                                 />
                             }
                             return <div key={dailyPlan.id} />

@@ -95,6 +95,10 @@ const DailyPlan = (props) => {
         setDailyPlanChanged(true);
     }
 
+    const highlightHandler = () => {
+        props.setHighlight(props.daily_plan.id);
+    }
+
     const calendarToggleHandler = () => {
         setShowCalendar(showCalendar => !showCalendar)
     }
@@ -219,7 +223,10 @@ const DailyPlan = (props) => {
 
     return (
         <React.Fragment>
-            <Row className={classes.row}>
+            <Row
+                className={`${classes.row} ${props.highlight === props.daily_plan.id ? classes.highlight : ''}`}
+                onClick={highlightHandler}
+            >
                 {/* Set fixed width for this column */}
                 <Col xs={{ span: 4 }}>
                     {/* Use paddingLeft instead of textIndent as it causes bug for the css style applied to the icon */}

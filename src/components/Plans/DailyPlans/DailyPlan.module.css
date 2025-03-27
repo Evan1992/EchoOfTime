@@ -6,6 +6,10 @@
     background-color: lightgray;
 }
 
+.highlight {
+    background-color: #ebf5f0; /* Adjust the highlight color as needed */
+}
+
 .expand_collapse {
     float:left;
     color: gray;
