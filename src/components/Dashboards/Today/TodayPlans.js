@@ -20,10 +20,36 @@ const TodayPlans = () => {
     const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
 
+    // DFS algorithm to build isAddToTodays to add all parent plans if date for current plan is today
+    const isAddToTodays = Array(plan.short_term_plan.daily_plans.length).fill(false);
+    const buildIsAddToTodays = (index) => {
+        let cur_plan = plan.short_term_plan.daily_plans[index]
+
+        if (cur_plan.has_children === false) {
+            let is_today = isToday(cur_plan.date)
+            isAddToTodays[index] = is_today
+            return is_today;
+        }
+
+        if (index < isAddToTodays.length) {
+            let result = buildIsAddToTodays(index+1)
+            if (result === true) {
+                isAddToTodays[index] = result
+            }
+            return result;
+        }
+
+        return false;
+    }
+
     const todayPlans = [];
-    if(plan.short_term_plan.daily_plans !== undefined) {
+    if (plan.short_term_plan.daily_plans !== undefined) {
         for(const [index, daily_plan] of plan.short_term_plan.daily_plans.entries()) {
-            if(isToday(daily_plan.date)) {
+            if (daily_plan.parent_id === undefined) {
+                buildIsAddToTodays(index);
+            }
+
+            if (isAddToTodays[index]) {
                 todayPlans.push([daily_plan, index]);
             }
         }
