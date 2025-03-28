@@ -23,23 +23,22 @@ const TodayPlans = () => {
     // DFS algorithm to build isAddToTodays to add all parent plans if date for current plan is today
     const isAddToTodays = Array(plan.short_term_plan.daily_plans.length).fill(false);
     const buildIsAddToTodays = (index) => {
-        let cur_plan = plan.short_term_plan.daily_plans[index]
+        if (index === isAddToTodays.length) {
+            return false;
+        }
 
+        let cur_plan = plan.short_term_plan.daily_plans[index]
         if (cur_plan.has_children === false) {
             let is_today = isToday(cur_plan.date)
             isAddToTodays[index] = is_today
-            return is_today;
+            return buildIsAddToTodays(index+1) || is_today;
         }
 
-        if (index < isAddToTodays.length) {
-            let result = buildIsAddToTodays(index+1)
-            if (result === true) {
-                isAddToTodays[index] = result
-            }
-            return result;
+        let is_today = buildIsAddToTodays(index+1)
+        if (is_today === true) {
+            isAddToTodays[index] = is_today
         }
-
-        return false;
+        return is_today;
     }
 
     const todayPlans = [];
