@@ -31,7 +31,13 @@ const TodayPlans = () => {
         if (cur_plan.has_children === false) {
             let is_today = isToday(cur_plan.date)
             isAddToTodays[index] = is_today
-            return buildIsAddToTodays(index+1) || is_today;
+            if (index+1 < isAddToTodays.length &&
+                // Do not go through another root daily plan
+                plan.short_term_plan.daily_plans[index+1].parent_id !== undefined) {
+                    return buildIsAddToTodays(index+1) || is_today;
+            } else {
+                return is_today;
+            }
         }
 
         let is_today = buildIsAddToTodays(index+1)
