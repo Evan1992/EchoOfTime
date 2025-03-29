@@ -6,13 +6,15 @@
     background-color: #ebf5f0; /* Adjust the highlight color as needed */
 }
 
-.plan_timer_button {
+.plan_timer_button,
+.plan_check_button {
     vertical-align: middle;
     width:20px;
     height:20px;
 }
 
-.plan_timer_button:hover {
+.plan_timer_button:hover,
+.plan_check_button:hover {
     transform: scale(1.8);
 }
 

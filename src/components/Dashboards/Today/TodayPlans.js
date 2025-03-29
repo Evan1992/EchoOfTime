@@ -1,24 +1,38 @@
 import React from 'react';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect, useContext } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 /* ========== import React components ========== */
 import TodayPlan from './TodayPlan';
+import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 import { isToday } from '../../../utilities';
+import { sendDailyPlanData, sendPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './TodayPlans.module.css';
 
 const TodayPlans = () => {
+    const authCtx = useContext(AuthContext);
     const plan = useSelector((state) => state.activePlan);
+    const [planDeleted, setPlanDeleted] = useState(false);
+    // Only one timer for a task can be active at a time
     const [isTimerActive, setIsTimerActive] = useState(false);
     const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if(planDeleted === true) {
+            dispatch(sendDailyPlanData(authCtx.userID, plan))
+            dispatch(sendPlanData(authCtx.userID, plan))
+            setPlanDeleted(false);
+        }
+    }, [dispatch, authCtx.userID, plan, planDeleted])
 
     const rootPlans = []
     const planTree = new Map();
@@ -41,7 +55,6 @@ const TodayPlans = () => {
     // DFS algorithm to add all parent plans if date for current plan is today
     const isAddToTodays = Array(plan.short_term_plan.daily_plans.length).fill(false);
     const mutateIsAddToTodays = (cur_plan, cur_index) => {
-        console.log(cur_index)
         let is_today = isToday(cur_plan.date)
         if (is_today === true) {
             isAddToTodays[cur_index] = true;
@@ -102,6 +115,7 @@ const TodayPlans = () => {
                                             plan={plan}
                                             today_plan={today_plan[0]}
                                             show_children={show_children}
+                                            set_plan_deleted={setPlanDeleted}
                                             isTimerActive={isTimerActive}
                                             setIsTimerActive={setIsTimerActive}
                                             timerHolder={timerHolder}

@@ -154,6 +154,15 @@ const TodayPlan = (props) => {
         setTodayPlanChanged(true);
     }
 
+    const checkPlanHandler = () => {
+        dispatch(
+            activePlanActions.checkDailyPlan({
+                index:props.index
+            })
+        )
+        props.set_plan_deleted(true);
+    }
+
     return (
         <React.Fragment>
             <Row
@@ -209,6 +218,10 @@ const TodayPlan = (props) => {
                 {/* Timer */}
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_timer_button} onClick={timerToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
+                </Col>
+                {/* Check a plan */}
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                 </Col>
             </Row>
         </React.Fragment>
