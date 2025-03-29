@@ -25,7 +25,7 @@ const NewDailyPlanForm = (props) => {
             rank: props.rank,
             title: inputPlan.current.value,
             comment: "",
-            date: "",
+            date: props.date || "",
             seconds: 0,
             expected_hours: 0,
             expected_minutes: 0,

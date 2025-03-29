@@ -178,6 +178,14 @@ const TodayPlan = (props) => {
         props.set_plan_deleted(true);
     }
 
+    const getTodayDateString = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+        const day = today.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     return (
         <React.Fragment>
             <Row
@@ -255,6 +263,7 @@ const TodayPlan = (props) => {
                                     parent_id={props.today_plan.id}
                                     rank={props.today_plan.rank+1}
                                     index={props.index} // used to decide where to insert the new daily plan to daily_plans
+                                    date={getTodayDateString()}
                                     formToggler={formToggleHandler}
                                     setIsAddNewPlan={setIsAddNewPlan}
                                 />
