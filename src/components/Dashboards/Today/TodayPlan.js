@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 
 /* ========== import React components ========== */
+import NewDailyPlanForm from '../../Plans/DailyPlans/NewDailyPlanForm';
 import Backdrop from '../../UI/Backdrop';
 import AuthContext from '../../../store/auth-context';
 import Timer from '../../Timer/Timer';
@@ -9,6 +10,7 @@ import Timer from '../../Timer/Timer';
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 import Calendar from 'react-calendar';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
@@ -22,7 +24,9 @@ const TodayPlan = (props) => {
     const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
     const [seconds, setSeconds] = useState(props.today_plan.seconds);
+    const [showForm, setShowForm] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
+    const [isAddNewPlan, setIsAddNewPlan] = useState(false);
     const [_date, setDate] = useState(props.today_plan.date);
     const [todayPlanChanged, setTodayPlanChanged] = useState(false);
 
@@ -32,6 +36,17 @@ const TodayPlan = (props) => {
             setTodayPlanChanged(false);
         }
     }, [dispatch, authCtx.userID, props.plan, todayPlanChanged])
+
+    useEffect(() => {
+        if(isAddNewPlan) {
+            dispatch(sendDailyPlanData(authCtx.userID, props.plan));
+            setIsAddNewPlan(false);
+        }
+    }, [dispatch, authCtx.userID, props.plan, isAddNewPlan])
+
+    const formToggleHandler = () => {
+        setShowForm(!showForm);
+    }
 
     const childrenToggleHandler = () => {
         if(props.show_children) {
@@ -186,6 +201,10 @@ const TodayPlan = (props) => {
                         <div>{props.today_plan.title || 'No title'}</div>
                     </div>
                 </Col>
+                {/* Add sub-task */}
+                <Col xs="auto" style={{padding: 0}}>
+                    <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
+                </Col>
                 {/* p-0: Padding of 0 */}
                 <Col className="p-0">
                     <div>{props.today_plan.expected_hours}:{props.today_plan.expected_minutes}</div>
@@ -223,6 +242,26 @@ const TodayPlan = (props) => {
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                 </Col>
+            </Row>
+
+            <Row>
+                {
+                    showForm &&
+                    <Container fluid>
+                        <Row>
+                            <Col xs={1}></Col>
+                            <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
+                                <NewDailyPlanForm
+                                    parent_id={props.today_plan.id}
+                                    rank={props.today_plan.rank+1}
+                                    index={props.index} // used to decide where to insert the new daily plan to daily_plans
+                                    formToggler={formToggleHandler}
+                                    setIsAddNewPlan={setIsAddNewPlan}
+                                />
+                            </Col>
+                        </Row>
+                    </Container>
+                }
             </Row>
         </React.Fragment>
     )
