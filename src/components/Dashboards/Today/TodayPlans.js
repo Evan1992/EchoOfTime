@@ -20,40 +20,58 @@ const TodayPlans = () => {
     const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
 
-    // DFS algorithm to build isAddToTodays to add all parent plans if date for current plan is today
-    const isAddToTodays = Array(plan.short_term_plan.daily_plans.length).fill(false);
-    const buildIsAddToTodays = (index) => {
-        if (index === isAddToTodays.length) {
-            return false;
-        }
+    const rootPlans = []
+    const planTree = new Map();
+    const buildPlanTree = () => {
+        for(const [index, daily_plan] of plan.short_term_plan.daily_plans.entries()) {
+            if (daily_plan.parent_id === undefined) {
+                rootPlans.push([daily_plan, index])
+            }
 
-        let cur_plan = plan.short_term_plan.daily_plans[index]
-        if (cur_plan.has_children === false) {
-            let is_today = isToday(cur_plan.date)
-            isAddToTodays[index] = is_today
-            if (index+1 < isAddToTodays.length &&
-                // Do not go through another root daily plan
-                plan.short_term_plan.daily_plans[index+1].parent_id !== undefined) {
-                    return buildIsAddToTodays(index+1) || is_today;
-            } else {
-                return is_today;
+            if (daily_plan.has_children) {
+                planTree.set(daily_plan.id, []);
+            }
+
+            if (daily_plan.parent_id !== undefined) {
+                planTree.get(daily_plan.parent_id).push([daily_plan, index]);
             }
         }
+    }
 
-        let is_today = buildIsAddToTodays(index+1)
+    // DFS algorithm to add all parent plans if date for current plan is today
+    const isAddToTodays = Array(plan.short_term_plan.daily_plans.length).fill(false);
+    const mutateIsAddToTodays = (cur_plan, cur_index) => {
+        console.log(cur_index)
+        let is_today = isToday(cur_plan.date)
         if (is_today === true) {
-            isAddToTodays[index] = is_today
+            isAddToTodays[cur_index] = true;
         }
-        return is_today;
+
+        // base case
+        if (cur_plan.has_children === false) {
+            return is_today
+        }
+
+        // general case
+        let any_child_is_today = false;
+        for (const plan of planTree.get(cur_plan.id)) {
+            let result = mutateIsAddToTodays(plan[0], plan[1])
+            if (result === true) {
+                isAddToTodays[cur_index] = true;
+            }
+            any_child_is_today = any_child_is_today || result;
+        }
+        return any_child_is_today;
     }
 
     const todayPlans = [];
     if (plan.short_term_plan.daily_plans !== undefined) {
-        for(const [index, daily_plan] of plan.short_term_plan.daily_plans.entries()) {
-            if (daily_plan.parent_id === undefined) {
-                buildIsAddToTodays(index);
-            }
+        buildPlanTree();
+        for (const rootPlan of rootPlans) {
+            mutateIsAddToTodays(rootPlan[0], rootPlan[1])
+        }
 
+        for(const [index, daily_plan] of plan.short_term_plan.daily_plans.entries()) {
             if (isAddToTodays[index]) {
                 todayPlans.push([daily_plan, index]);
             }
