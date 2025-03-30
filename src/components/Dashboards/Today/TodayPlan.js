@@ -226,8 +226,12 @@ const TodayPlan = (props) => {
                 className={`${classes.row} ${props.highlight === props.today_plan.id ? classes.highlight : ''}`}
                 onClick={highlightHandler}
             >
-                <Col xs={{ span: 4 }}>
-                    <div style={{display:'flex', justifyContent:'left', padding: 0, 'paddingLeft':`calc(${props.today_plan.rank} * 20px)`}}>
+                {/* Check a plan */}
+                <Col xs="auto" style={{paddingLeft: 0, paddingRight: "15px"}}>
+                    <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
+                </Col>
+                <Col xs={{ span: 5 }}>
+                    <div style={{display:'flex', justifyContent:'left', padding: 0, paddingLeft:`calc(${props.today_plan.rank} * 20px)`}}>
                         <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
                             {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
                             {
@@ -243,16 +247,13 @@ const TodayPlan = (props) => {
                         <div>{props.today_plan.title || 'No title'}</div>
                     </div>
                 </Col>
-                {/* Add sub-task */}
-                <Col xs="auto" style={{padding: 0}}>
-                    <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
-                </Col>
                 {/* p-0: Padding of 0 */}
-                <Col className="p-0">
+                {/* Override the css style flex: 1 0; as it's the default behavior of the react-bootstrap Col component */}
+                <Col className="p-0" style={{width: '9%', flex: '0 0 auto'}}>
                     <input className={classes.input_time} type="number" onChange={expectedHoursChangeHandler} value={props.today_plan.expected_hours} />:
                     <input className={classes.input_time} type="number" onChange={expectedMinutesChangeHandler} value={props.today_plan.expected_minutes} />
                 </Col>
-                <Col xs={1} style={{padding: 0}}>
+                <Col xs={1} style={{width: '5%', padding: 0}}>
                     <Timer
                         id={props.today_plan.id}
                         used_seconds={props.today_plan.seconds}
@@ -262,7 +263,7 @@ const TodayPlan = (props) => {
                         timerHolder={props.timerHolder} />
                 </Col>
                 {/* Show the date of the plan */}
-                <Col style={{'maxWidth': "10%"}}>
+                <Col style={{maxWidth: "10%"}}>
                     {dateTransformHandler(_date)}
                 </Col>
                 {/* Calendar */}
@@ -285,9 +286,9 @@ const TodayPlan = (props) => {
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
                 </Col>
-                {/* Check a plan */}
-                <Col xs="auto" style={{padding: 0}}>
-                    <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
+                {/* Add sub-task */}
+                <Col xs="auto" style={{paddingLeft: '15px'}}>
+                    <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
                 </Col>
             </Row>
 

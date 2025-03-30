@@ -55,7 +55,7 @@
 
 .plan_add_button{
     float:right;
-    color: gray;
+    color: #333
 }
 .plan_add_button:hover{
     transform: scale(1.8);
