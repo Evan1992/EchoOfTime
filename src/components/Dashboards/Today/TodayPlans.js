@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 /* ========== import React components ========== */
+import Focus from './Focus';
 import TodayPlan from './TodayPlan';
 import AuthContext from '../../../store/auth-context';
 
@@ -134,9 +135,7 @@ const TodayPlans = () => {
                     <Col xs={4} className="p-0">
                         <Container>
                             <Row>
-                                <Col>
-                                    <h4>Placeholder</h4>
-                                </Col>
+                                <Focus />
                             </Row>
                         </Container>
                     </Col>
