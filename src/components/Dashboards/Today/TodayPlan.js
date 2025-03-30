@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 /* ========== import React components ========== */
@@ -22,6 +22,8 @@ import classes from './TodayPlan.module.css';
 
 const TodayPlan = (props) => {
     const dispatch = useDispatch();
+    let inputExpectedHours = useRef();
+    let inputExpectedMinutes = useRef();
     const authCtx = useContext(AuthContext);
     const [isHovered, setIsHovered] = useState(false); // Track hover state
     const [seconds, setSeconds] = useState(props.today_plan.seconds);
@@ -67,21 +69,21 @@ const TodayPlan = (props) => {
         }
     }
 
-    const expectedHoursChangeHandler = (event) => {
+    const expectedHoursChangeHandler = () => {
         dispatch(
             activePlanActions.setExpectedHours({
                 index:props.index,
-                hours:event.target.value
+                hours:inputExpectedHours.current.value
             })
         )
         setTodayPlanChanged(true);
     }
 
-    const expectedMinutesChangeHandler = (event) => {
+    const expectedMinutesChangeHandler = () => {
         dispatch(
             activePlanActions.setExpectedMinutes({
                 index:props.index,
-                minutes:event.target.value
+                minutes:inputExpectedMinutes.current.value
             })
         )
         setTodayPlanChanged(true);
@@ -255,8 +257,8 @@ const TodayPlan = (props) => {
                 {/* p-0: Padding of 0 */}
                 {/* Override the css style flex: 1 0; as it's the default behavior of the react-bootstrap Col component */}
                 <Col className="p-0" style={{width: '9%', flex: '0 0 auto'}}>
-                    <input className={classes.input_time} type="number" onChange={expectedHoursChangeHandler} value={props.today_plan.expected_hours} />:
-                    <input className={classes.input_time} type="number" onChange={expectedMinutesChangeHandler} value={props.today_plan.expected_minutes} />
+                    <input className={classes.input_time} type="number" ref={inputExpectedHours} onBlur={expectedHoursChangeHandler} defaultValue={props.today_plan.expected_hours} />:
+                    <input className={classes.input_time} type="number" ref={inputExpectedMinutes} onBlur={expectedMinutesChangeHandler} defaultValue={props.today_plan.expected_minutes} />
                 </Col>
                 <Col xs={1} style={{width: '5%', padding: 0}}>
                     <Timer
