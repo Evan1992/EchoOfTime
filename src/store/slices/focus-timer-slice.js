@@ -10,8 +10,9 @@ const focusTimerSlice = createSlice({
         startTimer(state, action) {
             state.focusTime = action.payload.seconds;
         },
-        stopTimer(state) {
-            state.focusTime = 0;
+        stopTimer(state, action) {
+            // When stop the timer, show the toal focus time before the next focus start
+            state.focusTime = action.payload.seconds;
         }
     }
 })

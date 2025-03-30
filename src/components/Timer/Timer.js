@@ -36,7 +36,7 @@ const Timer = (props) => {
 
     useEffect(() => {
         let elapsedMilliseconds = Date.now() - startTime;
-        let elapsedSeconds = Math.ceil(elapsedMilliseconds / 1000) === 0 ? 1 : Math.ceil(elapsedMilliseconds / 1000)
+        let elapsedSeconds = Math.ceil(elapsedMilliseconds / 1000)
         let interval = null;
         if(props.isTimerActive === true && props.timerHolder === props.id) {
             interval = setInterval(() => {
@@ -50,7 +50,10 @@ const Timer = (props) => {
         }
         if(props.isTimerActive === false) {
             dispatch(
-                focusTimerActions.stopTimer()
+                focusTimerActions.stopTimer({
+                    // Get over the number round up issue
+                    seconds: elapsedSeconds - 1
+                })
             )
             setStartTimeSetted(false);
         }
