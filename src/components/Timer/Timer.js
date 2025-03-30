@@ -48,7 +48,7 @@ const Timer = (props) => {
                 props.setSeconds(props.used_seconds + elapsedSeconds);
             }, 1000);
         }
-        if(props.isTimerActive === false) {
+        if(props.isTimerActive === false && startTimeSetted === true) {
             dispatch(
                 focusTimerActions.stopTimer({
                     // Get over the number round up issue
@@ -58,7 +58,7 @@ const Timer = (props) => {
             setStartTimeSetted(false);
         }
         return () => clearInterval(interval);
-    }, [props, dispatch, startTime])
+    }, [props, dispatch, startTime, startTimeSetted])
 
     // Used to update parent's used time
     /**
