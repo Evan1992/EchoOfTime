@@ -7,14 +7,16 @@
 }
 
 .plan_timer_button,
-.plan_check_button {
+.plan_check_button,
+.plan_deletion_button {
     vertical-align: middle;
     width:20px;
     height:20px;
 }
 
 .plan_timer_button:hover,
-.plan_check_button:hover {
+.plan_check_button:hover,
+.plan_deletion_button:hover {
     transform: scale(1.8);
 }
 
