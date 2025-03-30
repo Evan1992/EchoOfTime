@@ -66,6 +66,26 @@ const TodayPlan = (props) => {
         }
     }
 
+    const expectedHoursChangeHandler = (event) => {
+        dispatch(
+            activePlanActions.setExpectedHours({
+                index:props.index,
+                hours:event.target.value
+            })
+        )
+        setTodayPlanChanged(true);
+    }
+
+    const expectedMinutesChangeHandler = (event) => {
+        dispatch(
+            activePlanActions.setExpectedMinutes({
+                index:props.index,
+                minutes:event.target.value
+            })
+        )
+        setTodayPlanChanged(true);
+    }
+
     const highlightHandler = () => {
         props.setHighlight(props.today_plan.id);
     }
@@ -215,7 +235,8 @@ const TodayPlan = (props) => {
                 </Col>
                 {/* p-0: Padding of 0 */}
                 <Col className="p-0">
-                    <div>{props.today_plan.expected_hours}:{props.today_plan.expected_minutes}</div>
+                    <input className={classes.input_time} type="number" onChange={expectedHoursChangeHandler} value={props.today_plan.expected_hours} />:
+                    <input className={classes.input_time} type="number" onChange={expectedMinutesChangeHandler} value={props.today_plan.expected_minutes} />
                 </Col>
                 <Col xs={1} style={{padding: 0}}>
                     <Timer

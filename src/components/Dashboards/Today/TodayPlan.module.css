@@ -58,3 +58,7 @@
 .plan_add_button:hover{
     transform: scale(1.8);
 }
+
+.input_time {
+    width: 50px
+}
