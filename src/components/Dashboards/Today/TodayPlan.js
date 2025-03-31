@@ -25,7 +25,6 @@ const TodayPlan = (props) => {
     let inputExpectedHours = useRef();
     let inputExpectedMinutes = useRef();
     const authCtx = useContext(AuthContext);
-    const [isHovered, setIsHovered] = useState(false); // Track hover state
     const [seconds, setSeconds] = useState(props.today_plan.seconds);
     const [showForm, setShowForm] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
@@ -228,12 +227,10 @@ const TodayPlan = (props) => {
             <Row
                 className={`${classes.row} ${props.highlight === props.today_plan.id ? classes.highlight : ''}`}
                 onClick={highlightHandler}
-                onMouseEnter={() => setIsHovered(true)} // Set hover state to true
-                onMouseLeave={() => setIsHovered(false)} // Set hover state to false
             >
                 {/* Check a plan */}
                 <Col xs="auto" style={{paddingLeft: 0, paddingRight: "15px", width: "30px"}}>
-                    {(props.highlight === props.today_plan.id || isHovered) && (
+                    {props.highlight === props.today_plan.id  && (
                         <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                     )}
                 </Col>
