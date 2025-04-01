@@ -13,7 +13,7 @@ import AuthContext from '../../../store/auth-context';
 /* ========== import css ========== */
 import classes from './NewDailyPlan.module.css';
 
-const NewDailyPlan = () => {
+const NewDailyPlan = (props) => {
     const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
     const plan = useSelector((state) => state.activePlan);
@@ -49,6 +49,7 @@ const NewDailyPlan = () => {
                     <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
                         <NewDailyPlanForm
                             rank={0}
+                            date={props.date}
                             formToggler={formToggleHandler}
                             setIsAddNewPlan={setIsAddNewPlan}
                         />

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 /* ========== import React components ========== */
 import Focus from './Focus';
 import TodayPlan from './TodayPlan';
+import NewDailyPlan from '../../Plans/DailyPlans/NewDailyPlan';
 import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
@@ -92,6 +93,14 @@ const TodayPlans = () => {
         }
     }
 
+    const getTodayDateString = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+        const day = today.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     return (
         <React.Fragment>
             <Container className={classes.container}>
@@ -130,6 +139,9 @@ const TodayPlans = () => {
                                     return null;
                                 })
                             }
+                            <NewDailyPlan
+                                date={getTodayDateString()}
+                            />
                         </Container>
                     </Col>
                     <Col xs={4} className="p-0">
