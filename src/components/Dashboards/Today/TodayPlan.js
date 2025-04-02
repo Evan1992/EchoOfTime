@@ -188,7 +188,9 @@ const TodayPlan = (props) => {
                 date:dateToSet
             })
         )
-        setTodayPlanChanged(true);
+        // After chaing date, TodayPlan won't be rendered, useEffect() won't run.
+        // We should run side effect - useEffect() from parent
+        props.set_plan_removed(true);
     }
 
     const deletePlanHandler = () => {
@@ -198,7 +200,7 @@ const TodayPlan = (props) => {
                 index:props.index
             })
         )
-        // setDailyPlanChanged(true) does NOT trigger useEffect any more
+        // setTodayPlanChanged(true) does NOT trigger useEffect any more
         // because the daily plan is deleted and DailyPlan component will
         // NOT be re-rendered. We are supposed to update the database on
         // the upper layer DailyPlans

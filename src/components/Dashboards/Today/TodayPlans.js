@@ -21,6 +21,7 @@ import classes from './TodayPlans.module.css';
 const TodayPlans = () => {
     const authCtx = useContext(AuthContext);
     const plan = useSelector((state) => state.activePlan);
+    const [planRemoved, setPlanRemoved] = useState(false);
     const [planDeleted, setPlanDeleted] = useState(false);
     // Only one timer for a task can be active at a time
     const [isTimerActive, setIsTimerActive] = useState(false);
@@ -29,12 +30,16 @@ const TodayPlans = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if(planRemoved) {
+            dispatch(sendDailyPlanData(authCtx.userID, plan))
+            setPlanRemoved(false);
+        }
         if(planDeleted === true) {
             dispatch(sendDailyPlanData(authCtx.userID, plan))
             dispatch(sendPlanData(authCtx.userID, plan))
             setPlanDeleted(false);
         }
-    }, [dispatch, authCtx.userID, plan, planDeleted])
+    }, [dispatch, authCtx.userID, plan, planRemoved, planDeleted])
 
     const rootPlans = []
     const planTree = new Map();
@@ -126,6 +131,7 @@ const TodayPlans = () => {
                                             today_plan={today_plan[0]}
                                             show_children={show_children}
                                             set_plan_deleted={setPlanDeleted}
+                                            set_plan_removed={setPlanRemoved}
                                             isTimerActive={isTimerActive}
                                             setIsTimerActive={setIsTimerActive}
                                             timerHolder={timerHolder}
