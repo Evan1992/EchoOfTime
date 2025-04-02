@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 /* ========== import React components ========== */
 import Focus from './Focus';
 import TodayPlan from './TodayPlan';
+import TodayPlanSummary from './TodayPlanSummary';
 import NewDailyPlan from '../../Plans/DailyPlans/NewDailyPlan';
 import AuthContext from '../../../store/auth-context';
 
@@ -85,6 +86,7 @@ const TodayPlans = () => {
     }
 
     const todayPlans = [];
+    const todayPlansForDisplay = [];
     if (plan.short_term_plan.daily_plans !== undefined) {
         buildPlanTree();
         for (const rootPlan of rootPlans) {
@@ -93,7 +95,10 @@ const TodayPlans = () => {
 
         for(const [index, daily_plan] of plan.short_term_plan.daily_plans.entries()) {
             if (isAddToTodays[index]) {
-                todayPlans.push([daily_plan, index]);
+                todayPlansForDisplay.push([daily_plan, index]);
+            }
+            if (isToday(daily_plan.date)) {
+                todayPlans.push(daily_plan)
             }
         }
     }
@@ -114,7 +119,7 @@ const TodayPlans = () => {
                     <Col xs={8} className="p-0">
                         <Container className={classes.tasks}>
                             {
-                                todayPlans.map((today_plan) => {
+                                todayPlansForDisplay.map((today_plan) => {
                                     let show_children = false;
                                     // today_plan[0] is the daily plan, today_plan[1] is the index of the daily plan
                                     if(today_plan[0].has_children) {
@@ -154,6 +159,13 @@ const TodayPlans = () => {
                         <Container>
                             <Row>
                                 <Focus />
+                            </Row>
+                            <Row>
+                                <TodayPlanSummary
+                                    today_plans={todayPlans}
+                                    used_time_checked_today={plan.checked_tasks_today.used_time}
+                                    expected_time_checked_today={plan.checked_tasks_today.expected_time}
+                                />
                             </Row>
                         </Container>
                     </Col>
