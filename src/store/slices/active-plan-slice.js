@@ -68,6 +68,7 @@ const activePlanSlice = createSlice({
             state.description = action.payload.description;
             state.date = action.payload.date;
             state.checked_tasks_today = action.payload.checked_tasks_today;
+            state.today = action.payload.today;
             state.short_term_plan = action.payload.short_term_plan;
             state.changed = action.payload.changed;
 

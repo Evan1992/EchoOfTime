@@ -13,6 +13,7 @@ export const sendPlanData = (userID, plan) => {
                         description: plan.description,
                         date: plan.date,
                         checked_tasks_today: plan.checked_tasks_today,
+                        today: plan.today,
                         short_term_plan: plan.short_term_plan
                     })
                 }
@@ -54,6 +55,7 @@ export const fetchPlanData = (userID) => {
                     date: planData.date,
                     changed: false,
                     checked_tasks_today: planData.checked_tasks_today,
+                    today: planData.today,
                     short_term_plan: planData.short_term_plan
                 })
             )

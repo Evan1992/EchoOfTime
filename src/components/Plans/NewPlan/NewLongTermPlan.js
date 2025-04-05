@@ -31,6 +31,10 @@ const NewLongTermPlan = () => {
                     expected_time: 0,
                     used_time: 0
                 },
+                today: {
+                    today_plans: [],
+                    used_time: 0
+                },
                 short_term_plan: {
                     title: "",
                     description: "",
