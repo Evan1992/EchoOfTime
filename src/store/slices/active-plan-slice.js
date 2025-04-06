@@ -200,7 +200,7 @@ const activePlanSlice = createSlice({
             // Update both current plan and its parent plans
             let index = action.payload.index;
             state.short_term_plan.daily_plans[index].seconds = action.payload.seconds;
-            while(index) {
+            while(index !== null) {
                 if(state.short_term_plan.daily_plans[index].parent_id !== undefined) {
                     for(let i in state.short_term_plan.daily_plans) {
                         if(state.short_term_plan.daily_plans[i].id === state.short_term_plan.daily_plans[index].parent_id) {
