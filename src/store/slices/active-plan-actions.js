@@ -63,6 +63,29 @@ export const fetchPlanData = (userID) => {
     }
 }
 
+export const updateTodayUsedTime = (userID, usedTime) => {
+    return async (dispatch) => {
+        const postData = async () => {
+            const response = await fetch(
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/today.json`,
+                {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        used_time: usedTime
+                    })
+                }
+            )
+
+            if(!response.ok) {
+                throw new Error('Sending data failed')
+            }
+        }
+
+        console.log("Updating the database...");
+        await postData();
+    }
+}
+
 export const updateCheckedTasksToday = (userID) => {
     return async (dispatch) => {
         const postData = async () => {

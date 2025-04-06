@@ -12,6 +12,10 @@ const initialState = {
         daily_plans: [],
         changed: false
     },
+    today: {
+        today_plans: [],
+        used_time: 0
+    },
     checked_tasks_today: {
         date: "",
         expected_time: 0,
@@ -212,6 +216,11 @@ const activePlanSlice = createSlice({
                 } else {
                     index = null;
                 }
+            }
+
+            // Update today used time
+            if(isToday(state.short_term_plan.daily_plans[action.payload.index].date)) {
+                state.today.used_time += action.payload.new_seconds;
             }
         }
     }
