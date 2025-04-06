@@ -32,6 +32,7 @@ const NewLongTermPlan = () => {
                     used_time: 0
                 },
                 today: {
+                    date: dateTodayISO,
                     today_plans: [],
                     used_time: 0
                 },
