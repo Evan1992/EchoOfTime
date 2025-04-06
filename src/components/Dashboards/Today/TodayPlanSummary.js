@@ -2,11 +2,9 @@ import React from 'react';
 
 const TodayPlanSummary = (props) => {
     let expectedTimeToday = props.expected_time_checked_today;
-    let usedTime = props.used_time_checked_today;
 
     for(const today_plan of props.today_plans) {
         expectedTimeToday += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60
-        usedTime += today_plan.seconds;
     }
 
     const formatToTwoDigits = (n) => {
@@ -33,7 +31,7 @@ const TodayPlanSummary = (props) => {
     return (
         <React.Fragment>
             <div>Total Planned Time: {secondsToHMS(expectedTimeToday)}</div>
-            <div>Total Used Time: {secondsToHMS(usedTime)}</div>
+            <div>Total Used Time: {secondsToHMS(props.used_time)}</div>
         </React.Fragment>
         
     )

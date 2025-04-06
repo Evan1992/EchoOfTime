@@ -164,7 +164,7 @@ const TodayPlans = () => {
                             <Row>
                                 <TodayPlanSummary
                                     today_plans={todayPlans}
-                                    used_time_checked_today={plan.checked_tasks_today.used_time}
+                                    used_time={plan.today.used_time}
                                     expected_time_checked_today={plan.checked_tasks_today.expected_time}
                                 />
                             </Row>
