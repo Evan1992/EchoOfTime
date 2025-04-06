@@ -1,5 +1,5 @@
 /* ========== import React and React hooks ========== */
-import React, { useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
@@ -9,7 +9,7 @@ import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import { isToday } from '../../../utilities';
-import { fetchPlanData, archivePlanData, sendPlanData, updateCheckedTasksToday } from '../../../store/slices/active-plan-actions';
+import { fetchPlanData, archivePlanData, sendPlanData, updateCheckedTasksToday, refreshToday } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './LongTermPlan.module.css';
@@ -18,10 +18,12 @@ const LongTermPlan = () => {
     const authCtx = useContext(AuthContext);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
+    const [fetched, setFetched] = useState(false);
 
     // Get the data from database as soon as user visit the home page
     useEffect(() => {
         dispatch(fetchPlanData(authCtx.userID));
+        setFetched(true);
     }, [authCtx.userID, dispatch])
 
     // Send the data to database after user input
@@ -37,6 +39,13 @@ const LongTermPlan = () => {
             dispatch(updateCheckedTasksToday(authCtx.userID));
         }
     }, [authCtx.userID, dispatch, plan])
+
+    // Update today if date fetched from database is not today
+    useEffect(() => {
+        if(fetched && plan.today.date !== "" && !isToday(plan.today.date)) {
+            dispatch(refreshToday(authCtx.userID));
+        }
+    }, [authCtx.userID, dispatch, fetched, plan])
 
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
     const archivePlan = () => {
