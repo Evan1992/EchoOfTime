@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Calendar from 'react-calendar';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
-import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
+import { sendDailyPlanData, updateTodayUsedTime } from '../../../store/slices/active-plan-actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -35,6 +35,7 @@ const TodayPlan = (props) => {
     useEffect(() => {
         if(todayPlanChanged === true) {
             dispatch(sendDailyPlanData(authCtx.userID, props.plan))
+            dispatch(updateTodayUsedTime(authCtx.userID, props.plan.today.used_time))
             setTodayPlanChanged(false);
         }
     }, [dispatch, authCtx.userID, props.plan, todayPlanChanged])
