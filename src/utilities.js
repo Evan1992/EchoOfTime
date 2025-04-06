@@ -5,6 +5,10 @@
  * @returns boolean
  */
 const isToday = (plan_date) => {
+    if (!plan_date) {
+        return false;
+    }
+
     /**
      * date's format is yyyy-mm-dd, somehow, new Date(date) will use UTC to parse it,
      * while if date's format is mm/dd/yyyy, new Date(date) will use local time zone to parse it.
