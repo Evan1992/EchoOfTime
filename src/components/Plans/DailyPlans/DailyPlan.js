@@ -13,7 +13,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
-import { sendDailyPlanData, updateTodayUsedTime } from '../../../store/slices/active-plan-actions';
+import { sendDailyPlanData, updateToday } from '../../../store/slices/active-plan-actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -42,7 +42,7 @@ const DailyPlan = (props) => {
     useEffect(() => {
         if(dailyPlanChanged === true) {
             dispatch(sendDailyPlanData(authCtx.userID, props.plan))
-            dispatch(updateTodayUsedTime(authCtx.userID,
+            dispatch(updateToday(authCtx.userID,
                 props.plan.today.date,
                 props.plan.today.today_plans,
                 props.plan.today.used_time))

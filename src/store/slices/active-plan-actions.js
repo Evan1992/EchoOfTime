@@ -91,7 +91,7 @@ export const refreshToday = (userID) => {
     }
 }
 
-export const updateTodayUsedTime = (userID, date, todayPlans, usedTime) => {
+export const updateToday = (userID, date, todayPlans, usedTime) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
