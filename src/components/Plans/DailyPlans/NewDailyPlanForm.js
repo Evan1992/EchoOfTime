@@ -31,7 +31,8 @@ const NewDailyPlanForm = (props) => {
             expected_minutes: 0,
             parent_id: props.parent_id, // props.parent_id could be undefined if the new plan is the root daily plan
             has_children: false,
-            show_plan: true
+            show_plan: true,
+            completed: false
         }
         dispatch(
             activePlanActions.addDailyPlan({
