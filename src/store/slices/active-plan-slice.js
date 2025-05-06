@@ -182,6 +182,26 @@ const activePlanSlice = createSlice({
         setDate(state, action) {
             for (const [index, daily_plan] of state.short_term_plan.daily_plans.entries()) {
                 if (daily_plan.id === action.payload.id) {
+                    // Add daily plan to state.today.today_plans if the date is set to today
+                    if (isToday(action.payload.date)) {
+                        if (state.today.today_plans !== undefined) {
+                            state.today.today_plans.push(daily_plan)
+                        } else {
+                            state.today.today_plans = [daily_plan]
+                        }
+                    }
+                    // Remove daily plan from state.today.today_plans if toggled to not today
+                    if (isToday(daily_plan.date) && action.payload.date === "") {
+                        for (const today_plan of state.today.today_plans) {
+                            if (today_plan.id === daily_plan.id) {
+                                state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
+                                console.log(state.today.today_plans)
+                                break;
+                            }
+                        }
+                    }
+
+                    // Update the date of the current plan and all its children plans
                     daily_plan.date = action.payload.date;
                     if (daily_plan.has_children) {
                         const parent_plan_ids = new Set([daily_plan.id]);
