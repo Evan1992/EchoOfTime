@@ -13,6 +13,7 @@ const initialState = {
         changed: false
     },
     today: {
+        date: "",
         today_plans: [],
         used_time: 0
     },
