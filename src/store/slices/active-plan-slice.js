@@ -195,7 +195,6 @@ const activePlanSlice = createSlice({
                         for (const today_plan of state.today.today_plans) {
                             if (today_plan.id === daily_plan.id) {
                                 state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
-                                console.log(state.today.today_plans)
                                 break;
                             }
                         }
