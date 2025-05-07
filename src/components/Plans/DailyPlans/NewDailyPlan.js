@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
+import { isToday } from '../../../utilities';
+import { updateToday } from '../../../store/slices/active-plan-actions';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import React components ========== */
@@ -9,6 +11,7 @@ import NewDailyPlanForm from './NewDailyPlanForm';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AuthContext from '../../../store/auth-context';
+
 
 /* ========== import css ========== */
 import classes from './NewDailyPlan.module.css';
@@ -23,9 +26,17 @@ const NewDailyPlan = (props) => {
     useEffect(() => {
         if(isAddNewPlan) {
             dispatch(sendDailyPlanData(authCtx.userID, plan));
+
+            if (props.date !== undefined && isToday(props.date)) {
+                dispatch(updateToday(authCtx.userID,
+                    plan.today.date,
+                    plan.today.today_plans,
+                    plan.today.used_time))
+            }
+
             setIsAddNewPlan(false);
         }
-    }, [dispatch, authCtx.userID, plan, isAddNewPlan])
+    }, [dispatch, props.date, authCtx.userID, plan, isAddNewPlan])
 
     const formToggleHandler = () => {
         setShowForm(!showForm);
