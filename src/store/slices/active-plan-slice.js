@@ -192,7 +192,7 @@ const activePlanSlice = createSlice({
                         }
                     }
                     // Remove daily plan from state.today.today_plans if toggled to not today
-                    if (isToday(daily_plan.date) && action.payload.date === "") {
+                    if (isToday(daily_plan.date) && (action.payload.date === "" || !isToday(action.payload.date))) {
                         for (const today_plan of state.today.today_plans) {
                             if (today_plan.id === daily_plan.id) {
                                 state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
