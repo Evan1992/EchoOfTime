@@ -14,7 +14,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 import { isToday } from '../../../utilities';
-import { sendDailyPlanData, sendPlanData } from '../../../store/slices/active-plan-actions';
+import { sendDailyPlanData, sendPlanData, updateToday } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './TodayPlans.module.css';
@@ -33,6 +33,10 @@ const TodayPlans = () => {
     useEffect(() => {
         if(planRemoved) {
             dispatch(sendDailyPlanData(authCtx.userID, plan))
+            dispatch(updateToday(authCtx.userID,
+                plan.today.date,
+                plan.today.today_plans,
+                plan.today.used_time))
             setPlanRemoved(false);
         }
         if(planDeleted === true) {
