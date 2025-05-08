@@ -208,6 +208,11 @@ const TodayPlan = (props) => {
                 index:props.index
             })
         )
+        dispatch(
+            activePlanActions.deleteTodayPlan({
+                id: props.today_plan.id,
+            })
+        )
         // setTodayPlanChanged(true) does NOT trigger useEffect any more
         // because the daily plan is deleted and DailyPlan component will
         // NOT be re-rendered. We are supposed to update the database on

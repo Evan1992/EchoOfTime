@@ -144,6 +144,14 @@ const activePlanSlice = createSlice({
             }
         },
         deleteDailyPlan,
+        deleteTodayPlan(state, action) {
+            for (const today_plan of state.today.today_plans) {
+                if (today_plan.id === action.payload.id) {
+                    state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
+                    break;
+                }
+            }
+        },
         checkDailyPlan(state, action) {
             // When checking a plan, store the expected time and used time in the database
             if(isToday(state.short_term_plan.daily_plans[action.payload.index].date)) {
