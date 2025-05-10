@@ -25,6 +25,56 @@ const initialState = {
     changed: false
 }
 
+const setDateForToday = (state, action) => {
+    for(const daily_plan of state.short_term_plan.daily_plans) {
+        if(daily_plan.id === action.payload.id) {
+            // Add daily plan and its child plans to state.today.today_plans if the date is set to today
+            if (isToday(action.payload.date)) {
+                if (state.today.today_plans !== undefined) {
+                    state.today.today_plans.push(daily_plan)
+                } else {
+                    state.today.today_plans = [daily_plan]
+                }
+
+                let plan_id_process_queue = [action.payload.id];
+                while (plan_id_process_queue.length > 0) {
+                    const current_id = plan_id_process_queue.pop();
+                    for (const daily_plan of state.short_term_plan.daily_plans) {
+                        if (daily_plan.parent_id === current_id) {
+                            state.today.today_plans.push(daily_plan)
+                            plan_id_process_queue.push(daily_plan.id);
+                        }
+                    }
+                }
+            }
+
+            // Remove daily plan and its child plans from state.today.today_plans if toggled to not today
+            if (isToday(daily_plan.date) && (action.payload.date === "" || !isToday(action.payload.date))) {
+                for (const today_plan of state.today.today_plans) {
+                    if (today_plan.id === action.payload.id) {
+                        state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
+
+                        let plan_id_process_queue = [today_plan.id];
+                        while (plan_id_process_queue.length > 0) {
+                            const current_id = plan_id_process_queue.pop();
+                            for (const today_plan of state.today.today_plans) {
+                                if (today_plan.parent_id === current_id) {
+                                    plan_id_process_queue.push(today_plan.id);
+                                    state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+                }
+                break;
+            }
+            break;
+        }
+    }
+}
+
 /* Reducer function outside of createSlice() so we can reuse this function */
 const deleteDailyPlan = (state, action) => {
     // Delete current plan and all its children plans
@@ -198,26 +248,10 @@ const activePlanSlice = createSlice({
             state.short_term_plan.daily_plans[action.payload.index].expected_minutes = action.payload.minutes;
         },
         setDate(state, action) {
+            setDateForToday(state, action);
+
             for (const [index, daily_plan] of state.short_term_plan.daily_plans.entries()) {
                 if (daily_plan.id === action.payload.id) {
-                    // Add daily plan to state.today.today_plans if the date is set to today
-                    if (isToday(action.payload.date)) {
-                        if (state.today.today_plans !== undefined) {
-                            state.today.today_plans.push(daily_plan)
-                        } else {
-                            state.today.today_plans = [daily_plan]
-                        }
-                    }
-                    // Remove daily plan from state.today.today_plans if toggled to not today
-                    if (isToday(daily_plan.date) && (action.payload.date === "" || !isToday(action.payload.date))) {
-                        for (const today_plan of state.today.today_plans) {
-                            if (today_plan.id === daily_plan.id) {
-                                state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
-                                break;
-                            }
-                        }
-                    }
-
                     // Update the date of the current plan and all its children plans
                     daily_plan.date = action.payload.date;
                     if (daily_plan.has_children) {
