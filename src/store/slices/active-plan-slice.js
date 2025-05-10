@@ -113,6 +113,29 @@ const deleteDailyPlan = (state, action) => {
     state.short_term_plan.daily_plans = new_daily_plans;
 }
 
+const deleteTodayPlan = (state, action) => {
+    // Delete current plan and all its children plans
+    const plan_ids_to_delete = new Set();
+    const plan_id_process_queue = [action.payload.id];
+
+    while (plan_id_process_queue.length > 0) {
+        const current_id = plan_id_process_queue.pop();
+        plan_ids_to_delete.add(current_id);
+        for (const today_plan of state.today.today_plans) {
+            if (today_plan.parent_id === current_id) {
+                plan_id_process_queue.push(today_plan.id);
+            }
+        }
+    }
+
+    for (const today_plan of state.today.today_plans) {
+        if (plan_ids_to_delete.has(today_plan.id)) {
+            // Remove the plan from the today_plans array
+            state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
+        }
+    }
+}
+
 
 const activePlanSlice = createSlice({
     name: 'activePlan',
@@ -194,14 +217,7 @@ const activePlanSlice = createSlice({
             }
         },
         deleteDailyPlan,
-        deleteTodayPlan(state, action) {
-            for (const today_plan of state.today.today_plans) {
-                if (today_plan.id === action.payload.id) {
-                    state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== today_plan.id);
-                    break;
-                }
-            }
-        },
+        deleteTodayPlan,
         checkDailyPlan(state, action) {
             // When checking a plan, store the expected time and used time in the database
             if(isToday(state.short_term_plan.daily_plans[action.payload.index].date)) {
