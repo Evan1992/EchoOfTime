@@ -41,7 +41,18 @@ const setDateForToday = (state, action) => {
                     const current_id = plan_id_process_queue.pop();
                     for (const daily_plan of state.short_term_plan.daily_plans) {
                         if (daily_plan.parent_id === current_id) {
-                            state.today.today_plans.push(daily_plan)
+                            // Determine if the plan is already in today_plans before adding
+                            let already_in_today_plans = false;
+                            for (const today_plan of state.today.today_plans) {
+                                if (today_plan.id === daily_plan.id) {
+                                    already_in_today_plans = true;
+                                    break
+                                }
+                            }
+                            if (!already_in_today_plans) {
+                                state.today.today_plans.push(daily_plan)
+                            }
+
                             plan_id_process_queue.push(daily_plan.id);
                         }
                     }
