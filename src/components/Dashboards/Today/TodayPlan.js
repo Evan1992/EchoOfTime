@@ -62,15 +62,13 @@ const TodayPlan = (props) => {
         if(props.show_children) {
             dispatch(
                 activePlanActions.hideChildPlan({
-                    id:props.today_plan.id,
-                    index:props.index
+                    id:props.today_plan.id
                 })
             )
         } else {
             dispatch(
                 activePlanActions.showChildPlan({
-                    id:props.today_plan.id,
-                    index:props.index
+                    id:props.today_plan.id
                 })
             );
         }

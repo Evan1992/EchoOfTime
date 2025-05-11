@@ -250,20 +250,19 @@ const activePlanSlice = createSlice({
             deleteDailyPlan(state, action);
         },
         showChildPlan(state, action) {
-            for(let i = action.payload.index+1; i < state.short_term_plan.daily_plans.length; i++) {
-                if(state.short_term_plan.daily_plans[i].parent_id === action.payload.id) {
-                    state.short_term_plan.daily_plans[i].show_plan = true;
+            for (const daily_plan of state.short_term_plan.daily_plans) {
+                if (daily_plan.parent_id === action.payload.id) {
+                    daily_plan.show_plan = true;
                 }
             }
         },
         hideChildPlan(state, action) {
             const parent_ids = new Set([action.payload.id]);
-
-            for(let i = action.payload.index+1; i < state.short_term_plan.daily_plans.length; i++) {
-                if(parent_ids.has(state.short_term_plan.daily_plans[i].parent_id)) {
-                    state.short_term_plan.daily_plans[i].show_plan = false;
-                    if(state.short_term_plan.daily_plans[i].has_children === true) {
-                        parent_ids.add(state.short_term_plan.daily_plans[i].id);
+            for (const daily_plan of state.short_term_plan.daily_plans) {
+                if (parent_ids.has(daily_plan.parent_id)) {
+                    daily_plan.show_plan = false;
+                    if (daily_plan.has_children === true) {
+                        parent_ids.add(daily_plan.id);
                     }
                 }
             }
