@@ -70,7 +70,6 @@ const DailyPlans = () => {
                             if(dailyPlan.show_plan) {
                                 return <DailyPlan
                                     key={dailyPlan.id}
-                                    index={index} // used to decide where to insert the new daily plan to daily_plans
                                     id={dailyPlan.id}
                                     plan={plan}
                                     daily_plan={dailyPlan}

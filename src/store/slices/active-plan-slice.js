@@ -191,30 +191,31 @@ const activePlanSlice = createSlice({
                 state.short_term_plan.daily_plans = [];
                 state.short_term_plan.daily_plans.push(action.payload.daily_plan);
             } else {
-                // The new daily plan is the root plan if action.payload.index is undefined
-                if(action.payload.index === undefined) {
+                if (action.payload.parent_id === undefined) {
+                    // The new daily plan is the root plan if action.payload.parent_id is undefined
                     state.short_term_plan.daily_plans.push(action.payload.daily_plan);
                 } else {
-                    if(action.payload.index+1 === state.short_term_plan.daily_plans.length) {
-                        // The new daily plan will be added to the end of the list daily_plans
-                        state.short_term_plan.daily_plans.push(action.payload.daily_plan);
-                    } else {
-                        // Given the index of the parent, insert the new daily plan to the last of all the child plans of the parent
-                        const parent_ids = new Set([action.payload.parent_id]);
-                        for(let i = action.payload.index+1; i < state.short_term_plan.daily_plans.length; i++) {
-                            if(parent_ids.has(state.short_term_plan.daily_plans[i].parent_id)) {
-                                parent_ids.add(state.short_term_plan.daily_plans[i].id)
-                            } else {
-                                state.short_term_plan.daily_plans = state.short_term_plan.daily_plans.toSpliced(i, 0, action.payload.daily_plan);
-                                break;
-                            }
-                            if(i+1 === state.short_term_plan.daily_plans.length) {
+                    for (const [index, daily_plan] of state.short_term_plan.daily_plans.entries()) {
+                        if (daily_plan.id === action.payload.parent_id) {
+                            if (index + 1 === state.short_term_plan.daily_plans.length) {
+                                // If the parent plan is the last plan in the list, just push the new daily plan to the end
                                 state.short_term_plan.daily_plans.push(action.payload.daily_plan);
-                                break; // if not break, we'll fall into infinite loop
+                            } else {
+                                // Given the index of the parent, insert the new daily plan to the end of all the child plans of the parent
+                                const parent_ids = new Set([action.payload.parent_id]);
+                                for (let i = index+1; i < state.short_term_plan.daily_plans.length; i++) {
+                                    if(parent_ids.has(state.short_term_plan.daily_plans[i].parent_id)) {
+                                        parent_ids.add(state.short_term_plan.daily_plans[i].id)
+                                    } else {
+                                        state.short_term_plan.daily_plans = state.short_term_plan.daily_plans.toSpliced(i, 0, action.payload.daily_plan);
+                                        break;
+                                    }
+                                }
                             }
+                            state.short_term_plan.daily_plans[index].has_children = true;
+                            break;
                         }
                     }
-                    state.short_term_plan.daily_plans[action.payload.index].has_children = true;
                 }
             }
 

@@ -321,7 +321,6 @@ const TodayPlan = (props) => {
                                 <NewDailyPlanForm
                                     parent_id={props.today_plan.id}
                                     rank={props.today_plan.rank+1}
-                                    index={props.index} // used to decide where to insert the new daily plan to daily_plans
                                     date={getTodayDateString()}
                                     formToggler={formToggleHandler}
                                     setIsAddNewPlan={setIsAddNewPlan}
