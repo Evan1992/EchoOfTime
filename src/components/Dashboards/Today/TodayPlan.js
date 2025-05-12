@@ -158,7 +158,7 @@ const TodayPlan = (props) => {
             // Update both current plan and its parent plans
             dispatch(
                 activePlanActions.updateTime({
-                    index:props.index,
+                    id: props.today_plan.id,
                     seconds:seconds,
                     new_seconds: seconds-props.today_plan.seconds
                 })
