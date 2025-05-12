@@ -13,7 +13,6 @@ import AuthContext from '../../../store/auth-context';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
-import { isToday } from '../../../utilities';
 import { sendDailyPlanData, sendPlanData, updateToday } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
@@ -47,63 +46,63 @@ const TodayPlans = () => {
         }
     }, [dispatch, authCtx.userID, plan, planRemoved, planDeleted])
 
-    const rootPlans = []
+    const id_plan_map = new Map();
+    for (const daily_plan of plan.short_term_plan.daily_plans) {
+        id_plan_map.set(daily_plan.id, daily_plan);
+    }
+    for (const today_plan of plan.today.today_plans) {
+        if (!id_plan_map.has(today_plan.id)) {
+            id_plan_map.set(today_plan.id, today_plan);
+        }
+    }
+
+    const findAllParentPlans = (today_plan, parent_plans) => {
+        parent_plans.push(today_plan.id);
+        if (today_plan.parent_id !== undefined) {
+            findAllParentPlans(id_plan_map.get(today_plan.parent_id), parent_plans);
+        }
+        return parent_plans;
+    }
+
     const planTree = new Map();
-    const buildPlanTree = () => {
-        for(const [index, daily_plan] of plan.short_term_plan.daily_plans.entries()) {
-            if (daily_plan.parent_id === undefined) {
-                rootPlans.push([daily_plan, index])
-            }
+    const rootPlans = new Set();
+    if (plan.today.today_plans !== undefined) {
+        for (const today_plan of plan.today.today_plans) {
+            let parent_plan_ids = findAllParentPlans(today_plan, []); // parent_plan_ids includes current plan and its parent plans
 
-            if (daily_plan.has_children) {
-                planTree.set(daily_plan.id, []);
-            }
+            for(let i = 0; i < parent_plan_ids.length; i++) {
+                const parent_plan_id = parent_plan_ids[i];
+                if (i === parent_plan_ids.length - 1) {
+                    rootPlans.add(parent_plan_id);
+                }
 
-            if (daily_plan.parent_id !== undefined) {
-                planTree.get(daily_plan.parent_id).push([daily_plan, index]);
+                if (i > 0) {
+                    if (!planTree.has(parent_plan_id)) {
+                        planTree.set(parent_plan_id, new Set([parent_plan_ids[i - 1]]));
+                    } else {
+                        planTree.get(parent_plan_id).add(parent_plan_ids[i - 1]);
+                    }
+                } else {
+                    if (!planTree.has(parent_plan_id)) {
+                        planTree.set(parent_plan_id, new Set());
+                    }
+                }
             }
         }
     }
 
-    // DFS algorithm to add all parent plans if date for current plan is today
-    const isAddToTodays = Array(plan.short_term_plan.daily_plans.length).fill(false);
-    const mutateIsAddToTodays = (cur_plan, cur_index) => {
-        let is_today = isToday(cur_plan.date)
-        if (is_today === true) {
-            isAddToTodays[cur_index] = true;
-        }
-
-        // base case
-        if (cur_plan.has_children === false) {
-            return is_today
-        }
-
-        // general case
-        let any_child_is_today = false;
-        for (const plan of planTree.get(cur_plan.id)) {
-            let result = mutateIsAddToTodays(plan[0], plan[1])
-            if (result === true) {
-                isAddToTodays[cur_index] = true;
-            }
-            any_child_is_today = any_child_is_today || result;
-        }
-        return any_child_is_today;
-    }
-
-    const todayPlans = [];
     const todayPlansForDisplay = [];
-    if (plan.short_term_plan.daily_plans !== undefined) {
-        buildPlanTree();
-        for (const rootPlan of rootPlans) {
-            mutateIsAddToTodays(rootPlan[0], rootPlan[1])
+    for (const root_plan of rootPlans) {
+        todayPlansForDisplay.push(id_plan_map.get(root_plan));
+        let bfs_queue = [];
+        for (const child_plan of planTree.get(root_plan)) {
+            bfs_queue.push(child_plan);
         }
-
-        for(const [index, daily_plan] of plan.short_term_plan.daily_plans.entries()) {
-            if (isAddToTodays[index]) {
-                todayPlansForDisplay.push([daily_plan, index]);
-            }
-            if (isToday(daily_plan.date)) {
-                todayPlans.push(daily_plan)
+        while (bfs_queue.length > 0) {
+            const cur_plan = bfs_queue.shift();
+            todayPlansForDisplay.push(id_plan_map.get(cur_plan));
+            for (const child_plan of planTree.get(cur_plan)) {
+                bfs_queue.push(child_plan);
             }
         }
     }
@@ -124,21 +123,18 @@ const TodayPlans = () => {
                     <Col xs={8} className="p-0">
                         <Container className={classes.tasks}>
                             {
-                                todayPlansForDisplay.map((today_plan) => {
+                                todayPlansForDisplay.map((today_plan, index) => {
                                     let show_children = false;
-                                    // today_plan[0] is the daily plan, today_plan[1] is the index of the daily plan
-                                    if(today_plan[0].has_children) {
-                                        const index = today_plan[1];
-                                        if(index+1 < plan.short_term_plan.daily_plans.length && plan.short_term_plan.daily_plans[index+1].show_plan) {
+                                    if(today_plan.has_children) {
+                                        if(index+1 < todayPlansForDisplay.length && todayPlansForDisplay[index+1].show_plan) {
                                             show_children = true;
                                         }
                                     }
-                                    if(today_plan[0].show_plan) {
+                                    if(today_plan.show_plan) {
                                         return <TodayPlan
-                                            key={today_plan[0].id}
-                                            index={today_plan[1]}
+                                            key={today_plan.id}
                                             plan={plan}
-                                            today_plan={today_plan[0]}
+                                            today_plan={today_plan}
                                             show_children={show_children}
                                             set_plan_deleted={setPlanDeleted}
                                             set_plan_removed={setPlanRemoved}
@@ -155,6 +151,7 @@ const TodayPlans = () => {
                                     return null;
                                 })
                             }
+
                             <NewDailyPlan
                                 date={getTodayDateString()}
                             />
@@ -167,7 +164,7 @@ const TodayPlans = () => {
                             </Row>
                             <Row>
                                 <TodayPlanSummary
-                                    today_plans={todayPlans}
+                                    today_plans={plan.today.today_plans}
                                     used_time={plan.today.used_time}
                                     expected_time_checked_today={plan.checked_tasks_today.expected_time}
                                 />
