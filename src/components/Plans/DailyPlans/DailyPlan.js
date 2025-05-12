@@ -80,7 +80,7 @@ const DailyPlan = (props) => {
     const expectedHoursChangeHandler = (event) => {
         dispatch(
             activePlanActions.setExpectedHours({
-                index:props.index,
+                id: props.id,
                 hours:event.target.value
             })
         )
@@ -90,7 +90,7 @@ const DailyPlan = (props) => {
     const expectedMinutesChangeHandler = (event) => {
         dispatch(
             activePlanActions.setExpectedMinutes({
-                index:props.index,
+                id: props.id,
                 minutes:event.target.value
             })
         )

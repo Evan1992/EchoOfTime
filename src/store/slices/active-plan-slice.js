@@ -268,10 +268,20 @@ const activePlanSlice = createSlice({
             }
         },
         setExpectedHours(state, action) {
-            state.short_term_plan.daily_plans[action.payload.index].expected_hours = action.payload.hours;
+            for (const daily_plan of state.short_term_plan.daily_plans) {
+                if (daily_plan.id === action.payload.id) {
+                    daily_plan.expected_hours = action.payload.hours;
+                    break;
+                }
+            }
         },
         setExpectedMinutes(state, action) {
-            state.short_term_plan.daily_plans[action.payload.index].expected_minutes = action.payload.minutes;
+            for (const daily_plan of state.short_term_plan.daily_plans) {
+                if (daily_plan.id === action.payload.id) {
+                    daily_plan.expected_minutes = action.payload.minutes;
+                    break;
+                }
+            }
         },
         setDate(state, action) {
             setDateForToday(state, action);

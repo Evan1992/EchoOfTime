@@ -77,7 +77,7 @@ const TodayPlan = (props) => {
     const expectedHoursChangeHandler = () => {
         dispatch(
             activePlanActions.setExpectedHours({
-                index:props.index,
+                id: props.today_plan.id,
                 hours:inputExpectedHours.current.value
             })
         )
@@ -87,7 +87,7 @@ const TodayPlan = (props) => {
     const expectedMinutesChangeHandler = () => {
         dispatch(
             activePlanActions.setExpectedMinutes({
-                index:props.index,
+                id: props.today_plan.id,
                 minutes:inputExpectedMinutes.current.value
             })
         )
