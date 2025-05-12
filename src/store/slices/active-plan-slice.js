@@ -230,23 +230,6 @@ const activePlanSlice = createSlice({
         deleteDailyPlan,
         deleteTodayPlan,
         checkDailyPlan(state, action) {
-            // When checking a plan, store the expected time and used time in the database
-            if(isToday(state.short_term_plan.daily_plans[action.payload.index].date)) {
-                if(isToday(state.checked_tasks_today.date)) {
-                    state.checked_tasks_today.expected_time += (
-                        state.short_term_plan.daily_plans[action.payload.index].expected_hours * 60 * 60 +
-                        state.short_term_plan.daily_plans[action.payload.index].expected_minutes * 60
-                    )
-                    state.checked_tasks_today.used_time += state.short_term_plan.daily_plans[action.payload.index].seconds;
-                } else {
-                    state.checked_tasks_today.date = state.short_term_plan.daily_plans[action.payload.index].date
-                    state.checked_tasks_today.expected_time = (
-                        state.short_term_plan.daily_plans[action.payload.index].expected_hours * 60 * 60 +
-                        state.short_term_plan.daily_plans[action.payload.index].expected_minutes * 60
-                    )
-                    state.checked_tasks_today.used_time = state.short_term_plan.daily_plans[action.payload.index].seconds;
-                }
-            }
             deleteDailyPlan(state, action);
         },
         showChildPlan(state, action) {

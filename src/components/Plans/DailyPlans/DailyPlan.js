@@ -223,7 +223,8 @@ const DailyPlan = (props) => {
     const checkPlanHandler = () => {
         dispatch(
             activePlanActions.checkDailyPlan({
-                index:props.index
+                id: props.id,
+                parent_id: props.daily_plan.parent_id
             })
         )
         props.set_plan_deleted(true);

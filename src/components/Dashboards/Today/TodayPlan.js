@@ -194,7 +194,7 @@ const TodayPlan = (props) => {
                 date:dateToSet
             })
         )
-        // After chaing date, TodayPlan won't be rendered, useEffect() won't run.
+        // After changing date, TodayPlan won't be rendered, useEffect() won't run.
         // We should run side effect - useEffect() from parent
         props.set_plan_removed(true);
     }
@@ -222,7 +222,8 @@ const TodayPlan = (props) => {
     const checkPlanHandler = () => {
         dispatch(
             activePlanActions.checkDailyPlan({
-                index:props.index
+                id: props.today_plan.id,
+                parent_id: props.today_plan.parent_id
             })
         )
         props.set_plan_deleted(true);
