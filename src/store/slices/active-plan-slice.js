@@ -90,11 +90,11 @@ const setDateForToday = (state, action) => {
 const deleteDailyPlan = (state, action) => {
     // Delete current plan and all its children plans
     const new_daily_plans = [];
-    let id = state.short_term_plan.daily_plans[action.payload.index].id;
+    let id = action.payload.id;
     const parent_ids = new Set([id])
 
     // The two variables below are used to update current plan's parent plan's attribute has_children
-    const parent_id = state.short_term_plan.daily_plans[action.payload.index].parent_id;
+    const parent_id = action.payload.parent_id;
     let has_children = false;
 
     for(const daily_plan of state.short_term_plan.daily_plans) {

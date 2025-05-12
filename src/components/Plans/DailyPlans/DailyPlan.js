@@ -204,7 +204,8 @@ const DailyPlan = (props) => {
         // Delete current plan and all its children plans
         dispatch(
             activePlanActions.deleteDailyPlan({
-                index:props.index
+                id:props.id,
+                parent_id: props.daily_plan.parent_id
             })
         )
         dispatch(
