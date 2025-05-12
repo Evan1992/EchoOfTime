@@ -16,6 +16,7 @@ import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import { sendDailyPlanData, updateToday } from '../../../store/slices/active-plan-actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { isToday } from '../../../utilities';
 
 /* ========== import css ========== */
 import classes from './DailyPlan.module.css';
@@ -208,11 +209,13 @@ const DailyPlan = (props) => {
                 parent_id: props.daily_plan.parent_id
             })
         )
-        dispatch(
-            activePlanActions.deleteTodayPlan({
-                id: props.id
-            })
-        )
+        if (isToday(props.daily_plan.date)) {
+            dispatch(
+                activePlanActions.deleteTodayPlan({
+                    id: props.id
+                })
+            )
+        }
         // setDailyPlanChanged(true) does NOT trigger useEffect any more
         // because the daily plan is deleted and DailyPlan component will
         // NOT be re-rendered. We are supposed to update the database on
@@ -319,7 +322,6 @@ const DailyPlan = (props) => {
                                 <NewDailyPlanForm
                                     parent_id={props.id}
                                     rank={props.rank+1}
-                                    index={props.index} // used to decide where to insert the new daily plan to daily_plans
                                     formToggler={formToggleHandler}
                                     setIsAddNewPlan={setIsAddNewPlan}
                                 />
