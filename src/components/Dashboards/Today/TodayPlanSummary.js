@@ -4,9 +4,11 @@ const TodayPlanSummary = (props) => {
     let expectedTimeToday = props.expected_time_checked_today;
     let remainingPlannedTime = 0;
 
-    for(const today_plan of props.today_plans) {
-        expectedTimeToday += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60
-        remainingPlannedTime += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+    if (props.today_plans !== undefined) {
+        for(const today_plan of props.today_plans) {
+            expectedTimeToday += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60
+            remainingPlannedTime += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+        }
     }
 
     const formatToTwoDigits = (n) => {

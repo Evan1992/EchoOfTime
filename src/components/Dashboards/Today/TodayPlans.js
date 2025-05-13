@@ -50,9 +50,11 @@ const TodayPlans = () => {
     for (const daily_plan of plan.short_term_plan.daily_plans) {
         id_plan_map.set(daily_plan.id, daily_plan);
     }
-    for (const today_plan of plan.today.today_plans) {
-        if (!id_plan_map.has(today_plan.id)) {
-            id_plan_map.set(today_plan.id, today_plan);
+    if (plan.today.today_plans !== undefined) {
+        for (const today_plan of plan.today.today_plans) {
+            if (!id_plan_map.has(today_plan.id)) {
+                id_plan_map.set(today_plan.id, today_plan);
+            }
         }
     }
 
