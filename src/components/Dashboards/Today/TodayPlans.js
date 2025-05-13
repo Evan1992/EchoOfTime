@@ -95,16 +95,13 @@ const TodayPlans = () => {
 
     const todayPlansForDisplay = [];
     for (const root_plan of rootPlans) {
-        todayPlansForDisplay.push(id_plan_map.get(root_plan));
-        let bfs_queue = [];
-        for (const child_plan of planTree.get(root_plan)) {
-            bfs_queue.push(child_plan);
-        }
-        while (bfs_queue.length > 0) {
-            const cur_plan = bfs_queue.shift();
+        // DFS to display the plans in correct order
+        let dfs_queue = [root_plan];
+        while (dfs_queue.length > 0) {
+            const cur_plan = dfs_queue.pop();
             todayPlansForDisplay.push(id_plan_map.get(cur_plan));
-            for (const child_plan of planTree.get(cur_plan)) {
-                bfs_queue.push(child_plan);
+            for (const child_plan of Array.from(planTree.get(cur_plan)).reverse()) {
+                dfs_queue.push(child_plan);
             }
         }
     }
