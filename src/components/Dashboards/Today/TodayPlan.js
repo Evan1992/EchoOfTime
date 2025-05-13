@@ -250,7 +250,7 @@ const TodayPlan = (props) => {
             >
                 {/* Check a plan */}
                 <Col xs="auto" style={{paddingLeft: 0, paddingRight: "15px", width: "30px"}}>
-                    {props.highlight === props.today_plan.id  && (
+                    {props.highlight === props.today_plan.id  && props.today_plan.completed === false && (
                         <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                     )}
                 </Col>
