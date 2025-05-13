@@ -226,6 +226,11 @@ const TodayPlan = (props) => {
                 parent_id: props.today_plan.parent_id
             })
         )
+        dispatch(
+            activePlanActions.checkTodayPlan({
+                id: props.today_plan.id,
+            })
+        )
         props.set_plan_deleted(true);
     }
 
