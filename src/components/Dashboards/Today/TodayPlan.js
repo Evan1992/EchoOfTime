@@ -245,7 +245,11 @@ const TodayPlan = (props) => {
     return (
         <React.Fragment>
             <Row
-                className={`${classes.row} ${props.highlight === props.today_plan.id ? classes.highlight : ''}`}
+                className={`
+                    ${classes.row}
+                    ${props.highlight === props.today_plan.id ? classes.highlight : ''}
+                    ${props.today_plan.completed === true ? classes.completed : ''}
+                `}
                 onClick={highlightHandler}
             >
                 {/* Check a plan */}
@@ -268,14 +272,18 @@ const TodayPlan = (props) => {
                                 )
                             }
                         </div>
-                        <div>{props.today_plan.title || 'No title'}</div>
+                        <div className={`${props.today_plan.completed === true ? classes.crossed : ''}`}>{props.today_plan.title || 'No title'}</div>
                     </div>
                 </Col>
                 {/* p-0: Padding of 0 */}
                 {/* Override the css style flex: 1 0; as it's the default behavior of the react-bootstrap Col component */}
                 <Col className="p-0" style={{width: '9%', flex: '0 0 auto'}}>
-                    <input className={classes.input_time} type="number" ref={inputExpectedHours} onBlur={expectedHoursChangeHandler} defaultValue={props.today_plan.expected_hours} />:
-                    <input className={classes.input_time} type="number" ref={inputExpectedMinutes} onBlur={expectedMinutesChangeHandler} defaultValue={props.today_plan.expected_minutes} />
+                    {props.today_plan.completed === false && (
+                        <div>
+                            <input className={classes.input_time} type="number" ref={inputExpectedHours} onBlur={expectedHoursChangeHandler} defaultValue={props.today_plan.expected_hours} />:
+                            <input className={classes.input_time} type="number" ref={inputExpectedMinutes} onBlur={expectedMinutesChangeHandler} defaultValue={props.today_plan.expected_minutes} />
+                        </div>
+                    )}
                 </Col>
                 <Col xs={1} style={{width: '5%', padding: 0}}>
                     <Timer
@@ -292,27 +300,37 @@ const TodayPlan = (props) => {
                 </Col>
                 {/* Calendar */}
                 <Col xs="auto" style={{padding: 0}}>
-                    <img className={classes.calendar_icon} onClick={calendarToggleHandler} src="https://img.icons8.com/windows/32/000000/calendar.png" alt='calendar' />
-                    {showCalendar &&
-                        <React.Fragment>
-                            <Backdrop onClick={calendarToggleHandler} />
-                            <div className={classes.calendar}>
-                                <Calendar onChange={dateChangeHandler}/>
-                            </div>
-                        </React.Fragment>
-                    }
+                    {props.today_plan.completed === false && (
+                        <div>
+                            <img className={classes.calendar_icon} onClick={calendarToggleHandler} src="https://img.icons8.com/windows/32/000000/calendar.png" alt='calendar' />
+                            {showCalendar &&
+                                <React.Fragment>
+                                    <Backdrop onClick={calendarToggleHandler} />
+                                    <div className={classes.calendar}>
+                                        <Calendar onChange={dateChangeHandler}/>
+                                    </div>
+                                </React.Fragment>
+                            }
+                        </div>
+                    )}
                 </Col>
                 {/* Timer */}
                 <Col xs="auto" style={{padding: 0}}>
-                    <img className={classes.plan_timer_button} onClick={timerToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
+                    {props.today_plan.completed === false && (
+                        <img className={classes.plan_timer_button} onClick={timerToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
+                    )}
                 </Col>
                 {/* Delete a plan */}
                 <Col xs="auto" style={{padding: 0}}>
-                    <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
+                    {props.today_plan.completed === false && (
+                        <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
+                    )}
                 </Col>
                 {/* Add sub-task */}
                 <Col xs="auto" style={{paddingLeft: '15px'}}>
-                    <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
+                    {props.today_plan.completed === false && (
+                        <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
+                    )}
                 </Col>
             </Row>
 
@@ -340,3 +358,15 @@ const TodayPlan = (props) => {
 }
 
 export default TodayPlan
+
+
+/* ========== Learning ========== */
+/*
+    className={`
+        ${classes.row}
+        ${props.highlight === props.today_plan.id ? classes.highlight : ''}
+        ${props.completed === true ? classes.completed : ''}
+    `}
+*/
+// If the condition (props.highlight === props.today_plan.id) is true, it evaluates to classes.highlight,
+// otherwise it evaluates to an empty string ('').

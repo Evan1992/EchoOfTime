@@ -6,6 +6,14 @@
     background-color: #ebf5f0; /* Adjust the highlight color as needed */
 }
 
+.completed {
+    color: #6B7280;
+}
+
+.crossed {
+    text-decoration: line-through;
+}
+
 .plan_timer_button,
 .plan_deletion_button {
     vertical-align: middle;
