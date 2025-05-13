@@ -7,13 +7,11 @@ import Container from 'react-bootstrap/esm/Container';
 
 
 const TodayPlanSummary = (props) => {
-    let expectedTimeToday = props.expected_time_checked_today;
-    let usedTime = props.used_time_checked_today;
-    let remainingTime = 0;
-    for(const daily_plan of props.today_plans) {
-        expectedTimeToday += daily_plan.expected_hours * 60 * 60 + daily_plan.expected_minutes * 60
-        remainingTime += daily_plan.expected_hours * 60 * 60 + daily_plan.expected_minutes * 60;
-        usedTime += daily_plan.seconds;
+    let expectedTimeToday = 0;
+    let remainingPlannedTime = 0;
+    for(const today_plan of props.today_plans) {
+        expectedTimeToday += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60
+        remainingPlannedTime += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
     }
 
     const formatToTwoDigits = (n) => {
@@ -47,12 +45,12 @@ const TodayPlanSummary = (props) => {
                 <Row>
                     <Col xs={1} />
                     {/* Remaining Time is: Time for active plans of today */}
-                    <Col>Remaining Time: {secondsToHMS(remainingTime)}</Col>
+                    <Col>Remaining Time: {secondsToHMS(remainingPlannedTime)}</Col>
                 </Row>
                 <Row>
                     <Col xs={1} />
                     {/* Total Used Time is: Time actually used for plans of today */}
-                    <Col>Total Used Time: {secondsToHMS(usedTime)}</Col>
+                    <Col>Total Used Time: {secondsToHMS(props.used_time)}</Col>
                 </Row>
             </Container>
         </React.Fragment>

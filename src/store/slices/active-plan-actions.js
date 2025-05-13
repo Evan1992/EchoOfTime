@@ -12,7 +12,6 @@ export const sendPlanData = (userID, plan) => {
                         title: plan.title,
                         description: plan.description,
                         date: plan.date,
-                        checked_tasks_today: plan.checked_tasks_today,
                         today: plan.today,
                         short_term_plan: plan.short_term_plan
                     })
@@ -54,7 +53,6 @@ export const fetchPlanData = (userID) => {
                     description: planData.description,
                     date: planData.date,
                     changed: false,
-                    checked_tasks_today: planData.checked_tasks_today,
                     today: planData.today,
                     short_term_plan: planData.short_term_plan
                 })
@@ -102,34 +100,6 @@ export const updateToday = (userID, date, todayPlans, usedTime) => {
                         date: date,
                         today_plans: todayPlans,
                         used_time: usedTime,
-                    })
-                }
-            )
-
-            if(!response.ok) {
-                throw new Error('Sending data failed')
-            }
-        }
-
-        console.log("Updating the database...");
-        await postData();
-    }
-}
-
-export const updateCheckedTasksToday = (userID) => {
-    return async (dispatch) => {
-        const postData = async () => {
-            const dateToday = new Date().toLocaleDateString();
-            const split = dateToday.split("/")
-            const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1])
-            const response = await fetch(
-                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/checked_tasks_today.json`,
-                {
-                    method: 'PUT',
-                    body: JSON.stringify({
-                        date: dateTodayISO,
-                        expected_time: 0,
-                        used_time: 0
                     })
                 }
             )

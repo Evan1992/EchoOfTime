@@ -31,13 +31,9 @@ const DailyPlans = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
 
-    const todayPlans = [];
     const tomorrowPlans = []
     if(plan.short_term_plan.daily_plans !== undefined) {
         for(const daily_plan of plan.short_term_plan.daily_plans) {
-            if(isToday(daily_plan.date)) {
-                todayPlans.push(daily_plan);
-            }
             if(isTomorrow(daily_plan.date)) {
                 tomorrowPlans.push(daily_plan)
             }
@@ -94,14 +90,13 @@ const DailyPlans = () => {
             {/* Component for plans of today */}
             <div>
                 <TodayPlans
-                    today_plans={todayPlans}
+                    today_plans={plan.today.today_plans}
                 />
             </div>
 
             <TodayPlanSummary
-                used_time_checked_today={plan.checked_tasks_today.used_time}
-                expected_time_checked_today={plan.checked_tasks_today.expected_time}
-                today_plans={todayPlans}
+                today_plans={plan.today.today_plans}
+                used_time={plan.today.used_time}
             />
 
             {/* Separation between TodayPlanSummary and TomorrowPlanSummary */}

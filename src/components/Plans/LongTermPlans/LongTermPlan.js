@@ -9,7 +9,7 @@ import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import { isToday } from '../../../utilities';
-import { fetchPlanData, archivePlanData, sendPlanData, updateCheckedTasksToday, refreshToday } from '../../../store/slices/active-plan-actions';
+import { fetchPlanData, archivePlanData, sendPlanData, refreshToday } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './LongTermPlan.module.css';
@@ -30,13 +30,6 @@ const LongTermPlan = () => {
     useEffect(() => {
         if(plan.changed === true) {
             dispatch(sendPlanData(authCtx.userID, plan));
-        }
-    }, [authCtx.userID, dispatch, plan])
-
-    // Update checked_tasks_today if date fetched from database is not today
-    useEffect(() => {
-        if(plan.checked_tasks_today.date !== "" && !isToday(plan.checked_tasks_today.date)) {
-            dispatch(updateCheckedTasksToday(authCtx.userID));
         }
     }, [authCtx.userID, dispatch, plan])
 

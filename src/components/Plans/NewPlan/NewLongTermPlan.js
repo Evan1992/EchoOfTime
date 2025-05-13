@@ -26,11 +26,6 @@ const NewLongTermPlan = () => {
                 description: inputDescription.current.value,
                 date: dateTodayISO,
                 changed: true,
-                checked_tasks_today: {
-                    date: dateTodayISO,
-                    expected_time: 0,
-                    used_time: 0
-                },
                 today: {
                     date: dateTodayISO,
                     today_plans: [],

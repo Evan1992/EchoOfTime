@@ -1,7 +1,7 @@
 import React from 'react';
 
 const TodayPlanSummary = (props) => {
-    let expectedTimeToday = props.expected_time_checked_today;
+    let expectedTimeToday = 0;
     let remainingPlannedTime = 0;
 
     if (props.today_plans !== undefined) {
