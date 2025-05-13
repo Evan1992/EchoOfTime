@@ -259,17 +259,39 @@ const activePlanSlice = createSlice({
             for (const daily_plan of state.short_term_plan.daily_plans) {
                 if (daily_plan.id === action.payload.id) {
                     daily_plan.expected_hours = action.payload.hours;
+
+                    if (isToday(daily_plan.date)) {
+                        for (const today_plan of state.today.today_plans) {
+                            if (today_plan.id === action.payload.id) {
+                                today_plan.expected_hours = action.payload.hours;
+                                break;
+                            }
+                        }
+                    }
+
                     break;
                 }
             }
+
         },
         setExpectedMinutes(state, action) {
             for (const daily_plan of state.short_term_plan.daily_plans) {
                 if (daily_plan.id === action.payload.id) {
                     daily_plan.expected_minutes = action.payload.minutes;
+
+                    if (isToday(daily_plan.date)) {
+                        for (const today_plan of state.today.today_plans) {
+                            if (today_plan.id === action.payload.id) {
+                                today_plan.expected_minutes = action.payload.minutes;
+                                break;
+                            }
+                        }
+                    }
+
                     break;
                 }
             }
+
         },
         setDate(state, action) {
             setDateForToday(state, action);
