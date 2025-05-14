@@ -13,10 +13,12 @@ import AuthContext from '../../../store/auth-context';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
-import { sendDailyPlanData, sendPlanData, updateToday } from '../../../store/slices/active-plan-actions';
+import { isToday } from '../../../utilities';
+import { sendDailyPlanData, sendPlanData, updateToday, fetchPlanData, refreshToday } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import classes from './TodayPlans.module.css';
+
 
 const TodayPlans = () => {
     const authCtx = useContext(AuthContext);
@@ -27,7 +29,24 @@ const TodayPlans = () => {
     const [isTimerActive, setIsTimerActive] = useState(false);
     const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
+    const [fetched, setFetched] = useState(false);
     const dispatch = useDispatch();
+
+    // Get the data from database as soon as user visit Today page
+    useEffect(() => {
+        // Check if the plan is already fetched
+        if (plan.title === "") {
+            dispatch(fetchPlanData(authCtx.userID));
+            setFetched(true);
+        }
+    }, [plan, authCtx.userID, dispatch])
+
+    // Update today if date fetched from database is not today
+    useEffect(() => {
+        if(fetched && plan.today.date !== "" && !isToday(plan.today.date)) {
+            dispatch(refreshToday(authCtx.userID));
+        }
+    }, [authCtx.userID, dispatch, fetched, plan])
 
     useEffect(() => {
         if(planRemoved) {
