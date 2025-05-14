@@ -9,9 +9,11 @@ import Container from 'react-bootstrap/esm/Container';
 const TodayPlanSummary = (props) => {
     let expectedTimeToday = 0;
     let remainingPlannedTime = 0;
-    for(const today_plan of props.today_plans) {
-        expectedTimeToday += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60
-        remainingPlannedTime += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+    if (props.today_plans !== undefined) {
+        for(const today_plan of props.today_plans) {
+            expectedTimeToday += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60
+            remainingPlannedTime += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+        }
     }
 
     const formatToTwoDigits = (n) => {

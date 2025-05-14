@@ -19,12 +19,16 @@ const TodayPlans = (props) => {
                     </Col>
                 </Row>
                 {
-                    props.today_plans.map((today_plan) => {
-                        return <TodayPlan
-                            key={today_plan.id}
-                            plan={today_plan}
-                        />
-                    })
+                    props.today_plans !== undefined ? (
+                        props.today_plans.map((today_plan) => {
+                            return <TodayPlan
+                                key={today_plan.id}
+                                plan={today_plan}
+                            />
+                        })
+                    ) : (
+                        <React.Fragment />
+                    )
                 }
             </Container>
         </React.Fragment>
