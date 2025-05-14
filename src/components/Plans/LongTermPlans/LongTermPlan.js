@@ -39,7 +39,13 @@ const LongTermPlan = () => {
     // Update today if date fetched from database is not today
     useEffect(() => {
         if(fetched && plan.today.date !== "" && !isToday(plan.today.date)) {
-            dispatch(refreshToday(authCtx.userID));
+            let new_today_plans = []
+            for (const daily_plan of plan.short_term_plan.daily_plans) {
+                if(isToday(daily_plan.date)) {
+                    new_today_plans.push(daily_plan);
+                }
+            }
+            dispatch(refreshToday(authCtx.userID, new_today_plans));
         }
     }, [authCtx.userID, dispatch, fetched, plan])
 

@@ -62,7 +62,7 @@ export const fetchPlanData = (userID) => {
     }
 }
 
-export const refreshToday = (userID) => {
+export const refreshToday = (userID, today_plans) => {
     return async (dispatch) => {
         const postData = async () => {
             const dateToday = new Date().toLocaleDateString();
@@ -74,7 +74,7 @@ export const refreshToday = (userID) => {
                     method: 'PUT',
                     body: JSON.stringify({
                         date: dateTodayISO,
-                        today_plans: [],
+                        today_plans: today_plans,
                         used_time: 0
                     })
                 }
