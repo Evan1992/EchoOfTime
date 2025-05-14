@@ -12,8 +12,8 @@ import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
-import { isToday, isTomorrow } from '../../../utilities';
-import { sendDailyPlanData, sendPlanData } from '../../../store/slices/active-plan-actions';
+import { isTomorrow } from '../../../utilities';
+import { sendPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import 'bootstrap/dist/css/bootstrap.min.css';
