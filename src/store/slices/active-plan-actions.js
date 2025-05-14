@@ -29,6 +29,7 @@ export const sendPlanData = (userID, plan) => {
 }
 
 export const fetchPlanData = (userID) => {
+    console.log("Fetching data from database...");
     return async (dispatch) => {
         const fetchData = async () => {
             const response = await fetch(

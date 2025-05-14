@@ -22,9 +22,12 @@ const LongTermPlan = () => {
 
     // Get the data from database as soon as user visit the home page
     useEffect(() => {
-        dispatch(fetchPlanData(authCtx.userID));
-        setFetched(true);
-    }, [authCtx.userID, dispatch])
+        // Check if the plan is already fetched
+        if (plan.title === "") {
+            dispatch(fetchPlanData(authCtx.userID));
+            setFetched(true);
+        }
+    }, [plan, authCtx.userID, dispatch])
 
     // Send the data to database after user input
     useEffect(() => {
