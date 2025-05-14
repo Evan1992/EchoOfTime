@@ -201,12 +201,14 @@ const TodayPlan = (props) => {
 
     const deletePlanHandler = () => {
         // Delete current plan and all its children plans
-        dispatch(
-            activePlanActions.deleteDailyPlan({
-                id: props.today_plan.id,
-                parent_id: props.today_plan.parent_id,
-            })
-        )
+        if (props.today_plan.completed === false) {
+            dispatch(
+                activePlanActions.deleteDailyPlan({
+                    id: props.today_plan.id,
+                    parent_id: props.today_plan.parent_id,
+                })
+            )
+        }
         dispatch(
             activePlanActions.deleteTodayPlan({
                 id: props.today_plan.id,
@@ -327,9 +329,7 @@ const TodayPlan = (props) => {
                 </Col>
                 {/* Delete a plan */}
                 <Col xs="auto" style={{padding: 0}}>
-                    {props.today_plan.completed === false && (
-                        <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
-                    )}
+                    <img className={classes.plan_deletion_button} onClick={deletePlanHandler} src="https://img.icons8.com/ios-filled/50/null/multiply.png" alt=''/>
                 </Col>
                 {/* Add sub-task */}
                 <Col xs="auto" style={{paddingLeft: '15px'}}>
