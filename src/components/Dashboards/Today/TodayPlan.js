@@ -278,10 +278,15 @@ const TodayPlan = (props) => {
                 {/* p-0: Padding of 0 */}
                 {/* Override the css style flex: 1 0; as it's the default behavior of the react-bootstrap Col component */}
                 <Col className="p-0" style={{width: '9%', flex: '0 0 auto'}}>
-                    {props.today_plan.completed === false && (
+                    {props.today_plan.completed === false ? (
                         <div>
                             <input className={classes.input_time} type="number" ref={inputExpectedHours} onBlur={expectedHoursChangeHandler} defaultValue={props.today_plan.expected_hours} />:
                             <input className={classes.input_time} type="number" ref={inputExpectedMinutes} onBlur={expectedMinutesChangeHandler} defaultValue={props.today_plan.expected_minutes} />
+                        </div>
+                    ) : (
+                        <div>
+                            {props.today_plan.expected_hours}:
+                            {props.today_plan.expected_minutes}
                         </div>
                     )}
                 </Col>
