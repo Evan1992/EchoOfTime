@@ -7,7 +7,9 @@ const TodayPlanSummary = (props) => {
     if (props.today_plans !== undefined) {
         for(const today_plan of props.today_plans) {
             expectedTimeToday += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60
-            remainingPlannedTime += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+            if (today_plan.completed === false) {
+                remainingPlannedTime += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+            }
         }
     }
 
