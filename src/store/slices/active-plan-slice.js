@@ -231,10 +231,21 @@ const activePlanSlice = createSlice({
             deleteDailyPlan(state, action);
         },
         checkTodayPlan(state, action) {
-            for(const today_plan of state.today.today_plans) {
-                if(today_plan.id === action.payload.id) {
+            // Check the plan and all its children plans
+            const plan_ids_to_check = new Set();
+            const plan_id_process_queue = [action.payload.id];
+            while (plan_id_process_queue.length > 0) {
+                const current_id = plan_id_process_queue.pop();
+                plan_ids_to_check.add(current_id);
+                for (const today_plan of state.today.today_plans) {
+                    if (today_plan.parent_id === current_id) {
+                        plan_id_process_queue.push(today_plan.id);
+                    }
+                }
+            }
+            for (const today_plan of state.today.today_plans) {
+                if (plan_ids_to_check.has(today_plan.id)) {
                     today_plan.completed = true;
-                    break;
                 }
             }
         },
