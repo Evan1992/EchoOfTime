@@ -319,33 +319,29 @@ const activePlanSlice = createSlice({
             }
         },
         updateTime(state, action) {
-            let plan_index = null;
-            for (const i in state.short_term_plan.daily_plans) {
-                if (state.short_term_plan.daily_plans[i].id === action.payload.id) {
-                    plan_index = i;
-                }
-            }
-
             // Update both current plan and its parent plans
-            let index = plan_index;
-            state.short_term_plan.daily_plans[index].seconds = action.payload.seconds;
-            while(index !== null) {
-                if(state.short_term_plan.daily_plans[index].parent_id !== undefined) {
-                    for(let i in state.short_term_plan.daily_plans) {
-                        if(state.short_term_plan.daily_plans[i].id === state.short_term_plan.daily_plans[index].parent_id) {
-                            index = i;
-                            state.short_term_plan.daily_plans[i].seconds += action.payload.new_seconds;
-                            break
-                        }
+            let parent_id;
+            for (const daily_plan of state.short_term_plan.daily_plans) {
+                if (daily_plan.id === action.payload.id) {
+                    daily_plan.seconds = action.payload.seconds;
+
+                    // Update today used time
+                    if (isToday(daily_plan.date)) {
+                        state.today.used_time += action.payload.new_seconds;
                     }
-                } else {
-                    index = null;
+
+                    parent_id = daily_plan.parent_id;
                 }
             }
 
-            // Update today used time
-            if(isToday(state.short_term_plan.daily_plans[plan_index].date)) {
-                state.today.used_time += action.payload.new_seconds;
+            while (parent_id !== undefined) {
+                for (const daily_plan of state.short_term_plan.daily_plans) {
+                    if (daily_plan.id === parent_id) {
+                        daily_plan.seconds += action.payload.new_seconds;
+                        parent_id = daily_plan.parent_id;
+                        break;
+                    }
+                }
             }
         }
     }
