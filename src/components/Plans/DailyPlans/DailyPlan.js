@@ -231,9 +231,11 @@ const DailyPlan = (props) => {
             })
         )
         if (isToday(props.daily_plan.date)) {
-            activePlanActions.checkTodayPlan({
-                id: props.today_plan.id,
-            })
+            dispatch(
+                activePlanActions.checkTodayPlan({
+                    id: props.id,
+                })
+            )
         }
         props.set_plan_deleted(true);
     }
