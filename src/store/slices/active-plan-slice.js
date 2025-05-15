@@ -333,12 +333,29 @@ const activePlanSlice = createSlice({
                     parent_id = daily_plan.parent_id;
                 }
             }
-
             while (parent_id !== undefined) {
                 for (const daily_plan of state.short_term_plan.daily_plans) {
                     if (daily_plan.id === parent_id) {
                         daily_plan.seconds += action.payload.new_seconds;
                         parent_id = daily_plan.parent_id;
+                        break;
+                    }
+                }
+            }
+
+            // Do the same for today.today_plans
+            for (const today_plan of state.today.today_plans) {
+                if (today_plan.id === action.payload.id) {
+                    today_plan.seconds = action.payload.seconds;
+                    parent_id = today_plan.parent_id;
+                    break;
+                }
+            }
+            while (parent_id !== undefined) {
+                for (const today_plan of state.today.today_plans) {
+                    if (today_plan.id === parent_id) {
+                        today_plan.seconds += action.payload.new_seconds;
+                        parent_id = today_plan.parent_id;
                         break;
                     }
                 }
