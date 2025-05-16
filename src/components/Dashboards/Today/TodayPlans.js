@@ -123,6 +123,8 @@ const TodayPlans = () => {
         }
     }
 
+    // todayPlansForDisplay is a mix of plans from today.today_plans and short_term_plan.daily_plans
+    // If a plan's date is today, it is from today.today_plans, otherwise it is from short_term_plan.daily_plans
     const todayPlansForDisplay = [];
     for (const root_plan of rootPlans) {
         // DFS to display the plans in correct order
