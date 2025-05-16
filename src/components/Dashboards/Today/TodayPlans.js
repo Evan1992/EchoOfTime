@@ -15,6 +15,8 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 import { isToday } from '../../../utilities';
 import { sendDailyPlanData, sendPlanData, updateToday, fetchPlanData, refreshToday } from '../../../store/slices/active-plan-actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
 /* ========== import css ========== */
 import classes from './TodayPlans.module.css';
@@ -30,6 +32,8 @@ const TodayPlans = () => {
     const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
     const [fetched, setFetched] = useState(false);
+    const [filterOptionsVisible, setFilterOptionsVisible] = useState(false);
+    const [filter, setFilter] = useState("All tasks");
     const dispatch = useDispatch();
 
     // Get the data from database as soon as user visit Today page
@@ -140,8 +144,39 @@ const TodayPlans = () => {
         return `${year}-${month}-${day}`;
     };
 
+    const toggleFilterOptions = () => {
+        setFilterOptionsVisible((prevState) => !prevState);
+    }
+
+    const selectFilterOption = (option) => {
+        setFilter(option);
+        setFilterOptionsVisible(false); // Hide options after selection
+    };
+
     return (
         <React.Fragment>
+            <div className={classes.filter_module}>
+                <FontAwesomeIcon className={classes.filter_icon} icon={faFilter} onClick={toggleFilterOptions} />
+                {
+                    filterOptionsVisible ? (
+                    <div className={classes.filter_options}>
+                        <span
+                            className={`${classes.filter_option} ${filter === "All tasks" ? classes.active_option : ""}`}
+                            onClick={() => selectFilterOption("All tasks")}
+                        >
+                            All tasks
+                        </span>
+                        <span
+                            className={`${classes.filter_option} ${filter === "Active tasks" ? classes.active_option : ""}`}
+                            onClick={() => selectFilterOption("Active tasks")}
+                        >
+                            Active tasks
+                        </span>
+                    </div>
+                    ) :
+                    <div className={classes.filter_text}>{filter}</div>
+                }
+            </div>
             <Container className={classes.container}>
                 <Row>
                     {/* <Col> has padding by default, use Bootstrap utility classes for no padding */}

@@ -1,7 +1,40 @@
 .container {
     margin-left: 5% !important;
-    margin-top: 2rem;
     max-width: 2000px !important;
+}
+
+.filter_module {
+    padding-top: 1rem;
+    padding-left: 5%;
+    display: flex;
+    align-items: center;
+}
+
+.filter_icon,
+.filter_text {
+    opacity: 0.5;
+}
+
+.filter_icon {
+    padding-right: 0.5rem;
+}
+
+.filter_icon:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.filter_option {
+    padding-left: 0.5rem;
+    cursor: pointer;
+}
+
+.filter_option:hover {
+    background-color: #f0f0f0;
+}
+
+.active_option {
+    font-weight: bold;
 }
 
 .task {
