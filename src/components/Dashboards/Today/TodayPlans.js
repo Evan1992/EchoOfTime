@@ -100,23 +100,26 @@ const TodayPlans = () => {
     const rootPlans = new Set();
     if (plan.today.today_plans !== undefined) {
         for (const today_plan of plan.today.today_plans) {
-            let parent_plan_ids = findAllParentPlans(today_plan, []); // parent_plan_ids includes current plan and its parent plans
+            if (filter === "All tasks" ||
+                (filter === "Active tasks" && today_plan.completed === false)) {
+                let parent_plan_ids = findAllParentPlans(today_plan, []); // parent_plan_ids includes current plan and its parent plans
 
-            for(let i = 0; i < parent_plan_ids.length; i++) {
-                const parent_plan_id = parent_plan_ids[i];
-                if (i === parent_plan_ids.length - 1) {
-                    rootPlans.add(parent_plan_id);
-                }
-
-                if (i > 0) {
-                    if (!planTree.has(parent_plan_id)) {
-                        planTree.set(parent_plan_id, new Set([parent_plan_ids[i - 1]]));
-                    } else {
-                        planTree.get(parent_plan_id).add(parent_plan_ids[i - 1]);
+                for(let i = 0; i < parent_plan_ids.length; i++) {
+                    const parent_plan_id = parent_plan_ids[i];
+                    if (i === parent_plan_ids.length - 1) {
+                        rootPlans.add(parent_plan_id);
                     }
-                } else {
-                    if (!planTree.has(parent_plan_id)) {
-                        planTree.set(parent_plan_id, new Set());
+
+                    if (i > 0) {
+                        if (!planTree.has(parent_plan_id)) {
+                            planTree.set(parent_plan_id, new Set([parent_plan_ids[i - 1]]));
+                        } else {
+                            planTree.get(parent_plan_id).add(parent_plan_ids[i - 1]);
+                        }
+                    } else {
+                        if (!planTree.has(parent_plan_id)) {
+                            planTree.set(parent_plan_id, new Set());
+                        }
                     }
                 }
             }
