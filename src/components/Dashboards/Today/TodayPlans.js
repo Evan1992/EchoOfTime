@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 /* ========== import React components ========== */
@@ -75,71 +75,76 @@ const TodayPlans = () => {
         }
     }, [dispatch, authCtx.userID, plan, planRemoved, planDeleted])
 
-    // Order for the following two iteration matters
-    const id_plan_map = new Map();
-    if (plan.today.today_plans !== undefined) {
-        for (const today_plan of plan.today.today_plans) {
-            id_plan_map.set(today_plan.id, today_plan);
-        }
-    }
-    for (const daily_plan of plan.short_term_plan.daily_plans) {
-        if (!id_plan_map.has(daily_plan.id)) {
-            id_plan_map.set(daily_plan.id, daily_plan);
-        }
-    }
-
-    const findAllParentPlans = (today_plan, parent_plans) => {
+    const findAllParentPlans = useCallback((today_plan, parent_plans, id_plan_map) => {
         parent_plans.push(today_plan.id);
         if (today_plan.parent_id !== undefined) {
-            findAllParentPlans(id_plan_map.get(today_plan.parent_id), parent_plans);
+            findAllParentPlans(id_plan_map.get(today_plan.parent_id), parent_plans, id_plan_map);
         }
         return parent_plans;
-    }
+    }, []);
 
-    const planTree = new Map();
-    const rootPlans = new Set();
-    if (plan.today.today_plans !== undefined) {
-        for (const today_plan of plan.today.today_plans) {
-            if (filter === "All tasks" ||
-                (filter === "Active tasks" && today_plan.completed === false)) {
-                let parent_plan_ids = findAllParentPlans(today_plan, []); // parent_plan_ids includes current plan and its parent plans
+    // todayPlansForDisplay is a mix of plans from today.today_plans and short_term_plan.daily_plans
+    // If a plan's date is today, it is from today.today_plans, otherwise it is from short_term_plan.daily_plans
+    const todayPlansForDisplay = useMemo(() => {
+        const result = [];
 
-                for(let i = 0; i < parent_plan_ids.length; i++) {
-                    const parent_plan_id = parent_plan_ids[i];
-                    if (i === parent_plan_ids.length - 1) {
-                        rootPlans.add(parent_plan_id);
-                    }
+        // Order for the following two iteration matters
+        const id_plan_map = new Map();
+        if (plan.today.today_plans !== undefined) {
+            for (const today_plan of plan.today.today_plans) {
+                id_plan_map.set(today_plan.id, today_plan);
+            }
+        }
+        for (const daily_plan of plan.short_term_plan.daily_plans) {
+            if (!id_plan_map.has(daily_plan.id)) {
+                id_plan_map.set(daily_plan.id, daily_plan);
+            }
+        }
 
-                    if (i > 0) {
-                        if (!planTree.has(parent_plan_id)) {
-                            planTree.set(parent_plan_id, new Set([parent_plan_ids[i - 1]]));
-                        } else {
-                            planTree.get(parent_plan_id).add(parent_plan_ids[i - 1]);
+        const planTree = new Map();
+        const rootPlans = new Set();
+        if (plan.today.today_plans !== undefined) {
+            for (const today_plan of plan.today.today_plans) {
+                if (filter === "All tasks" ||
+                    (filter === "Active tasks" && today_plan.completed === false)) {
+                    let parent_plan_ids = findAllParentPlans(today_plan, [], id_plan_map); // parent_plan_ids includes current plan and its parent plans
+    
+                    for(let i = 0; i < parent_plan_ids.length; i++) {
+                        const parent_plan_id = parent_plan_ids[i];
+                        if (i === parent_plan_ids.length - 1) {
+                            rootPlans.add(parent_plan_id);
                         }
-                    } else {
-                        if (!planTree.has(parent_plan_id)) {
-                            planTree.set(parent_plan_id, new Set());
+    
+                        if (i > 0) {
+                            if (!planTree.has(parent_plan_id)) {
+                                planTree.set(parent_plan_id, new Set([parent_plan_ids[i - 1]]));
+                            } else {
+                                planTree.get(parent_plan_id).add(parent_plan_ids[i - 1]);
+                            }
+                        } else {
+                            if (!planTree.has(parent_plan_id)) {
+                                planTree.set(parent_plan_id, new Set());
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    // todayPlansForDisplay is a mix of plans from today.today_plans and short_term_plan.daily_plans
-    // If a plan's date is today, it is from today.today_plans, otherwise it is from short_term_plan.daily_plans
-    const todayPlansForDisplay = [];
-    for (const root_plan of rootPlans) {
-        // DFS to display the plans in correct order
-        let dfs_queue = [root_plan];
-        while (dfs_queue.length > 0) {
-            const cur_plan = dfs_queue.pop();
-            todayPlansForDisplay.push(id_plan_map.get(cur_plan));
-            for (const child_plan of Array.from(planTree.get(cur_plan)).reverse()) {
-                dfs_queue.push(child_plan);
+        for (const root_plan of rootPlans) {
+            // DFS to display the plans in correct order
+            let dfs_queue = [root_plan];
+            while (dfs_queue.length > 0) {
+                const cur_plan = dfs_queue.pop();
+                result.push(id_plan_map.get(cur_plan));
+                for (const child_plan of Array.from(planTree.get(cur_plan)).reverse()) {
+                    dfs_queue.push(child_plan);
+                }
             }
         }
-    }
+
+        return result;
+    }, [plan.today.today_plans, plan.short_term_plan.daily_plans, filter, findAllParentPlans])
 
     const getTodayDateString = () => {
         const today = new Date();
@@ -242,3 +247,11 @@ const TodayPlans = () => {
 }
 
 export default TodayPlans
+
+
+
+/* ========== Learning ========== */
+/* useMemo */
+// useMemo is a React hook that allows you to memoize the result of a function call.
+// It is used to optimize performance by preventing unnecessary re-computations of
+// expensive calculations when the dependencies have not changed.
