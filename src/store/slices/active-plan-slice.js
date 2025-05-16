@@ -255,14 +255,27 @@ const activePlanSlice = createSlice({
                     daily_plan.show_plan = true;
                 }
             }
+            for (const today_plan of state.today.today_plans) {
+                if (today_plan.parent_id === action.payload.id) {
+                    today_plan.show_plan = true;
+                }
+            }
         },
         hideChildPlan(state, action) {
-            const parent_ids = new Set([action.payload.id]);
+            let parent_ids = new Set([action.payload.id]);
             for (const daily_plan of state.short_term_plan.daily_plans) {
                 if (parent_ids.has(daily_plan.parent_id)) {
                     daily_plan.show_plan = false;
                     if (daily_plan.has_children === true) {
                         parent_ids.add(daily_plan.id);
+                    }
+                }
+            }
+            for (const today_plan of state.today.today_plans) {
+                if (parent_ids.has(today_plan.parent_id)) {
+                    today_plan.show_plan = false;
+                    if (today_plan.has_children === true) {
+                        parent_ids.add(today_plan.id);
                     }
                 }
             }
@@ -363,7 +376,6 @@ const activePlanSlice = createSlice({
                 }
             }
             while (parent_id !== undefined) {
-
                 let new_parent_id;
                 for (const today_plan of state.today.today_plans) {
                     if (today_plan.id === parent_id) {
