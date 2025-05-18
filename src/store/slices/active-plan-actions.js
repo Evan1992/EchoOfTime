@@ -1,11 +1,11 @@
 import { activePlanActions } from "./active-plan-slice";
 
 
-export const sendPlanData = (userID, plan) => {
+export const sendPlanData = (userID, token, plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
-                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json?auth=${token}`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
@@ -28,12 +28,12 @@ export const sendPlanData = (userID, plan) => {
     }
 }
 
-export const fetchPlanData = (userID) => {
+export const fetchPlanData = (userID, token) => {
     console.log("Fetching data from database...");
     return async (dispatch) => {
         const fetchData = async () => {
             const response = await fetch(
-                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json`
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json?auth=${token}`,
             )
 
             if(!response.ok) {
@@ -62,14 +62,14 @@ export const fetchPlanData = (userID) => {
     }
 }
 
-export const refreshToday = (userID, today_plans) => {
+export const refreshToday = (userID, token, today_plans) => {
     return async (dispatch) => {
         const postData = async () => {
             const dateToday = new Date().toLocaleDateString();
             const split = dateToday.split("/")
             const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1])
             const response = await fetch(
-                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/today.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/today.json?auth=${token}`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
@@ -90,11 +90,11 @@ export const refreshToday = (userID, today_plans) => {
     }
 }
 
-export const updateToday = (userID, date, todayPlans, usedTime) => {
+export const updateToday = (userID, token, date, todayPlans, usedTime) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
-                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/today.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/today.json?auth=${token}`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
@@ -116,11 +116,11 @@ export const updateToday = (userID, date, todayPlans, usedTime) => {
 }
 
 // Archive the active plan
-export const archivePlanData = (userID, plan) => {
+export const archivePlanData = (userID, token, plan) => {
     return async (dispatch) => {
         const archiveActivePlan = async () => {
             const response = await fetch(
-                'https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/archived_plans.json',
+                'https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/archived_plans.json?auth=${token}',
                 {
                     method: 'POST',
                     body: JSON.stringify({
@@ -160,11 +160,11 @@ export const archivePlanData = (userID, plan) => {
 }
 
 // Method for updating active_plan.short_term_plan
-export const sendDailyPlanData = (userID, plan) => {
+export const sendDailyPlanData = (userID, token, plan) => {
     return async (dispatch) => {
         const postData = async () => {
             const response = await fetch(
-                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/short_term_plan.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/short_term_plan.json?auth=${token}`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({

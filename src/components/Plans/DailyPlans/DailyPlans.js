@@ -44,10 +44,10 @@ const DailyPlans = () => {
         if(planDeleted === true) {
             // No need to do sendDailyPlanData as sendPlanData will update the parent object
             // dispatch(sendDailyPlanData(authCtx.userID, plan))
-            dispatch(sendPlanData(authCtx.userID, plan))
+            dispatch(sendPlanData(authCtx.userID, authCtx.token, plan))
             setPlanDeleted(false);
         }
-    }, [dispatch, authCtx.userID, plan, planDeleted])
+    }, [dispatch, authCtx.userID, authCtx.token, plan, planDeleted])
 
     return (
         <React.Fragment>

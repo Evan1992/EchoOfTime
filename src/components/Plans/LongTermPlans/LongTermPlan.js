@@ -24,17 +24,17 @@ const LongTermPlan = () => {
     useEffect(() => {
         // Check if the plan is already fetched
         if (plan.title === "") {
-            dispatch(fetchPlanData(authCtx.userID));
+            dispatch(fetchPlanData(authCtx.userID, authCtx.token));
             setFetched(true);
         }
-    }, [plan, authCtx.userID, dispatch])
+    }, [plan, authCtx.userID, authCtx.token, dispatch])
 
     // Send the data to database after user input
     useEffect(() => {
         if(plan.changed === true) {
-            dispatch(sendPlanData(authCtx.userID, plan));
+            dispatch(sendPlanData(authCtx.userID, authCtx.token, plan));
         }
-    }, [authCtx.userID, dispatch, plan])
+    }, [authCtx.userID, authCtx.token, dispatch, plan])
 
     // Update today if date fetched from database is not today
     useEffect(() => {
@@ -45,13 +45,13 @@ const LongTermPlan = () => {
                     new_today_plans.push(daily_plan);
                 }
             }
-            dispatch(refreshToday(authCtx.userID, new_today_plans));
+            dispatch(refreshToday(authCtx.userID, authCtx.token, new_today_plans));
         }
-    }, [authCtx.userID, dispatch, fetched, plan])
+    }, [authCtx.userID, authCtx.token, dispatch, fetched, plan])
 
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
     const archivePlan = () => {
-        dispatch(archivePlanData(authCtx.userID, plan));
+        dispatch(archivePlanData(authCtx.userID, authCtx.token, plan));
     }
 
     const showLongTermPlan = (

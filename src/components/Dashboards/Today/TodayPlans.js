@@ -40,10 +40,10 @@ const TodayPlans = () => {
     useEffect(() => {
         // Check if the plan is already fetched
         if (plan.title === "") {
-            dispatch(fetchPlanData(authCtx.userID));
+            dispatch(fetchPlanData(authCtx.userID, authCtx.token));
             setFetched(true);
         }
-    }, [plan, authCtx.userID, dispatch])
+    }, [plan, authCtx.userID, authCtx.token, dispatch])
 
     // Update today if date fetched from database is not today
     useEffect(() => {
@@ -54,14 +54,15 @@ const TodayPlans = () => {
                     new_today_plans.push(daily_plan);
                 }
             }
-            dispatch(refreshToday(authCtx.userID, new_today_plans));
+            dispatch(refreshToday(authCtx.userID, authCtx.token, new_today_plans));
         }
-    }, [authCtx.userID, dispatch, fetched, plan])
+    }, [authCtx.userID, authCtx.token, dispatch, fetched, plan])
 
     useEffect(() => {
         if(planRemoved) {
-            dispatch(sendDailyPlanData(authCtx.userID, plan))
+            dispatch(sendDailyPlanData(authCtx.userID, authCtx.token, plan))
             dispatch(updateToday(authCtx.userID,
+                authCtx.token,
                 plan.today.date,
                 plan.today.today_plans,
                 plan.today.used_time))
@@ -70,10 +71,10 @@ const TodayPlans = () => {
         if(planDeleted === true) {
             // No need to do sendDailyPlanData as sendPlanData will update the parent object
             // dispatch(sendDailyPlanData(authCtx.userID, plan))
-            dispatch(sendPlanData(authCtx.userID, plan))
+            dispatch(sendPlanData(authCtx.userID, authCtx.token, plan))
             setPlanDeleted(false);
         }
-    }, [dispatch, authCtx.userID, plan, planRemoved, planDeleted])
+    }, [dispatch, authCtx.userID, authCtx.token, plan, planRemoved, planDeleted])
 
     const findAllParentPlans = useCallback((today_plan, parent_plans, id_plan_map) => {
         parent_plans.push(today_plan.id);
