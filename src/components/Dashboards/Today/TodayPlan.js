@@ -281,7 +281,7 @@ const TodayPlan = (props) => {
                 </Col>
                 {/* p-0: Padding of 0 */}
                 {/* Override the css style flex: 1 0; as it's the default behavior of the react-bootstrap Col component */}
-                <Col className="p-0" style={{width: '9%', flex: '0 0 auto'}}>
+                <Col className="p-0" style={{width: '10%', flex: '0 0 auto'}}>
                     {props.today_plan.completed === false ? (
                         <div>
                             <input className={classes.input_time} type="number" ref={inputExpectedHours} onBlur={expectedHoursChangeHandler} defaultValue={props.today_plan.expected_hours} />:
@@ -377,3 +377,8 @@ export default TodayPlan
 */
 // If the condition (props.highlight === props.today_plan.id) is true, it evaluates to classes.highlight,
 // otherwise it evaluates to an empty string ('').
+/* flex: 0 0 auto */
+// flex: 0 0 auto is a shorthand for the flex-grow, flex-shrink, and flex-basis properties used in flexbox layouts
+// flex-grow: 0; The item will not grow to fill available space
+// flex-shrink: 0; The item will not shrink if there is not enough space
+// flex-basis: auto; The item's size is based on its content for width/height properties
