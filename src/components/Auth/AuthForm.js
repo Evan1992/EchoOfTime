@@ -64,7 +64,8 @@ const AuthForm = (props) => {
             }
         })
         .then(data => {
-            authCtx.login(data.idToken, data.localId);
+            // After logging in, the response contains not only token but also refresh token
+            authCtx.login(data.idToken, data.refreshToken, data.localId);
             // Redirect to home page after log in successfully
             navigate('/');
         })

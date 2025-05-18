@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const AuthContext = React.createContext({
     token: '',
+    refreshToken: '',
     isLoggedIn: false,
     userID: '',
     firebase: null,
@@ -14,8 +15,10 @@ const AuthContext = React.createContext({
 
 export const AuthContextProvider = (props) => {
     const initialToken = localStorage.getItem('token');
+    const initialRefreshToken = localStorage.getItem('refreshToken');
     const initialUserID = localStorage.getItem('userID');
     const [token, setToken] = useState(initialToken);
+    const [refreshToken, setRefreshToken] = useState(initialRefreshToken);
     const [userID, setUserID] = useState(initialUserID);
     const isLoggedIn = !!token;
 
@@ -25,22 +28,27 @@ export const AuthContextProvider = (props) => {
         baseURL: `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}`
     });
 
-    const loginHandler = (token, userID) => {
+    const loginHandler = (token, refreshToken, userID) => {
         setToken(token);
+        setRefreshToken(refreshToken);
         setUserID(userID);
         localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('userID', userID);
     }
 
     const logoutHandler = () => {
         setToken(null);
+        setRefreshToken(null);
         setUserID(null);
         localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
         localStorage.removeItem('userID');
     }
 
     const contextValue = {
         token: token,
+        refreshToken: refreshToken,
         isLoggedIn: isLoggedIn,
         userID: userID,
         firebase: firebase,
