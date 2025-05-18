@@ -19,6 +19,7 @@ export const sendPlanData = (userID, token, plan) => {
             )
 
             if(!response.ok) {
+                alert("Failed to contact firebase")
                 throw new Error('Sending data failed')
             }
         }
@@ -37,6 +38,7 @@ export const fetchPlanData = (userID, token) => {
             )
 
             if(!response.ok) {
+                alert("Failed to contact firebase")
                 throw new Error('Fetching data failed')
             }
 
@@ -81,6 +83,7 @@ export const refreshToday = (userID, token, today_plans) => {
             )
 
             if(!response.ok) {
+                alert("Failed to contact firebase")
                 throw new Error('Sending data failed')
             }
         }
@@ -106,6 +109,7 @@ export const updateToday = (userID, token, date, todayPlans, usedTime) => {
             )
 
             if(!response.ok) {
+                alert("Failed to contact firebase")
                 throw new Error('Sending data failed')
             }
         }
@@ -132,6 +136,7 @@ export const archivePlanData = (userID, token, plan) => {
                 }
             )
             if(!response.ok) {
+                alert("Failed to contact firebase")
                 throw new Error('Archiving data failed')
             }
         }
@@ -144,6 +149,7 @@ export const archivePlanData = (userID, token, plan) => {
                 }
             )
             if(!response.ok) {
+                alert("Failed to contact firebase")
                 throw new Error('Deleting data failed')
             }
         }
@@ -177,6 +183,7 @@ export const sendDailyPlanData = (userID, token, plan) => {
             )
 
             if(!response.ok) {
+                alert("Failed to contact firebase")
                 throw new Error('Sending data failed')
             }
         }
