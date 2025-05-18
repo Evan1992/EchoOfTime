@@ -31,9 +31,9 @@ const AuthForm = (props) => {
         setIsLoading(true)
         let url;
         if(isLogin) {
-            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAEWsVIMlydgvX_odxR7Y2R2V2yPeJfygA'; 
+            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDmXWs4VOOgIxnptitzMKI3tNOSjP67TfI'; 
         } else {
-            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAEWsVIMlydgvX_odxR7Y2R2V2yPeJfygA';
+            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDmXWs4VOOgIxnptitzMKI3tNOSjP67TfI';
         }
         fetch(
             url,
@@ -122,3 +122,6 @@ export default AuthForm;
 // All native HTML elements come with their internal behavior. For instance, input
 // elements store their internal state. The same applies for a form element which
 // has a submit event that is invoked via a submit button element.
+/* Web API Key  */
+// Key to access Firebase API can be found at Firebase console -> Project Overview -> Project settings
+// The registered users can be found at Firebase console -> Authentication -> Users
