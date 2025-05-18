@@ -120,7 +120,7 @@ export const archivePlanData = (userID, token, plan) => {
     return async (dispatch) => {
         const archiveActivePlan = async () => {
             const response = await fetch(
-                'https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/archived_plans.json?auth=${token}',
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/archived_plans.json?auth=${token}`,
                 {
                     method: 'POST',
                     body: JSON.stringify({
