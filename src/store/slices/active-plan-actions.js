@@ -1,4 +1,5 @@
 import { activePlanActions } from "./active-plan-slice";
+import { refreshIdToken }  from "../auth-context";
 
 
 export const sendPlanData = (userID, token, plan) => {
@@ -29,24 +30,42 @@ export const sendPlanData = (userID, token, plan) => {
     }
 }
 
-export const fetchPlanData = (userID, token) => {
+export const fetchPlanData = (authCtx) => {
     console.log("Fetching data from database...");
     return async (dispatch) => {
-        const fetchData = async () => {
-            const response = await fetch(
+        const fetchData = async (userID, token) => {
+            let response = await fetch(
                 `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json?auth=${token}`,
             )
 
             if(!response.ok) {
-                alert("Failed to contact firebase")
-                throw new Error('Fetching data failed')
+                const error = new Error('Fetching data failed');
+                error.status = response.status;
+                throw error;
             }
 
             const data = await response.json();
             return data;
         }
 
-        const planData = await fetchData();
+        let planData;
+        try {
+            planData = await fetchData(authCtx.userID, authCtx.token);
+        } catch (error) {
+            if (error.status === 401 && authCtx.refreshToken) {
+                try {
+                    const refreshData = await refreshIdToken(authCtx.refreshToken);
+                    authCtx.login(refreshData.id_token, refreshData.refresh_token, refreshData.user_id);
+                    planData = await fetchData(refreshData.user_id, refreshData.id_token);
+                } catch (refreshError) {
+                    alert("Failed to refresh token or fetch data from firebase");
+                    throw refreshError;
+                }
+            } else {
+                alert("Failed to contact firebase");
+                throw error;
+            }
+        }
 
         // planData might be empty if no active plan present
         if(planData) {
