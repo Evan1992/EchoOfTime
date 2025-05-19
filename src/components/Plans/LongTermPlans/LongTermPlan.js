@@ -24,10 +24,10 @@ const LongTermPlan = () => {
     useEffect(() => {
         // Check if the plan is already fetched
         if (plan.title === "") {
-            dispatch(fetchPlanData(authCtx.userID, authCtx.token));
+            dispatch(fetchPlanData(authCtx));
             setFetched(true);
         }
-    }, [plan, authCtx.userID, authCtx.token, dispatch])
+    }, [plan, authCtx, dispatch])
 
     // Send the data to database after user input
     useEffect(() => {

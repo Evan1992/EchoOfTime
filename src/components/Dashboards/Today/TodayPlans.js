@@ -40,10 +40,10 @@ const TodayPlans = () => {
     useEffect(() => {
         // Check if the plan is already fetched
         if (plan.title === "") {
-            dispatch(fetchPlanData(authCtx.userID, authCtx.token));
+            dispatch(fetchPlanData(authCtx));
             setFetched(true);
         }
-    }, [plan, authCtx.userID, authCtx.token, dispatch])
+    }, [plan, authCtx, dispatch])
 
     // Update today if date fetched from database is not today
     useEffect(() => {
