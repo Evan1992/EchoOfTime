@@ -207,3 +207,9 @@ export const sendDailyPlanData = (userID, token, plan) => {
 // if(variable) will check for all "false-like" value null/undefined/""/false/0/NaN
 // if (variable === null) check for null SPECIFICALLY
 // if (variable === '') check for empty string SPECIFICALLY
+
+/* Firebase ID token */
+// Firebase ID token is a short-lived token that is valid for 1 hour
+// After 1 hour, the token will expire and we need to refresh it
+// Firebase refresh token is a long-lived token that is valid for 30 days
+// After 30 days, the refresh token will expire and we need to re-authenticate
