@@ -63,4 +63,14 @@ export const AuthContextProvider = (props) => {
     )
 }
 
+export const refreshIdToken = async (refreshToken) => {
+    const url = `https://securetoken.googleapis.com/v1/token?key=AIzaSyDmXWs4VOOgIxnptitzMKI3tNOSjP67TfI`;
+    const response = await axios.post(url, {
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken
+    });
+    if (response.status !== 200) throw new Error('Failed to refresh token');
+    return response.data;
+}
+
 export default AuthContext
