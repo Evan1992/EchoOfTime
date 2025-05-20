@@ -239,9 +239,9 @@ export const archivePlanData = (userID, token, plan) => {
 }
 
 // Method for updating active_plan.short_term_plan
-export const sendDailyPlanData = (userID, token, plan) => {
+export const sendDailyPlanData = (authCtx, plan) => {
     return async (dispatch) => {
-        const postData = async () => {
+        const postData = async (userID, token) => {
             const response = await fetch(
                 `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/short_term_plan.json?auth=${token}`,
                 {
@@ -256,13 +256,31 @@ export const sendDailyPlanData = (userID, token, plan) => {
             )
 
             if(!response.ok) {
-                alert("Failed to contact firebase")
-                throw new Error('Sending data failed')
+                const error = new Error('Sending data failed');
+                error.status = response.status;
+                throw error;
             }
         }
 
         console.log("Updating the database...");
-        await postData();
+
+        try {
+            await postData(authCtx.userID, authCtx.token);
+        } catch (error) {
+            if (error.status === 401 && authCtx.refreshToken) {
+                try {
+                    const refreshData = await refreshIdToken(authCtx.refreshToken);
+                    authCtx.login(refreshData.id_token, refreshData.refresh_token, refreshData.user_id);
+                    await postData(refreshData.user_id, refreshData.id_token);
+                } catch (refreshError) {
+                    alert("Failed to refresh token or put data to firebase");
+                    throw refreshError;
+                }
+            } else {
+                alert("Failed to contact firebase");
+                throw error;
+            }
+        }
     }
 }
 

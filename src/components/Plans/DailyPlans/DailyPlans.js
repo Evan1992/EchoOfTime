@@ -43,7 +43,7 @@ const DailyPlans = () => {
     useEffect(() => {
         if(planDeleted === true) {
             // No need to do sendDailyPlanData as sendPlanData will update the parent object
-            // dispatch(sendDailyPlanData(authCtx.userID, plan))
+            // dispatch(sendDailyPlanData(authCtx, plan))
             dispatch(sendPlanData(authCtx, plan))
             setPlanDeleted(false);
         }

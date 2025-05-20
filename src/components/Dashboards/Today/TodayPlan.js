@@ -34,18 +34,18 @@ const TodayPlan = (props) => {
 
     useEffect(() => {
         if(todayPlanChanged === true) {
-            dispatch(sendDailyPlanData(authCtx.userID, authCtx.token, props.plan))
+            dispatch(sendDailyPlanData(authCtx, props.plan))
             dispatch(updateToday(authCtx,
                 props.plan.today.date,
                 props.plan.today.today_plans,
                 props.plan.today.used_time))
             setTodayPlanChanged(false);
         }
-    }, [dispatch, authCtx.userID, authCtx.token, props.plan, todayPlanChanged])
+    }, [dispatch, authCtx, props.plan, todayPlanChanged])
 
     useEffect(() => {
         if(isAddNewPlan) {
-            dispatch(sendDailyPlanData(authCtx.userID, authCtx.token, props.plan));
+            dispatch(sendDailyPlanData(authCtx, props.plan));
             dispatch(updateToday(authCtx.userID,
                 authCtx.token,
                 props.plan.today.date,
@@ -53,7 +53,7 @@ const TodayPlan = (props) => {
                 props.plan.today.used_time))
             setIsAddNewPlan(false);
         }
-    }, [dispatch, authCtx.userID, authCtx.token, props.plan, isAddNewPlan])
+    }, [dispatch, authCtx, props.plan, isAddNewPlan])
 
     const formToggleHandler = () => {
         setShowForm(!showForm);
