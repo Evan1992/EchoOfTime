@@ -51,7 +51,7 @@ const LongTermPlan = () => {
 
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
     const archivePlan = () => {
-        dispatch(archivePlanData(authCtx.userID, authCtx.token, plan));
+        dispatch(archivePlanData(authCtx, plan));
     }
 
     const showLongTermPlan = (

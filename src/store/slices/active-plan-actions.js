@@ -193,11 +193,11 @@ export const updateToday = (authCtx, date, todayPlans, usedTime) => {
 }
 
 // Archive the active plan
-export const archivePlanData = (userID, token, plan) => {
+export const archivePlanData = (authCtx, plan) => {
     return async (dispatch) => {
         const archiveActivePlan = async () => {
             const response = await fetch(
-                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/archived_plans.json?auth=${token}`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/archived_plans.json`,
                 {
                     method: 'POST',
                     body: JSON.stringify({
@@ -214,23 +214,43 @@ export const archivePlanData = (userID, token, plan) => {
             }
         }
 
-        const deleteActivePlan = async () => {
+        const deleteActivePlan = async (userID, token) => {
             const response = await fetch(
-                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json`,
+                `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan.json?auth=${token}`,
                 {
                     method: 'DELETE'
                 }
             )
+
             if(!response.ok) {
-                alert("Failed to contact firebase")
-                throw new Error('Deleting data failed')
+                const error = new Error('Deleting data failed');
+                error.status = response.status;
+                throw error;
             }
+
+            console.log("Updating the database...");
         }
 
         console.log("Updating the database...");
         await archiveActivePlan();
-        console.log("Updating the database...");
-        await deleteActivePlan();
+
+        try {
+            await deleteActivePlan(authCtx.userID, authCtx.token);
+        } catch (error) {
+            if (error.status === 401 && authCtx.refreshToken) {
+                try {
+                    const refreshData = await refreshIdToken(authCtx.refreshToken);
+                    authCtx.login(refreshData.id_token, refreshData.refresh_token, refreshData.user_id);
+                    await deleteActivePlan(refreshData.user_id, refreshData.id_token);
+                } catch (refreshError) {
+                    alert("Failed to refresh token or delete data from firebase");
+                    throw refreshError;
+                }
+            } else {
+                alert("Failed to contact firebase");
+                throw error;
+            }
+        }
 
         dispatch(
             activePlanActions.removePlan()
