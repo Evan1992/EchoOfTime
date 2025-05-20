@@ -71,10 +71,10 @@ const TodayPlans = () => {
         if(planDeleted === true) {
             // No need to do sendDailyPlanData as sendPlanData will update the parent object
             // dispatch(sendDailyPlanData(authCtx.userID, plan))
-            dispatch(sendPlanData(authCtx.userID, authCtx.token, plan))
+            dispatch(sendPlanData(authCtx, plan))
             setPlanDeleted(false);
         }
-    }, [dispatch, authCtx.userID, authCtx.token, plan, planRemoved, planDeleted])
+    }, [dispatch, authCtx, plan, planRemoved, planDeleted])
 
     const findAllParentPlans = useCallback((today_plan, parent_plans, id_plan_map) => {
         parent_plans.push(today_plan.id);

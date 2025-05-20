@@ -32,9 +32,9 @@ const LongTermPlan = () => {
     // Send the data to database after user input
     useEffect(() => {
         if(plan.changed === true) {
-            dispatch(sendPlanData(authCtx.userID, authCtx.token, plan));
+            dispatch(sendPlanData(authCtx, plan));
         }
-    }, [authCtx.userID, authCtx.token, dispatch, plan])
+    }, [authCtx, dispatch, plan])
 
     // Update today if date fetched from database is not today
     useEffect(() => {
