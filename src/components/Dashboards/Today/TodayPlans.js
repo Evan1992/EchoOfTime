@@ -61,8 +61,7 @@ const TodayPlans = () => {
     useEffect(() => {
         if(planRemoved) {
             dispatch(sendDailyPlanData(authCtx.userID, authCtx.token, plan))
-            dispatch(updateToday(authCtx.userID,
-                authCtx.token,
+            dispatch(updateToday(authCtx,
                 plan.today.date,
                 plan.today.today_plans,
                 plan.today.used_time))

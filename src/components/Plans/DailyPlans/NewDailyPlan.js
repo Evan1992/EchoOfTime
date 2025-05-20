@@ -28,8 +28,7 @@ const NewDailyPlan = (props) => {
             dispatch(sendDailyPlanData(authCtx.userID, authCtx.token, plan));
 
             if (props.date !== undefined && isToday(props.date)) {
-                dispatch(updateToday(authCtx.userID,
-                    authCtx.token,
+                dispatch(updateToday(authCtx,
                     plan.today.date,
                     plan.today.today_plans,
                     plan.today.used_time))
