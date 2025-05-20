@@ -45,9 +45,9 @@ const LongTermPlan = () => {
                     new_today_plans.push(daily_plan);
                 }
             }
-            dispatch(refreshToday(authCtx.userID, authCtx.token, new_today_plans));
+            dispatch(refreshToday(authCtx, new_today_plans));
         }
-    }, [authCtx.userID, authCtx.token, dispatch, fetched, plan])
+    }, [authCtx, dispatch, fetched, plan])
 
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
     const archivePlan = () => {
