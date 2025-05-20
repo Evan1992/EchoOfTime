@@ -46,8 +46,7 @@ const TodayPlan = (props) => {
     useEffect(() => {
         if(isAddNewPlan) {
             dispatch(sendDailyPlanData(authCtx, props.plan));
-            dispatch(updateToday(authCtx.userID,
-                authCtx.token,
+            dispatch(updateToday(authCtx,
                 props.plan.today.date,
                 props.plan.today.today_plans,
                 props.plan.today.used_time))
