@@ -60,6 +60,8 @@ const TodayPlanSummary = (props) => {
         return `${hour}:${minute}:${second}`
     }
 
+    const untrackedTime = 24 * 60 * 60 - expectedTimeToday - 1 * 60 * 60 - 8 * 60 * 60 - 30 * 60; // 1 hour eating, 8 hours sleeping, 30 minutes spacing out
+
     return (
         <React.Fragment>
             <div>Total Planned Time: {secondsToHMS(expectedTimeToday)}</div>
@@ -69,8 +71,9 @@ const TodayPlanSummary = (props) => {
             <div>Life Support:
                 <div className={classes.lifeSupportDetails}>Eating: 1:00</div>
                 <div className={classes.lifeSupportDetails}>Sleeping: 8:00</div>
-                <div className={classes.lifeSupportDetails}>Space Out: 0:30</div>
+                <div className={classes.lifeSupportDetails}>Spacing Out: 0:30</div>
             </div>
+            <div>Untracked Time: {secondsToHMS(untrackedTime)}</div>
         </React.Fragment>
         
     )
