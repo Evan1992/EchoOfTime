@@ -125,6 +125,12 @@ const TodayPlan = (props) => {
         cur_date.setHours(0, 0, 0, 0);
         plan_date.setHours(0, 0, 0, 0);
 
+        // Treat time before 2:00am as Today (previous calendar day)
+        const now = new Date();
+        if (now.getHours() < 2) {
+            cur_date.setDate(cur_date.getDate() - 1);
+        }
+
         const cur_date_to_time = cur_date.getTime();
         const plan_date_to_time = plan_date.getTime();
 
