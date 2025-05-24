@@ -52,6 +52,19 @@ const setDateForToday = (state, action) => {
                         }
                     }
                 }
+            } else {
+                // The selected plan from today page is not today but has children plans that are today
+                // Remove all the children plans from today_plans
+                let plan_id_process_queue = [action.payload.id];
+                while (plan_id_process_queue.length > 0) {
+                    const current_id = plan_id_process_queue.pop();
+                    for (const daily_plan of state.short_term_plan.daily_plans) {
+                        if (daily_plan.parent_id === current_id) {
+                            state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== daily_plan.id);
+                            plan_id_process_queue.push(daily_plan.id);
+                        }
+                    }
+                }
             }
 
             // Remove daily plan and its child plans from state.today.today_plans if toggled to not today
@@ -316,7 +329,6 @@ const activePlanSlice = createSlice({
                     break;
                 }
             }
-
         },
         setDate(state, action) {
             setDateForToday(state, action);
