@@ -9,27 +9,31 @@ const isToday = (plan_date) => {
         return false;
     }
 
-    /**
-     * date's format is yyyy-mm-dd, somehow, new Date(date) will use UTC to parse it,
-     * while if date's format is mm/dd/yyyy, new Date(date) will use local time zone to parse it.
-     * As a result, we should convert yyyy-mm-dd to mm/dd/yyyy first
-     */
-    let formatted_plan_date
-    if(plan_date) {
-        const splitted_plan_date = plan_date.split("-")
-        const yy = splitted_plan_date[0]
-        const mm = splitted_plan_date[1]
-        const dd = splitted_plan_date[2]
-        formatted_plan_date = mm.concat("/", dd, "/", yy)
+    // Convert yyyy-mm-dd to mm/dd/yyyy for local time parsing
+    let formatted_plan_date;
+    if (plan_date) {
+        const [yy, mm, dd] = plan_date.split("-");
+        formatted_plan_date = `${mm}/${dd}/${yy}`;
     }
 
-    const cur_date = new Date().toLocaleDateString()
-    const cur_date_to_time = new Date(cur_date).getTime()
-    const plan_date_to_time = new Date(formatted_plan_date).getTime()
-    if(plan_date_to_time && plan_date_to_time - cur_date_to_time === 0) {
-        return true
+    // Get current date and time
+    const now = new Date();
+    let cur_date = now.toLocaleDateString();
+    let cur_date_to_time = new Date(cur_date).getTime();
+    let plan_date_to_time = new Date(formatted_plan_date).getTime();
+
+    // If before 2:00am, treat as previous day
+    if (now.getHours() < 2) {
+        const prev = new Date(now);
+        prev.setDate(now.getDate() - 1);
+        cur_date = prev.toLocaleDateString();
+        cur_date_to_time = new Date(cur_date).getTime();
     }
-    return false
+
+    if (plan_date_to_time && plan_date_to_time - cur_date_to_time === 0) {
+        return true;
+    }
+    return false;
 }
 
 const isTomorrow = (plan_date) => {
