@@ -1,4 +1,5 @@
 import React from 'react';
+import classes from './TodayPlanSummary.module.css';
 
 const TodayPlanSummary = (props) => {
     let expectedTimeToday = 0;
@@ -39,6 +40,11 @@ const TodayPlanSummary = (props) => {
             <div>Total Planned Time: {secondsToHMS(expectedTimeToday)}</div>
             <div>Remaining Planned Time: {secondsToHMS(remainingPlannedTime)}</div>
             <div>Total Used Time: {secondsToHMS(props.used_time)}</div>
+            <div>Life Support:
+                <div className={classes.lifeSupportDetails}>Eating: 1:00</div>
+                <div className={classes.lifeSupportDetails}>Sleeping: 8:00</div>
+                <div className={classes.lifeSupportDetails}>Space Out: 0:30</div>
+            </div>
         </React.Fragment>
         
     )
