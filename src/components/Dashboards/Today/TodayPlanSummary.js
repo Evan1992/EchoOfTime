@@ -68,7 +68,7 @@ const TodayPlanSummary = (props) => {
             <div>Remaining Planned Time: {secondsToHMS(remainingPlannedTime)}</div>
             <div>Total Used Time: {secondsToHMS(props.used_time)}</div>
             <div>Sleep in: <span>{sleepCountdown}</span></div>
-            <div>Life Support:
+            <div>Life Support: 9:30
                 <div className={classes.lifeSupportDetails}>Eating: 1:00</div>
                 <div className={classes.lifeSupportDetails}>Sleeping: 8:00</div>
                 <div className={classes.lifeSupportDetails}>Spacing Out: 0:30</div>
