@@ -32,16 +32,9 @@ const Focus = () => {
 
     return(
         <React.Fragment>
-            <Container fluid>
-                <Row>
-                    <Col xs={1} />
-                    <Col>
-                        <div style={{fontSize:'2rem'}}>
-                            {secondsToHMS(focusTime)}
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
+            <div style={{fontSize:'2rem'}}>
+                {secondsToHMS(focusTime)}
+            </div>
         </React.Fragment>
     )
 }
