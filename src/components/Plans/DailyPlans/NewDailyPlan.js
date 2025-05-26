@@ -8,7 +8,6 @@ import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import React components ========== */
 import NewDailyPlanForm from './NewDailyPlanForm';
-import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AuthContext from '../../../store/auth-context';
 
@@ -44,29 +43,22 @@ const NewDailyPlan = (props) => {
 
     return (
         <React.Fragment>
-            <Row>
-                <Col xs='auto' >
-                    <div className={classes.expand_collapse}></div>
+            { !showForm &&
+                <Col xs={{ span: 4}} style={{display:'flex', justifyContent:'left'}}>
+                    <div className={classes.hint} onClick={formToggleHandler}>Click here to add a task</div>
                 </Col>
+            }
 
-                { !showForm && 
-                    <Col xs={{ span: 4}} style={{display:'flex', justifyContent:'left'}}>
-                        <div className={classes.hint} onClick={formToggleHandler}>Click here to add a task</div>
-                    </Col>
-                }
-
-
-                { showForm &&
-                    <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
-                        <NewDailyPlanForm
-                            rank={0}
-                            date={props.date}
-                            formToggler={formToggleHandler}
-                            setIsAddNewPlan={setIsAddNewPlan}
-                        />
-                    </Col>
-                }
-            </Row>
+            { showForm &&
+                <Col xs={{ span: 5}} style={{display:'flex', justifyContent:'left'}}>
+                    <NewDailyPlanForm
+                        rank={0}
+                        date={props.date}
+                        formToggler={formToggleHandler}
+                        setIsAddNewPlan={setIsAddNewPlan}
+                    />
+                </Col>
+            }
         </React.Fragment>
     )
 }
