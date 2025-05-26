@@ -10,6 +10,8 @@ import TomorrowPreview from './TomorrowPreview';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { isTomorrow } from '../../../utilities';
 import { sendPlanData } from '../../../store/slices/active-plan-actions';
 
@@ -80,7 +82,10 @@ const Backlog = () => {
                             return <div key={dailyPlan.id} />
                         })
                     }
-                    <NewDailyPlan />
+                    <Row>
+                        <Col xs={2} />
+                        <NewDailyPlan />
+                    </Row>
 
                     {/* Separation between backlog plans and TomorrowPreview */}
                     <div style={{height: "25px"}} />
