@@ -35,14 +35,14 @@ const TomorrowPreview = (props) => {
         <React.Fragment>
             <Container fluid>
                 <Row>
-                    <Col xs={1} />
+                    <Col xs={2} />
                     <Col>
                         <h4>Tomorrow Preview</h4>
                     </Col>
                 </Row>
 
                 <Row>
-                    <Col xs={1} />
+                    <Col xs={2} />
                     {/* Total Planned Time is: Time for active plans of today + Time for finished plans of today  */}
                     <Col>Total Planned Time: {secondsToHMS(expectedTimeTomorrow)} </Col>
                 </Row>
