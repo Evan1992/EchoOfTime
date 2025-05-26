@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import NewDailyPlan from '../../Plans/DailyPlans/NewDailyPlan';
 import DailyPlan from '../../Plans/DailyPlans/DailyPlan';
 import AuthContext from '../../../store/auth-context';
+import TomorrowPreview from './TomorrowPreview';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
@@ -80,6 +81,11 @@ const Backlog = () => {
                         })
                     }
                     <NewDailyPlan />
+
+                    {/* Separation between backlog plans and TomorrowPreview */}
+                    <div style={{height: "25px"}} />
+
+                    <TomorrowPreview tomorrow_plans={tomorrowPlans} />
                 </Container>
             </div>
         </React.Fragment>

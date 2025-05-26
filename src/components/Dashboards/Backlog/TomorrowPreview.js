@@ -1,14 +1,11 @@
 import React from 'react';
 
-/* ========== import React components ========== */
-import TodayPlan from '../TodayPlans/TodayPlan';
-
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 
-const TomorrowPlanSummary = (props) => {
+const TomorrowPreview = (props) => {
     const formatToTwoDigits = (n) => {
         if(n < 10 ){
             return `0${n}`;
@@ -30,8 +27,8 @@ const TomorrowPlanSummary = (props) => {
     }
 
     let expectedTimeTomorrow = 0;
-    for(const daily_plan of props.tomorrow_plans) {
-        expectedTimeTomorrow += daily_plan.expected_hours * 60 * 60 + daily_plan.expected_minutes * 60;
+    for(const tomorrow_plan of props.tomorrow_plans) {
+        expectedTimeTomorrow += tomorrow_plan.expected_hours * 60 * 60 + tomorrow_plan.expected_minutes * 60;
     }
 
     return (
@@ -40,18 +37,9 @@ const TomorrowPlanSummary = (props) => {
                 <Row>
                     <Col xs={1} />
                     <Col>
-                        <h4>Todo Tomorrow</h4>
+                        <h4>Tomorrow Preview</h4>
                     </Col>
                 </Row>
-
-                {
-                    props.tomorrow_plans.map((tomorrow_plan) => {
-                        return <TodayPlan
-                            key={tomorrow_plan.id}
-                            plan={tomorrow_plan}
-                        />
-                    })
-                }
 
                 <Row>
                     <Col xs={1} />
@@ -63,4 +51,4 @@ const TomorrowPlanSummary = (props) => {
     )
 }
 
-export default TomorrowPlanSummary
+export default TomorrowPreview

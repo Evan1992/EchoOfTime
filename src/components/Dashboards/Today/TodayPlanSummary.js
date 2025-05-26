@@ -52,7 +52,7 @@ const TodayPlanSummary = (props) => {
         let hour  = (seconds / 3600) >> 0;
         let minute  = ((seconds % 3600) / 60) >> 0;
         let second  = seconds % 60;
-        
+
         hour   = formatToTwoDigits(hour);
         minute = formatToTwoDigits(minute);
         second = formatToTwoDigits(second);
