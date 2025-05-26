@@ -221,10 +221,12 @@ const TodayPlans = () => {
                                     return null;
                                 })
                             }
-
-                            <NewDailyPlan
-                                date={getTodayDateString()}
-                            />
+                            <Row>
+                                <Col xs="auto" style={{width: "30px"}}/>
+                                <NewDailyPlan
+                                    date={getTodayDateString()}
+                                />
+                            </Row>
                         </Container>
                     </Col>
                     <Col xs={4} className="p-0">

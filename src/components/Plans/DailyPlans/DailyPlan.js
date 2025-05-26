@@ -316,7 +316,6 @@ const DailyPlan = (props) => {
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                 </Col>
-
             </Row>
 
             <Row>
