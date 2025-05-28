@@ -203,6 +203,9 @@ const activePlanSlice = createSlice({
                 } else {
                     for (const [index, daily_plan] of state.short_term_plan.daily_plans.entries()) {
                         if (daily_plan.id === action.payload.parent_id) {
+                            // Set the date for action.payload.daily_plan to be same as its parent
+                            action.payload.daily_plan.date = daily_plan.date
+
                             if (index + 1 === state.short_term_plan.daily_plans.length) {
                                 // If the parent plan is the last plan in the list, just push the new daily plan to the end
                                 state.short_term_plan.daily_plans.push(action.payload.daily_plan);
