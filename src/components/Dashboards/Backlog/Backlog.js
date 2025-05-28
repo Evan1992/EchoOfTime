@@ -13,7 +13,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { isTomorrow } from '../../../utilities';
-import { sendPlanData } from '../../../store/slices/active-plan-actions';
+import { sendPlanData, fetchPlanData } from '../../../store/slices/active-plan-actions';
 
 /* ========== import css ========== */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -38,6 +38,14 @@ const Backlog = () => {
             }
         }
     }
+
+    // Get the data from database as soon as user visit Backlog page
+    useEffect(() => {
+        // Check if the plan is already fetched
+        if (plan.title === "") {
+            dispatch(fetchPlanData(authCtx));
+        }
+    }, [plan, authCtx, dispatch])
 
     useEffect(() => {
         if(planDeleted === true) {
