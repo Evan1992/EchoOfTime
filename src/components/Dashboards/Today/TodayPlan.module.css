@@ -6,6 +6,10 @@
     background-color: #ebf5f0; /* Adjust the highlight color as needed */
 }
 
+.placeholder_col {
+    background-color: white !important;
+}
+
 .completed {
     color: #6B7280;
 }
