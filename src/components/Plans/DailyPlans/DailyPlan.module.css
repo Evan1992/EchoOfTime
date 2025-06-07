@@ -1,13 +1,13 @@
-.row {
-    justify-content:center;
-}
-
 .row:hover {
     background-color: lightgray;
 }
 
 .highlight {
     background-color: #ebf5f0; /* Adjust the highlight color as needed */
+}
+
+.placeholder_col {
+    background-color: white !important;
 }
 
 .expand_collapse {

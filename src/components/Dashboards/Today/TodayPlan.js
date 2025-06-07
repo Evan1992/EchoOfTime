@@ -343,7 +343,7 @@ const TodayPlan = (props) => {
                         <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
                     )}
                 </Col>
-                <Col className={classes.placeholder_col}></Col>
+                <Col className={classes.placeholder_col} />
             </Row>
 
             <Row>

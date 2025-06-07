@@ -246,6 +246,8 @@ const DailyPlan = (props) => {
                 className={`${classes.row} ${props.highlight === props.daily_plan.id ? classes.highlight : ''}`}
                 onClick={highlightHandler}
             >
+
+                <Col xs={2} className={classes.placeholder_col} />
                 {/* Set fixed width for this column */}
                 <Col xs={{ span: 4 }}>
                     {/* Use paddingLeft instead of textIndent as it causes bug for the css style applied to the icon */}
@@ -316,6 +318,8 @@ const DailyPlan = (props) => {
                 <Col xs="auto" style={{padding: 0}}>
                     <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                 </Col>
+
+                <Col className={classes.placeholder_col} />
             </Row>
 
             <Row>
