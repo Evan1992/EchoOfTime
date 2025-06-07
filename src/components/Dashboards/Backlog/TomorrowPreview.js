@@ -36,7 +36,7 @@ const TomorrowPreview = (props) => {
             <Container fluid>
                 <Row>
                     <Col xs={2} />
-                    <Col>
+                    <Col style={{ paddingLeft: 0 }}>
                         <h4>Tomorrow Preview</h4>
                     </Col>
                 </Row>
@@ -44,7 +44,7 @@ const TomorrowPreview = (props) => {
                 <Row>
                     <Col xs={2} />
                     {/* Total Planned Time is: Time for active plans of today + Time for finished plans of today  */}
-                    <Col>Total Planned Time: {secondsToHMS(expectedTimeTomorrow)} </Col>
+                    <Col style={{ paddingLeft: 0 }}>Total Planned Time: {secondsToHMS(expectedTimeTomorrow)} </Col>
                 </Row>
             </Container>
         </React.Fragment>
