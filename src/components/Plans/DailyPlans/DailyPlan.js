@@ -148,13 +148,21 @@ const DailyPlan = (props) => {
             plan_date_string = mm.concat("/", dd, "/", yy)
         }
 
-        const cur_date_string = new Date().toLocaleDateString();
-        const cur_date = new Date(cur_date_string);
-        const plan_date = new Date(plan_date_string);
+        const now = new Date();
+        let cur_date = new Date(now.toLocaleDateString());
+        let plan_date = new Date(plan_date_string);
 
         // Set time components to zero
         cur_date.setHours(0, 0, 0, 0);
         plan_date.setHours(0, 0, 0, 0);
+
+        // If before 2:00am, treat as Today (previous calendar day)
+        // If 2:00am or later, treat as Tomorrow (current calendar day + 1)
+        console.log(now.getHours())
+        if (now.getHours() < 2) {
+            // Before 2:00am, treat as today (previous calendar day)
+            cur_date.setDate(cur_date.getDate() - 1);
+        }
 
         const cur_date_to_time = cur_date.getTime();
         const plan_date_to_time = plan_date.getTime();
@@ -165,14 +173,16 @@ const DailyPlan = (props) => {
         const offset_difference = (cur_date_offset - plan_date_offset) * 60 * 1000;
 
         const time_difference = plan_date_to_time - cur_date_to_time + offset_difference;
-        if(time_difference === -86400000){
-            return "Yesterday"
-        } else if(time_difference === 0) {
-            return "Today"
-        } else if(time_difference === 86400000) {
-            return "Tomorrow"
+        const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+        if (time_difference === 0) {
+            return "Today";
+        } else if (time_difference === ONE_DAY_MS) {
+            return "Tomorrow";
+        } else if (time_difference === -ONE_DAY_MS) {
+            return "Yesterday";
         } else {
-            return date
+            return date;
         }
     }
 
