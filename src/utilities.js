@@ -37,21 +37,29 @@ const isToday = (plan_date) => {
 }
 
 const isTomorrow = (plan_date) => {
-    if(plan_date) {
-        const year = plan_date.split("-")[0];
-        const month = plan_date.split("-")[1];
-        const day = plan_date.split("-")[2];
-
-        const date = new Date();
-        date.setDate(date.getDate() + 1);
-
-        if(Number(year) === date.getFullYear() &&
-           Number(month) === date.getMonth()+1 &&   // Note: getMonth() will return 0 for January
-           Number(day) === date.getDate()) {
-            return true
-        }
+    if (!plan_date) {
+        return false;
     }
-    return false
+
+    const [year, month, day] = plan_date.split("-");
+
+    const now = new Date();
+    // Only consider as tomorrow if current time is after 2:00am
+    if (now.getHours() < 2) {
+        return false;
+    }
+
+    const tomorrow = new Date();
+    tomorrow.setDate(now.getDate() + 1);
+
+    if (
+        Number(year) === tomorrow.getFullYear() &&
+        Number(month) === tomorrow.getMonth() + 1 && // getMonth() is 0-based
+        Number(day) === tomorrow.getDate()
+    ) {
+        return true;
+    }
+    return false;
 }
 
 export { isToday, isTomorrow };

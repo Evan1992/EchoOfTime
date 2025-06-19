@@ -158,7 +158,6 @@ const DailyPlan = (props) => {
 
         // If before 2:00am, treat as Today (previous calendar day)
         // If 2:00am or later, treat as Tomorrow (current calendar day + 1)
-        console.log(now.getHours())
         if (now.getHours() < 2) {
             // Before 2:00am, treat as today (previous calendar day)
             cur_date.setDate(cur_date.getDate() - 1);
