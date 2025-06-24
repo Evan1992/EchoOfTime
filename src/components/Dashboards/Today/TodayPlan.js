@@ -239,6 +239,9 @@ const TodayPlan = (props) => {
                 id: props.today_plan.id,
             })
         )
+        if (props.isTimerActive === true) {
+            props.setIsTimerActive(false);
+        }
         props.set_plan_deleted(true);
     }
 
