@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 /* ========== import React components ========== */
 import InlineEdit from '../../UI/InlineEdit';
 import DailyPlans from '../DailyPlans/DailyPlans';
+import ShortTermPlanContent from './ShortTermPlanContent';
 
 /* ========== import other libraries ========== */
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
@@ -43,7 +44,7 @@ const ShortTermPlan = () => {
                     <h3>Sprint</h3>
                     <button onClick={archivePlanHandler}>Done</button>
                 </div>
-                <InlineEdit
+                <ShortTermPlanContent
                     inputTitle={plan.short_term_plan.title}
                     inputDescription={plan.short_term_plan.description}
                     postPlan={addShortTermPlanHandler}
