@@ -4,6 +4,12 @@
 
 .submit_button {
     padding-left: 0.5rem;
+    cursor: pointer;
+    font: inherit;
+}
+
+.submit_button:hover {
+    filter: opacity(0.6);
 }
 
 .input_form input:hover,
