@@ -40,9 +40,10 @@ const ShortTermPlan = () => {
         <React.Fragment>
             {/* Show short_term_plan */}
             <section className={classes.card}>
-                <div>
+                <div className={classes.header}>
                     <h3>Sprint</h3>
-                    <button onClick={archivePlanHandler}>Done</button>
+                    <div className={classes.edit}>Edit</div>
+                    <div className={classes.done} onClick={archivePlanHandler}>Done</div>
                 </div>
                 <ShortTermPlanContent
                     inputTitle={plan.short_term_plan.title}
