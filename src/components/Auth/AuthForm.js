@@ -81,10 +81,10 @@ const AuthForm = (props) => {
                 <div className={classes.control}>
                     <label htmlFor='email'>Your email</label>
                     <input 
-                        type='email' 
-                        id='email' 
-                        required 
-                        ref={emailInputRef} 
+                        type='email'
+                        id='email'
+                        required
+                        ref={emailInputRef}
                     />
                 </div>
                 <div className={classes.control}>
@@ -100,8 +100,8 @@ const AuthForm = (props) => {
                 <div className={classes.actions}>
                     {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
                     { isLoading && <p>Sending request...</p> }
-                    <button 
-                        type='button' 
+                    <button
+                        type='button'
                         className={classes.toggle}
                         onClick={switchAuthModeHandler}
                     >
