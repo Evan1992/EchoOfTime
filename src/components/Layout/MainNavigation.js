@@ -43,6 +43,14 @@ const MainNavigation = () => {
           <ul>
             <li>
               <Link
+                to='/overview'
+                className={activeTab === '/overview' ? classes.active : ''}
+                onClick={() => handleLinkClick('/overview')}>
+                Overview
+              </Link>
+            </li>
+            <li>
+              <Link
                 to='/today'
                 className={activeTab === '/today' ? classes.active : ''}
                 onClick={() => handleLinkClick('/today')}>
@@ -55,14 +63,6 @@ const MainNavigation = () => {
                 className={activeTab === '/backlog' ? classes.active : ''}
                 onClick={() => handleLinkClick('/backlog')}>
                 Backlog
-              </Link>
-            </li>
-            <li>
-              <Link
-                to='/overview'
-                className={activeTab === '/overview' ? classes.active : ''}
-                onClick={() => handleLinkClick('/overview')}>
-                Overview
               </Link>
             </li>
           </ul>
