@@ -54,6 +54,7 @@ const InlineEdit = (props) => {
             <div className={classes.inline_edit}>
                 <input className={classes.input_title}
                     type = "text"
+                    placeholder = "Title"
                     aria-label = "Title"
                     value = {inputTitle}
                     onChange = {titleChangeHandler}
@@ -64,6 +65,7 @@ const InlineEdit = (props) => {
             <div className={classes.inline_edit}>
                 <textarea className={classes.input_description}
                     type = "text"
+                    placeholder = "Details (Markdown supported)"
                     aria-label = "Description"
                     value = {inputDescription}
                     onFocus={onFocus}
