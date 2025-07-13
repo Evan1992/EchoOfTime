@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-/* ========== import react components ========== */
-// import Backdrop from './Backdrop';
+import ReactMarkdown from 'react-markdown';
 
 /* ========== import css ========== */
 import classes from './ShortTermPlanContent.module.css';
@@ -10,7 +8,6 @@ const ShortTermPlanContent = (props) => {
     const [initialLoading, setInitialLoading] = useState(true);
     const [inputTitle, setInputTitle] = useState(props.inputTitle);
     const [inputDescription, setInputDescription] = useState(props.inputDescription);
-
     useEffect(() => {
         if(initialLoading === false) {
             setInputTitle(props.inputTitle);
@@ -83,7 +80,10 @@ const ShortTermPlanContent = (props) => {
                     </div>
                 </form>
             ) : (
-                <div>Existing Sprint</div>
+                <React.Fragment>
+                    <h4>{inputTitle}</h4>
+                    <ReactMarkdown>{inputDescription}</ReactMarkdown>
+                </React.Fragment>
             )}
         </React.Fragment>
     )

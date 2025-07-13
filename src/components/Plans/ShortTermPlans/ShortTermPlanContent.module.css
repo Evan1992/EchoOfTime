@@ -31,3 +31,8 @@
     font-weight: bold;
     font-size:large;
 }
+
+/* Pure text in react-markdown is transformed to html <p> element */
+p {
+    margin: 0;
+}
