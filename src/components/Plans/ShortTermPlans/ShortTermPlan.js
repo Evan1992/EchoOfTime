@@ -41,8 +41,13 @@ const ShortTermPlan = () => {
             <section className={classes.card}>
                 <div className={classes.header}>
                     <h3>Sprint</h3>
-                    <div className={classes.edit}>Edit</div>
-                    <div className={classes.done} onClick={archivePlanHandler}>Done</div>
+                    {plan.short_term_plan.title.trim() !== "" && (
+                        <React.Fragment>
+                            <div className={classes.edit}>Edit</div>
+                            <div className={classes.done} onClick={archivePlanHandler}>Done</div>
+                        </React.Fragment>
+                    )}
+
                 </div>
                 <ShortTermPlanContent
                     inputTitle={plan.short_term_plan.title}
