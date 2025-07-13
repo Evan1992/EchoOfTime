@@ -52,34 +52,39 @@ const ShortTermPlanContent = (props) => {
 
     return (
         <React.Fragment >
-            <form onSubmit={onSubmit}>
-                <div className={classes.input_form}>
-                    <input className={classes.input_title}
-                        type = "text"
-                        placeholder = "Title"
-                        aria-label = "Title"
-                        value = {inputTitle}
-                        onFocus={onFocus}
-                        onChange = {titleChangeHandler}
-                        onKeyDown={onKeyDown}
-                    />
-                </div>
-                <div className={classes.input_form}>
-                    <textarea className={classes.input_description}
-                        type = "text"
-                        placeholder = "Details (Markdown supported)"
-                        aria-label = "Description"
-                        value = {inputDescription}
-                        onFocus={onFocus}
-                        onChange = {descriptionChangeHandler}
-                        onInput = {onInput}
-                    />
-                </div>
-                <div className={classes.submit_button}>
-                    <button>Submit</button>
-                </div>
-            </form>
-
+            {props.inputTitle.trim() === "" ? (
+                <form onSubmit={onSubmit}>
+                    <div className={classes.input_form}>
+                        <input className={classes.input_title}
+                            type = "text"
+                            required
+                            placeholder = "Title"
+                            aria-label = "Title"
+                            value = {inputTitle}
+                            onFocus={onFocus}
+                            onChange = {titleChangeHandler}
+                            onKeyDown={onKeyDown}
+                        />
+                    </div>
+                    <div className={classes.input_form}>
+                        <textarea className={classes.input_description}
+                            type = "text"
+                            required
+                            placeholder = "Details (Markdown supported)"
+                            aria-label = "Description"
+                            value = {inputDescription}
+                            onFocus={onFocus}
+                            onChange = {descriptionChangeHandler}
+                            onInput = {onInput}
+                        />
+                    </div>
+                    <div className={classes.submit_button}>
+                        <button>Submit</button>
+                    </div>
+                </form>
+            ) : (
+                <div>Existing Sprint</div>
+            )}
         </React.Fragment>
     )
 }

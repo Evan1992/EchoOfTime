@@ -3,7 +3,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
-import InlineEdit from '../../UI/InlineEdit';
 import DailyPlans from '../DailyPlans/DailyPlans';
 import ShortTermPlanContent from './ShortTermPlanContent';
 
