@@ -49,7 +49,7 @@ const ShortTermPlanContent = (props) => {
 
     return (
         <React.Fragment >
-            {props.inputTitle.trim() === "" ? (
+            {props.inputTitle.trim() === "" || props.isEditing === true ? (
                 <form onSubmit={onSubmit}>
                     <div className={classes.input_form}>
                         <input className={classes.input_title}

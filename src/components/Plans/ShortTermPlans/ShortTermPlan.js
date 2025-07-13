@@ -1,5 +1,5 @@
 /* ========== import React and React hooks ========== */
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
@@ -13,6 +13,7 @@ import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import classes from './ShortTermPlan.module.css';
 
 const ShortTermPlan = () => {
+    const [isEditing, setIsEditing] = useState(false);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
     const daily_plans = (plan.short_term_plan.daily_plans !== undefined) ? plan.short_term_plan.daily_plans : [];
@@ -29,6 +30,11 @@ const ShortTermPlan = () => {
                 daily_plans: daily_plans
             }
         }))
+        editPlanHandler(); // Close the edit mode after posting the plan
+    }
+
+    const editPlanHandler = () => {
+        setIsEditing(!isEditing);
     }
 
     const archivePlanHandler = () => {
@@ -43,7 +49,7 @@ const ShortTermPlan = () => {
                     <h3>Sprint</h3>
                     {plan.short_term_plan.title.trim() !== "" && (
                         <React.Fragment>
-                            <div className={classes.edit}>Edit</div>
+                            <div className={classes.edit} onClick={editPlanHandler}>Edit</div>
                             <div className={classes.done} onClick={archivePlanHandler}>Done</div>
                         </React.Fragment>
                     )}
@@ -52,6 +58,7 @@ const ShortTermPlan = () => {
                 <ShortTermPlanContent
                     inputTitle={plan.short_term_plan.title}
                     inputDescription={plan.short_term_plan.description}
+                    isEditing={isEditing}
                     postPlan={addShortTermPlanHandler}
                 />
             </section>
