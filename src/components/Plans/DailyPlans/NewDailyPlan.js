@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isToday } from '../../../utilities';
 import { updateToday } from '../../../store/slices/active-plan-actions';
 import { sendDailyPlanData } from '../../../store/slices/active-plan-actions';
+import { sendDailyPlanDataToBacklog } from '../../../store/slices/backlog-plan-actions';
 
 /* ========== import React components ========== */
 import NewDailyPlanForm from './NewDailyPlanForm';
@@ -19,20 +20,24 @@ const NewDailyPlan = (props) => {
     const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
     const plan = useSelector((state) => state.activePlan);
+    const backlogPlan = useSelector((state) => state.backlogPlan);
     const [showForm, setShowForm] = useState(false);
     const [isAddNewPlan, setIsAddNewPlan] = useState(false);
 
     useEffect(() => {
         if(isAddNewPlan) {
-            dispatch(sendDailyPlanData(authCtx, plan));
+            if (props.isBacklog) {
+                dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
+            } else {
+                dispatch(sendDailyPlanData(authCtx, plan));
 
-            if (props.date !== undefined && isToday(props.date)) {
-                dispatch(updateToday(authCtx,
-                    plan.today.date,
-                    plan.today.today_plans,
-                    plan.today.used_time))
+                if (props.date !== undefined && isToday(props.date)) {
+                    dispatch(updateToday(authCtx,
+                        plan.today.date,
+                        plan.today.today_plans,
+                        plan.today.used_time))
+                }
             }
-
             setIsAddNewPlan(false);
         }
     }, [dispatch, props.date, authCtx, plan, isAddNewPlan])
@@ -56,6 +61,7 @@ const NewDailyPlan = (props) => {
                         date={props.date}
                         formToggler={formToggleHandler}
                         setIsAddNewPlan={setIsAddNewPlan}
+                        isBacklog={props.isBacklog}
                     />
                 </Col>
             }

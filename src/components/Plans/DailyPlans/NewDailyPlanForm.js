@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 
 /* ========== import other libraries ========== */
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
+import { backlogPlanActions } from '../../../store/slices/backlog-plan-slice';
 
 /* ========== import react components ========== */
 import Backdrop from '../../UI/Backdrop';
@@ -34,12 +35,22 @@ const NewDailyPlanForm = (props) => {
             show_plan: true,
             completed: false
         }
-        dispatch(
-            activePlanActions.addDailyPlan({
-                daily_plan:newDailyPlan,
-                parent_id: props.parent_id
-            })
-        );
+
+        if (props.isBacklog) {
+            dispatch(
+                backlogPlanActions.addDailyPlan({
+                    daily_plan: newDailyPlan,
+                    parent_id: props.parent_id
+                })
+            );
+        } else {
+            dispatch(
+                activePlanActions.addDailyPlan({
+                    daily_plan:newDailyPlan,
+                    parent_id: props.parent_id
+                })
+            );
+        }
 
         props.setIsAddNewPlan(true);
         props.formToggler();   // Hide the form after add a new plan

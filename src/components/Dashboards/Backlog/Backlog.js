@@ -12,8 +12,9 @@ import TomorrowPreview from './TomorrowPreview';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { isTomorrow } from '../../../utilities';
-import { sendPlanData, fetchPlanData } from '../../../store/slices/active-plan-actions';
+// import { isTomorrow } from '../../../utilities';
+// import { sendPlanData } from '../../../store/slices/active-plan-actions';
+import { fetchPlanData } from '../../../store/slices/backlog-plan-actions';
 
 /* ========== import css ========== */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,13 +23,14 @@ import classes from './Backlog.module.css';
 
 const Backlog = () => {
     const authCtx = useContext(AuthContext);
+    const [fetched, setFetched] = useState(false);
     const [planDeleted, setPlanDeleted] = useState(false);
     // Only one timer for a task can be active at a time
     const [isTimerActive, setIsTimerActive] = useState(false);
     const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
     const dispatch = useDispatch();
-    const plan = useSelector((state) => state.activePlan);
+    const backlog = useSelector((state) => state.backlogPlan);
 
     const tomorrowPlans = []
     if(plan.short_term_plan.daily_plans !== undefined) {
@@ -41,11 +43,12 @@ const Backlog = () => {
 
     // Get the data from database as soon as user visit Backlog page
     useEffect(() => {
-        // Check if the plan is already fetched
-        if (plan.title === "") {
+        // Check if the backlog is already fetched
+        if (!fetched) {
+            setFetched(true);
             dispatch(fetchPlanData(authCtx));
         }
-    }, [plan, authCtx, dispatch])
+    }, [fetched, authCtx, dispatch])
 
     useEffect(() => {
         if(planDeleted === true) {
@@ -62,11 +65,11 @@ const Backlog = () => {
             <div className={classes.plans}>
                 <Container>
                     {
-                        plan.short_term_plan.daily_plans &&
-                        plan.short_term_plan.daily_plans.map((dailyPlan, index) => {
+                        backlog.daily_plans &&
+                        backlog.daily_plans.map((dailyPlan, index) => {
                             let show_children = false;
                             if(dailyPlan.has_children) {
-                                if(index+1 < plan.short_term_plan.daily_plans.length && plan.short_term_plan.daily_plans[index+1].show_plan) {
+                                if(index+1 < backlog.daily_plans.length && backlog.daily_plans[index+1].show_plan) {
                                     show_children = true;
                                 }
                             }
@@ -74,7 +77,8 @@ const Backlog = () => {
                                 return <DailyPlan
                                     key={dailyPlan.id}
                                     id={dailyPlan.id}
-                                    plan={plan}
+                                    plan={backlog}
+                                    isBacklog={true}
                                     daily_plan={dailyPlan}
                                     rank={dailyPlan.rank}
                                     show_children={show_children}
@@ -92,7 +96,9 @@ const Backlog = () => {
                     }
                     <Row>
                         <Col xs={2} />
-                        <NewDailyPlan />
+                        <NewDailyPlan
+                            isBacklog={true}
+                        />
                     </Row>
 
                     {/* Separation between backlog plans and TomorrowPreview */}
