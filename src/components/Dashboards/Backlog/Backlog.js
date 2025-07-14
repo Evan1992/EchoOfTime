@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import NewDailyPlan from '../../Plans/DailyPlans/NewDailyPlan';
 import DailyPlan from '../../Plans/DailyPlans/DailyPlan';
 import AuthContext from '../../../store/auth-context';
-import TomorrowPreview from './TomorrowPreview';
+// import TomorrowPreview from './TomorrowPreview';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
@@ -32,14 +32,14 @@ const Backlog = () => {
     const dispatch = useDispatch();
     const backlog = useSelector((state) => state.backlogPlan);
 
-    const tomorrowPlans = []
-    if(plan.short_term_plan.daily_plans !== undefined) {
-        for(const daily_plan of plan.short_term_plan.daily_plans) {
-            if(isTomorrow(daily_plan.date)) {
-                tomorrowPlans.push(daily_plan)
-            }
-        }
-    }
+    // const tomorrowPlans = []
+    // if(plan.short_term_plan.daily_plans !== undefined) {
+    //     for(const daily_plan of plan.short_term_plan.daily_plans) {
+    //         if(isTomorrow(daily_plan.date)) {
+    //             tomorrowPlans.push(daily_plan)
+    //         }
+    //     }
+    // }
 
     // Get the data from database as soon as user visit Backlog page
     useEffect(() => {
@@ -50,14 +50,14 @@ const Backlog = () => {
         }
     }, [fetched, authCtx, dispatch])
 
-    useEffect(() => {
-        if(planDeleted === true) {
-            // No need to do sendDailyPlanData as sendPlanData will update the parent object
-            // dispatch(sendDailyPlanData(authCtx, plan))
-            dispatch(sendPlanData(authCtx, plan))
-            setPlanDeleted(false);
-        }
-    }, [dispatch, authCtx, plan, planDeleted])
+    // useEffect(() => {
+    //     if(planDeleted === true) {
+    //         // No need to do sendDailyPlanData as sendPlanData will update the parent object
+    //         // dispatch(sendDailyPlanData(authCtx, plan))
+    //         dispatch(sendPlanData(authCtx, plan))
+    //         setPlanDeleted(false);
+    //     }
+    // }, [dispatch, authCtx, plan, planDeleted])
 
     return (
         <React.Fragment>
@@ -104,7 +104,7 @@ const Backlog = () => {
                     {/* Separation between backlog plans and TomorrowPreview */}
                     <div style={{height: "25px"}} />
 
-                    <TomorrowPreview tomorrow_plans={tomorrowPlans} />
+                    {/* <TomorrowPreview tomorrow_plans={tomorrowPlans} /> */}
                 </Container>
             </div>
         </React.Fragment>
