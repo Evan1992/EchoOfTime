@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import activePlanSlice from './active-plan-slice';
+import backlogPlanSlice from './backlog-plan-slice';
 import focusTimerSlice from './focus-timer-slice';
 
 const store = configureStore({
     reducer: {
         activePlan: activePlanSlice.reducer,
+        backlogPlan: backlogPlanSlice.reducer,
         focusTimer: focusTimerSlice.reducer
     }
 })
