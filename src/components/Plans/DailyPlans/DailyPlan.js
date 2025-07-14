@@ -343,6 +343,7 @@ const DailyPlan = (props) => {
                                     rank={props.rank+1}
                                     formToggler={formToggleHandler}
                                     setIsAddNewPlan={setIsAddNewPlan}
+                                    isBacklog={props.isBacklog}
                                 />
                             </Col>
                         </Row>
