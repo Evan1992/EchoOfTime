@@ -274,9 +274,11 @@ const activePlanSlice = createSlice({
                     daily_plan.show_plan = true;
                 }
             }
-            for (const today_plan of state.today.today_plans) {
-                if (today_plan.parent_id === action.payload.id) {
-                    today_plan.show_plan = true;
+            if (state.today && state.today.today_plans) {
+                for (const today_plan of state.today.today_plans) {
+                    if (today_plan.parent_id === action.payload.id) {
+                        today_plan.show_plan = true;
+                    }
                 }
             }
         },
@@ -290,14 +292,17 @@ const activePlanSlice = createSlice({
                     }
                 }
             }
-            for (const today_plan of state.today.today_plans) {
-                if (parent_ids.has(today_plan.parent_id)) {
-                    today_plan.show_plan = false;
-                    if (today_plan.has_children === true) {
-                        parent_ids.add(today_plan.id);
+            if (state.today && state.today.today_plans) {
+                for (const today_plan of state.today.today_plans) {
+                    if (parent_ids.has(today_plan.parent_id)) {
+                        today_plan.show_plan = false;
+                        if (today_plan.has_children === true) {
+                            parent_ids.add(today_plan.id);
+                        }
                     }
                 }
             }
+
         },
         setExpectedHours(state, action) {
             for (const daily_plan of state.short_term_plan.daily_plans) {
