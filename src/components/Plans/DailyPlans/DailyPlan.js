@@ -13,7 +13,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
+import { backlogPlanActions } from '../../../store/slices/backlog-plan-slice';
 import { sendDailyPlanData, updateToday } from '../../../store/slices/active-plan-actions';
+import { sendDailyPlanDataToBacklog } from '../../../store/slices/backlog-plan-actions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { isToday } from '../../../utilities';
@@ -26,6 +28,7 @@ const DailyPlan = (props) => {
     const authCtx = useContext(AuthContext);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
+    const backlogPlan = useSelector((state) => state.backlogPlan);
     const [dailyPlanChanged, setDailyPlanChanged] = useState(false);
     const [seconds, setSeconds] = useState(props.daily_plan.seconds);
     const [showForm, setShowForm] = useState(false);
@@ -42,21 +45,29 @@ const DailyPlan = (props) => {
 
     useEffect(() => {
         if(dailyPlanChanged === true) {
-            dispatch(sendDailyPlanData(authCtx, props.plan))
-            dispatch(updateToday(authCtx,
-                props.plan.today.date,
-                props.plan.today.today_plans,
-                props.plan.today.used_time))
+            if (props.isBacklog) {
+                dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
+            } else {
+                dispatch(sendDailyPlanData(authCtx, props.plan))
+                dispatch(updateToday(authCtx,
+                    props.plan.today.date,
+                    props.plan.today.today_plans,
+                    props.plan.today.used_time))
+            }
             setDailyPlanChanged(false);
         }
-    }, [dispatch, authCtx, props.plan, dailyPlanChanged])
+    }, [dispatch, authCtx, props.isBacklog, props.plan, backlogPlan, dailyPlanChanged])
 
     useEffect(() => {
         if(isAddNewPlan) {
-            dispatch(sendDailyPlanData(authCtx, plan));
+            if (props.isBacklog) {
+                dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
+            } else {
+                dispatch(sendDailyPlanData(authCtx, plan));
+            }
             setIsAddNewPlan(false);
         }
-    }, [dispatch, authCtx, plan, isAddNewPlan])
+    }, [dispatch, authCtx, props.isBacklog, plan, backlogPlan, isAddNewPlan])
 
     const formToggleHandler = () => {
         setShowForm(!showForm);
@@ -79,22 +90,42 @@ const DailyPlan = (props) => {
     }
 
     const expectedHoursChangeHandler = (event) => {
-        dispatch(
-            activePlanActions.setExpectedHours({
-                id: props.id,
-                hours:event.target.value
-            })
-        )
+        if (props.isBacklog) {
+            dispatch(
+                backlogPlanActions.setExpectedHours({
+                    id: props.id,
+                    hours: event.target.value
+                })
+            )
+        } else {
+            dispatch(
+                activePlanActions.setExpectedHours({
+                    id: props.id,
+                    hours:event.target.value
+                })
+            )
+        }
+
         setDailyPlanChanged(true);
     }
 
     const expectedMinutesChangeHandler = (event) => {
-        dispatch(
-            activePlanActions.setExpectedMinutes({
-                id: props.id,
-                minutes:event.target.value
-            })
-        )
+        if (props.isBacklog) {
+            dispatch(
+                backlogPlanActions.setExpectedMinutes({
+                    id: props.id,
+                    minutes: event.target.value
+                })
+            )
+        } else {
+            dispatch(
+                activePlanActions.setExpectedMinutes({
+                    id: props.id,
+                    minutes:event.target.value
+                })
+            )
+        }
+
         setDailyPlanChanged(true);
     }
 
@@ -124,12 +155,22 @@ const DailyPlan = (props) => {
 
         setDate(_date => dateToSet);
         // Update the plan with the date.
-        dispatch(
-            activePlanActions.setDate({
-                id:props.id,
-                date:dateToSet
-            })
-        )
+        if (props.isBacklog) {
+            dispatch(
+                backlogPlanActions.setDate({
+                    id:props.id,
+                    date:dateToSet
+                })
+            )
+        } else {
+            dispatch(
+                activePlanActions.setDate({
+                    id:props.id,
+                    date:dateToSet
+                })
+            )
+        }
+
         setDailyPlanChanged(true);
     }
 
@@ -196,13 +237,24 @@ const DailyPlan = (props) => {
         }
         if(props.isTimerActive === true && props.timerHolder === props.id) {
             // Update both current plan and its parent plans
-            dispatch(
-                activePlanActions.updateTime({
-                    id: props.id,
-                    seconds:seconds,
-                    new_seconds: seconds-props.daily_plan.seconds
-                })
-            )
+            if (props.isBacklog) {
+                dispatch(
+                    backlogPlanActions.updateTime({
+                        id: props.id,
+                        seconds: seconds,
+                        new_seconds: seconds-props.daily_plan.seconds
+                    })
+                )
+            } else {
+                dispatch(
+                    activePlanActions.updateTime({
+                        id: props.id,
+                        seconds:seconds,
+                        new_seconds: seconds-props.daily_plan.seconds
+                    })
+                )
+            }
+
             // Upload the latest time to database after stopping the timer
             setDailyPlanChanged(true);
             props.setIsTimerActive(false);
@@ -233,18 +285,27 @@ const DailyPlan = (props) => {
     }
 
     const checkPlanHandler = () => {
-        dispatch(
-            activePlanActions.checkDailyPlan({
-                id: props.id,
-                parent_id: props.daily_plan.parent_id
-            })
-        )
-        if (isToday(props.daily_plan.date)) {
+        if (props.isBacklog) {
             dispatch(
-                activePlanActions.checkTodayPlan({
+                backlogPlanActions.deleteDailyPlan({
                     id: props.id,
+                    parent_id: props.daily_plan.parent_id
                 })
             )
+        } else {
+            dispatch(
+                activePlanActions.checkDailyPlan({
+                    id: props.id,
+                    parent_id: props.daily_plan.parent_id
+                })
+            )
+            if (isToday(props.daily_plan.date)) {
+                dispatch(
+                    activePlanActions.checkTodayPlan({
+                        id: props.id,
+                    })
+                )
+            }
         }
         props.set_plan_deleted(true);
     }
