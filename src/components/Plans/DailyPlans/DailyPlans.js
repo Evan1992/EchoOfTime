@@ -5,9 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 /* ========== import React components ========== */
 import NewDailyPlan from './NewDailyPlan';
 import DailyPlan from './DailyPlan';
-import TodayPlans from '../TodayPlans/TodayPlans';
-import TodayPlanSummary from '../TodayPlans/TodayPlanSummary';
-import Focus from '../../Focus/Focus';
+import TomorrowPreview from '../TomorrowPlans/TomorrowPreview';
 import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
@@ -18,7 +16,6 @@ import { sendPlanData } from '../../../store/slices/active-plan-actions';
 /* ========== import css ========== */
 import 'bootstrap/dist/css/bootstrap.min.css';
 import classes from './DailyPlans.module.css';
-import TomorrowPlanSummary from '../TomorrowPlans/TomorrowPlanSummary';
 
 
 const DailyPlans = () => {
@@ -87,29 +84,10 @@ const DailyPlans = () => {
                 </Container>
             </div>
 
-            {/* Component for plans of today */}
-            <div>
-                <TodayPlans
-                    today_plans={plan.today.today_plans}
-                />
-            </div>
-
-            <TodayPlanSummary
-                today_plans={plan.today.today_plans}
-                used_time={plan.today.used_time}
-            />
-
-            {/* Separation between TodayPlanSummary and TomorrowPlanSummary */}
+            {/* Separation between TodayPlanSummary and TomorrowPreview */}
             <div style={{height: "25px"}} />
 
-            <TomorrowPlanSummary
-                tomorrow_plans={tomorrowPlans}
-            />
-
-            {/* Separation between TomorrowPlanSummary and Focus */}
-            <div style={{height: "25px"}} />
-
-            <Focus />
+            <TomorrowPreview tomorrow_plans={tomorrowPlans} />
         </React.Fragment>
     )
 }
