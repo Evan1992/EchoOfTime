@@ -11,7 +11,7 @@ import AuthContext from '../../../store/auth-context';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { fetchPlanData } from '../../../store/slices/backlog-plan-actions';
+import { fetchPlanData, sendDailyPlanDataToBacklog } from '../../../store/slices/backlog-plan-actions';
 
 /* ========== import css ========== */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -38,14 +38,14 @@ const Backlog = () => {
         }
     }, [fetched, authCtx, dispatch])
 
-    // useEffect(() => {
-    //     if(planDeleted === true) {
-    //         // No need to do sendDailyPlanData as sendPlanData will update the parent object
-    //         // dispatch(sendDailyPlanData(authCtx, plan))
-    //         dispatch(sendPlanData(authCtx, plan))
-    //         setPlanDeleted(false);
-    //     }
-    // }, [dispatch, authCtx, plan, planDeleted])
+    useEffect(() => {
+        if(planDeleted === true) {
+            // No need to do sendDailyPlanData as sendPlanData will update the parent object
+            // dispatch(sendDailyPlanData(authCtx, plan))
+            dispatch(sendDailyPlanDataToBacklog(authCtx, backlog))
+            setPlanDeleted(false);
+        }
+    }, [dispatch, authCtx, backlog, planDeleted])
 
     return (
         <React.Fragment>
