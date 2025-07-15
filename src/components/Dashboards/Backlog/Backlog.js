@@ -6,14 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import NewDailyPlan from '../../Plans/DailyPlans/NewDailyPlan';
 import DailyPlan from '../../Plans/DailyPlans/DailyPlan';
 import AuthContext from '../../../store/auth-context';
-// import TomorrowPreview from './TomorrowPreview';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-// import { isTomorrow } from '../../../utilities';
-// import { sendPlanData } from '../../../store/slices/active-plan-actions';
 import { fetchPlanData } from '../../../store/slices/backlog-plan-actions';
 
 /* ========== import css ========== */
@@ -31,15 +28,6 @@ const Backlog = () => {
     const [highlight, setHighlight] = useState(null);
     const dispatch = useDispatch();
     const backlog = useSelector((state) => state.backlogPlan);
-
-    // const tomorrowPlans = []
-    // if(plan.short_term_plan.daily_plans !== undefined) {
-    //     for(const daily_plan of plan.short_term_plan.daily_plans) {
-    //         if(isTomorrow(daily_plan.date)) {
-    //             tomorrowPlans.push(daily_plan)
-    //         }
-    //     }
-    // }
 
     // Get the data from database as soon as user visit Backlog page
     useEffect(() => {
@@ -100,11 +88,6 @@ const Backlog = () => {
                             isBacklog={true}
                         />
                     </Row>
-
-                    {/* Separation between backlog plans and TomorrowPreview */}
-                    <div style={{height: "25px"}} />
-
-                    {/* <TomorrowPreview tomorrow_plans={tomorrowPlans} /> */}
                 </Container>
             </div>
         </React.Fragment>
