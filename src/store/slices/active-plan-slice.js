@@ -321,7 +321,6 @@ const activePlanSlice = createSlice({
                     break;
                 }
             }
-
         },
         setExpectedMinutes(state, action) {
             for (const daily_plan of state.short_term_plan.daily_plans) {
