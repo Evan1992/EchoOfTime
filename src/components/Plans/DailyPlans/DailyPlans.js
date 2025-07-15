@@ -10,6 +10,8 @@ import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
 import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { isTomorrow } from '../../../utilities';
 import { sendPlanData } from '../../../store/slices/active-plan-actions';
 
@@ -80,7 +82,10 @@ const DailyPlans = () => {
                             return <div key={dailyPlan.id} />
                         })
                     }
-                    <NewDailyPlan />
+                    <Row>
+                        <Col xs={2} />
+                        <NewDailyPlan />
+                    </Row>
                 </Container>
             </div>
 
