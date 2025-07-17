@@ -45,21 +45,18 @@ const ShortTermPlan = () => {
         <React.Fragment>
             {/* Show short_term_plan */}
             <section className={classes.card}>
-                <div className={classes.header}>
-                    <h3>Sprint</h3>
-                    {plan.short_term_plan.title.trim() !== "" && (
-                        <React.Fragment>
-                            <div className={classes.edit} onClick={editPlanHandler}>Edit</div>
-                            <div className={classes.done} onClick={archivePlanHandler}>Done</div>
-                        </React.Fragment>
+                <div>
+                    {plan.short_term_plan.title.trim() === "" && (
+                        <h3>Sprint</h3>
                     )}
-
                 </div>
                 <ShortTermPlanContent
                     inputTitle={plan.short_term_plan.title}
                     inputDescription={plan.short_term_plan.description}
                     isEditing={isEditing}
                     postPlan={addShortTermPlanHandler}
+                    editPlanHandler={editPlanHandler}
+                    archivePlanHandler={archivePlanHandler}
                 />
             </section>
 

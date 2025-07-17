@@ -8,13 +8,6 @@
     padding: 1rem;
 }
 
-.header {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
 .card h3 {
     margin: 0;
 }
@@ -22,14 +15,4 @@
 /* Show string with new lines */
 .card div {
     white-space: pre-wrap;
-}
-
-.edit,
-.done {
-    cursor: pointer;
-}
-
-.edit:hover,
-.done:hover {
-    filter: opacity(0.6);
 }

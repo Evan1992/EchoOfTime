@@ -81,7 +81,11 @@ const ShortTermPlanContent = (props) => {
                 </form>
             ) : (
                 <React.Fragment>
-                    <h4>{inputTitle}</h4>
+                    <div className={classes.header}>
+                        <h3>{inputTitle}</h3>
+                        <div className={classes.edit} onClick={props.editPlanHandler}>Edit</div>
+                        <div className={classes.done} onClick={props.archivePlanHandler}>Done</div>
+                    </div>
                     <ReactMarkdown>{inputDescription}</ReactMarkdown>
                 </React.Fragment>
             )}
