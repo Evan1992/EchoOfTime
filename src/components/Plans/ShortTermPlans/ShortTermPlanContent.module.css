@@ -32,23 +32,6 @@
     font-size:large;
 }
 
-.header {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-.edit,
-.done {
-    cursor: pointer;
-}
-
-.edit:hover,
-.done:hover {
-    filter: opacity(0.6);
-}
-
 /* Pure text in react-markdown is transformed to html <p> element */
 p {
     margin: 0;
