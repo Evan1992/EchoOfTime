@@ -63,6 +63,9 @@ const ShortTermPlan = () => {
                 />
             </section>
 
+            {/* Separation between Sprint and DailyPlans */}
+            <div style={{height: "15px"}} />
+
             {/* Show daily_plans if short_term_plan exists */}
             {plan.short_term_plan.title &&
                 <DailyPlans />

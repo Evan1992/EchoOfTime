@@ -81,7 +81,7 @@ const ShortTermPlanContent = (props) => {
                 </form>
             ) : (
                 <React.Fragment>
-                    <h4>{inputTitle}</h4>
+                    <h5>{inputTitle}</h5>
                     <ReactMarkdown>{inputDescription}</ReactMarkdown>
                 </React.Fragment>
             )}
