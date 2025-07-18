@@ -2,7 +2,7 @@
     margin: 1rem auto;
     width: 95%;
     max-width: 50rem;
-    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0; /* light gray line */
 }
 
 .header {
