@@ -1,5 +1,5 @@
 /* ========== import React and React hooks ========== */
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 /* ========== import other libraries ========== */
@@ -8,12 +8,36 @@ import { activePlanActions } from '../../../store/slices/active-plan-slice';
 /* ========== import css ========== */
 import classes from './NewLongTermPlan.module.css';
 
-const NewLongTermPlan = () => {
+const NewLongTermPlan = (props) => {
     const dispatch = useDispatch();
-    let inputTitle = useRef();
-    let inputDescription = useRef();
+    const [inputTitle, setInputTitle] = useState(props.inputTitle);
+    const [inputDescription, setInputDescription] = useState(props.inputDescription);
 
-    const postPlanHandler = (event) => {
+    const titleChangeHandler = (event) => {
+        setInputTitle(inputTitle => event.target.value);
+    }
+
+    const descriptionChangeHandler = (event) => {
+        setInputDescription(inputDescription => event.target.value);
+    }
+
+    const onFocus = (event) => {
+        event.target.style.height = event.target.scrollHeight + "px";
+    }
+
+    const onInput = (event) => {
+        if (event.target.scrollHeight > 100) {
+            event.target.style.height = (event.target.scrollHeight - 16) + "px";
+        }
+    }
+
+    const onKeyDown = (event) => {
+        if (event.key === "Enter" || event.key === "Escape") {
+            event.target.blur();
+        }
+    }
+
+    const onSubmit = (event) => {
         event.preventDefault();
 
         const dateToday = new Date().toLocaleDateString();
@@ -22,8 +46,8 @@ const NewLongTermPlan = () => {
 
         dispatch(
             activePlanActions.addPlan({
-                title: inputTitle.current.value,
-                description: inputDescription.current.value,
+                title: inputTitle,
+                description: inputDescription,
                 date: dateTodayISO,
                 changed: true,
                 today: {
@@ -39,23 +63,40 @@ const NewLongTermPlan = () => {
                 }
             })
         )
+
+        props.editPlanHandler();
     }
 
     return (
         <section className={classes.card}>
             <h1>Marathon</h1>
-            <form onSubmit = {postPlanHandler}>
-                <div className={classes.control}>
-                    <label htmlFor='title'>Title</label>
-                    <input type="text" ref={inputTitle} required />
+            <form onSubmit = {onSubmit}>
+                <div className={classes.input_form}>
+                    <input className={classes.input_title}
+                        type = "text"
+                        required
+                        placeholder = "Title"
+                        aria-label = "Title"
+                        value = {inputTitle}
+                        onFocus={onFocus}
+                        onChange = {titleChangeHandler}
+                        onKeyDown={onKeyDown}
+                    />
+                </div>
+                <div className={classes.input_form}>
+                    <textarea className={classes.input_description}
+                        type = "text"
+                        required
+                        placeholder = "Details (Markdown supported)"
+                        aria-label = "Description"
+                        value = {inputDescription}
+                        onFocus={onFocus}
+                        onChange = {descriptionChangeHandler}
+                        onInput = {onInput}
+                    />
                 </div>
 
-                <div className={classes.control}>
-                    <label htmlFor='description'>Description</label>
-                    <textarea ref={inputDescription} rows="15" required />
-                </div>
-
-                <div className={classes.actions}>
+                <div className={classes.submit_button}>
                     <button>Submit</button>
                 </div>
             </form>

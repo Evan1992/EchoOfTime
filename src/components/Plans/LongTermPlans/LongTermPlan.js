@@ -19,6 +19,7 @@ const LongTermPlan = () => {
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
     const [fetched, setFetched] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     // Get the data from database as soon as user visit the home page
     useEffect(() => {
@@ -49,29 +50,47 @@ const LongTermPlan = () => {
         }
     }, [authCtx, dispatch, fetched, plan])
 
+    const editPlanHandler = () => {
+        setIsEditing(!isEditing);
+    }
+
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
-    const archivePlan = () => {
+    const archivePlanHandler = () => {
         dispatch(archivePlanData(authCtx, plan));
     }
 
     const showLongTermPlan = (
-        <div>
+        <React.Fragment>
             <section className={classes.card}>
-                <div>
+                <div className={classes.header}>
                     <h3>Marathon</h3>
-                    <button onClick={archivePlan}>Done</button>
+                    {plan.title.trim() !== "" && (
+                        <React.Fragment>
+                            <div className={classes.edit} onClick={editPlanHandler}>Edit</div>
+                            <div className={classes.done} onClick={archivePlanHandler}>Done</div>
+                        </React.Fragment>
+                    )}
                 </div>
                 <h5>{plan.title}</h5>
                 <div>{plan.description}</div>
             </section>
             <ShortTermPlan />
-        </div>
+        </React.Fragment>
     )
 
     return (
         <React.Fragment>
-            {plan.title === "" && <NewLongTermPlan />}
-            {plan.title !== "" && showLongTermPlan}
+            {
+                (plan.title === "" || isEditing === true) ? (
+                    <section className={classes.card}>
+                        <NewLongTermPlan
+                            inputTitle={plan.title}
+                            inputDescription={plan.description}
+                            editPlanHandler={editPlanHandler}
+                        />
+                    </section>
+                ) : showLongTermPlan
+            }
         </React.Fragment>
     )
 }

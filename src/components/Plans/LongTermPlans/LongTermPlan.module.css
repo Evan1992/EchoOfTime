@@ -1,19 +1,12 @@
 .card {
-    margin: 1rem auto; /* 1rem away on the top&bottom, auto for centering the component */
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    margin: 1rem auto;
     width: 95%;
     max-width: 50rem;
-    border-radius: 6px;
-    background-color: #f8f9fa;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0; /* light gray line */
 }
 
 .card h3 {
-    font-weight: bold;
-    /* border-bottom: 2px solid black */
-    float: left;
-    padding: 0rem 35rem 0rem 0rem;
+    margin: 0;
 }
 
 .card h5 {
@@ -23,4 +16,21 @@
 /* Show string with new lines */
 .card div {
     white-space: pre-wrap;
+}
+
+.header {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.edit,
+.done {
+    cursor: pointer;
+}
+
+.edit:hover,
+.done:hover {
+    filter: opacity(0.6);
 }
