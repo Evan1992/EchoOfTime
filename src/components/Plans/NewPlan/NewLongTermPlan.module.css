@@ -32,6 +32,11 @@
     font-size:large;
 }
 
+.input_description {
+    height: 15rem;
+    resize: vertical;
+}
+
 /* Pure text in react-markdown is transformed to html <p> element */
 p {
     margin: 0;
