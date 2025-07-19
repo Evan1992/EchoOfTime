@@ -86,13 +86,15 @@ const DailyPlans = () => {
                         <Col xs={2} />
                         <NewDailyPlan />
                     </Row>
+
+                    {/* Separation between DailyPlans and TomorrowPreview */}
+                    <div style={{height: "50px"}} />
+
+                    <Row>
+                        <TomorrowPreview tomorrow_plans={tomorrowPlans} />
+                    </Row>
                 </Container>
             </div>
-
-            {/* Separation between TodayPlanSummary and TomorrowPreview */}
-            <div style={{height: "25px"}} />
-
-            <TomorrowPreview tomorrow_plans={tomorrowPlans} />
         </React.Fragment>
     )
 }
