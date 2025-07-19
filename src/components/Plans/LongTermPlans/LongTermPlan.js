@@ -1,6 +1,7 @@
 /* ========== import React and React hooks ========== */
 import React, { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import ReactMarkdown from 'react-markdown';
 
 /* ========== import React components ========== */
 import NewLongTermPlan from '../NewPlan/NewLongTermPlan';
@@ -72,7 +73,7 @@ const LongTermPlan = () => {
                     )}
                 </div>
                 <h5>{plan.title}</h5>
-                <div>{plan.description}</div>
+                <ReactMarkdown>{plan.description}</ReactMarkdown>
             </section>
             <ShortTermPlan />
         </React.Fragment>
