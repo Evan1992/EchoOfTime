@@ -1,30 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 /* ========== import css ========== */
 import classes from './ShortTermPlanContent.module.css';
 
 const ShortTermPlanContent = (props) => {
-    const [initialLoading, setInitialLoading] = useState(true);
-    const [inputTitle, setInputTitle] = useState(props.inputTitle);
-    const [inputDescription, setInputDescription] = useState(props.inputDescription);
-    useEffect(() => {
-        if(initialLoading === false) {
-            setInputTitle(props.inputTitle);
-            setInputDescription(props.inputDescription);
-        } else {
-            setInitialLoading(false);
-        }
-    }, [props, initialLoading])
-
-    const titleChangeHandler = (event) => {
-        setInputTitle(inputTitle => event.target.value);
-    }
-
-    const descriptionChangeHandler = (event) => {
-        // Update the description
-        setInputDescription(inputDescription => event.target.value);
-    }
+    let inputTitle = useRef(props.inputTitle);
+    let inputDescription = useRef(props.inputDescription);
 
     const onFocus = (event) => {
         event.target.style.height = event.target.scrollHeight + "px";
@@ -44,7 +26,7 @@ const ShortTermPlanContent = (props) => {
 
     const onSubmit = (event) => {
         event.preventDefault();
-        props.postPlan(inputTitle, inputDescription);
+        props.postPlan(inputTitle.current.value, inputDescription.current.value);
     }
 
     return (
@@ -57,9 +39,8 @@ const ShortTermPlanContent = (props) => {
                             required
                             placeholder = "Title"
                             aria-label = "Title"
-                            value = {inputTitle}
+                            ref = {inputTitle}
                             onFocus={onFocus}
-                            onChange = {titleChangeHandler}
                             onKeyDown={onKeyDown}
                         />
                     </div>
@@ -69,9 +50,8 @@ const ShortTermPlanContent = (props) => {
                             required
                             placeholder = "Details (Markdown supported)"
                             aria-label = "Description"
-                            value = {inputDescription}
+                            ref = {inputDescription}
                             onFocus={onFocus}
-                            onChange = {descriptionChangeHandler}
                             onInput = {onInput}
                         />
                     </div>
@@ -81,8 +61,8 @@ const ShortTermPlanContent = (props) => {
                 </form>
             ) : (
                 <React.Fragment>
-                    <h5>{inputTitle}</h5>
-                    <ReactMarkdown>{inputDescription}</ReactMarkdown>
+                    <h5>{props.inputTitle}</h5>
+                    <ReactMarkdown>{props.inputDescription}</ReactMarkdown>
                 </React.Fragment>
             )}
         </React.Fragment>

@@ -1,5 +1,5 @@
 /* ========== import React and React hooks ========== */
-import React, { useState } from 'react';
+import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 /* ========== import other libraries ========== */
@@ -10,16 +10,8 @@ import classes from './NewLongTermPlan.module.css';
 
 const NewLongTermPlan = (props) => {
     const dispatch = useDispatch();
-    const [inputTitle, setInputTitle] = useState(props.inputTitle);
-    const [inputDescription, setInputDescription] = useState(props.inputDescription);
-
-    const titleChangeHandler = (event) => {
-        setInputTitle(inputTitle => event.target.value);
-    }
-
-    const descriptionChangeHandler = (event) => {
-        setInputDescription(inputDescription => event.target.value);
-    }
+    let inputTitle = useRef(props.inputTitle);
+    let inputDescription = useRef(props.inputDescription);
 
     const onFocus = (event) => {
         event.target.style.height = event.target.scrollHeight + "px";
@@ -46,8 +38,8 @@ const NewLongTermPlan = (props) => {
 
         dispatch(
             activePlanActions.addPlan({
-                title: inputTitle,
-                description: inputDescription,
+                title: inputTitle.current.value,
+                description: inputDescription.current.value,
                 date: dateTodayISO,
                 changed: true,
                 today: {
@@ -77,9 +69,8 @@ const NewLongTermPlan = (props) => {
                         required
                         placeholder = "Title"
                         aria-label = "Title"
-                        value = {inputTitle}
+                        ref = {inputTitle}
                         onFocus={onFocus}
-                        onChange = {titleChangeHandler}
                         onKeyDown={onKeyDown}
                     />
                 </div>
@@ -89,9 +80,8 @@ const NewLongTermPlan = (props) => {
                         required
                         placeholder = "Details (Markdown supported)"
                         aria-label = "Description"
-                        value = {inputDescription}
+                        ref = {inputDescription}
                         onFocus={onFocus}
-                        onChange = {descriptionChangeHandler}
                         onInput = {onInput}
                     />
                 </div>
