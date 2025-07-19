@@ -51,8 +51,8 @@ const LongTermPlan = () => {
         }
     }, [authCtx, dispatch, fetched, plan])
 
-    const editPlanHandler = () => {
-        setIsEditing(!isEditing);
+    const editPlanHandler = (isEditingValue) => {
+        setIsEditing(isEditingValue);
     }
 
     // Migrate the plan from active_plan to archived_plans while deleting the active_plan from database
@@ -67,8 +67,8 @@ const LongTermPlan = () => {
                     <h3>Marathon</h3>
                     {plan.title.trim() !== "" && (
                         <React.Fragment>
-                            <div className={classes.edit} onClick={editPlanHandler}>Edit</div>
-                            <div className={classes.done} onClick={archivePlanHandler}>Done</div>
+                            <div className={classes.edit} onClick={() => editPlanHandler(true)}>Edit</div>
+                            <div className={classes.done} onClick={() => archivePlanHandler()}>Done</div>
                         </React.Fragment>
                     )}
                 </div>

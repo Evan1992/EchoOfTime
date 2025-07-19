@@ -30,11 +30,11 @@ const ShortTermPlan = () => {
                 daily_plans: daily_plans
             }
         }))
-        editPlanHandler(); // Close the edit mode after posting the plan
+        editPlanHandler(false); // Close the edit mode after posting the plan
     }
 
-    const editPlanHandler = () => {
-        setIsEditing(!isEditing);
+    const editPlanHandler = (isEditingValue) => {
+        setIsEditing(isEditingValue);
     }
 
     const archivePlanHandler = () => {
@@ -49,8 +49,8 @@ const ShortTermPlan = () => {
                     <h3>Sprint</h3>
                     {plan.short_term_plan.title.trim() !== "" && (
                         <React.Fragment>
-                            <div className={classes.edit} onClick={editPlanHandler}>Edit</div>
-                            <div className={classes.done} onClick={archivePlanHandler}>Done</div>
+                            <div className={classes.edit} onClick={() => editPlanHandler(true)}>Edit</div>
+                            <div className={classes.done} onClick={() => archivePlanHandler()}>Done</div>
                         </React.Fragment>
                     )}
 

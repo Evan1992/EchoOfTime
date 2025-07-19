@@ -64,7 +64,7 @@ const NewLongTermPlan = (props) => {
             })
         )
 
-        props.editPlanHandler();
+        props.editPlanHandler(false);
     }
 
     return (
