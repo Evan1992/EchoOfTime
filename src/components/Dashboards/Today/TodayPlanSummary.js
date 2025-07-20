@@ -36,7 +36,7 @@ const TodayPlanSummary = (props) => {
             let hour  = (diff / 3600) >> 0;
             let minute  = ((diff % 3600) / 60) >> 0;
             const formatToTwoDigits = (n) => (n < 10 ? `0${n}` : `${n}`);
-            setSleepCountdown(`${formatToTwoDigits(hour)}:${formatToTwoDigits(minute)}`);
+            setSleepCountdown(`${formatToTwoDigits(hour)}:${formatToTwoDigits(minute)}:00`);
         };
 
         updateCountdown();
@@ -98,19 +98,19 @@ const TodayPlanSummary = (props) => {
 
             <Row>
                 <Col className={classes.first_column}>Life Support:</Col>
-                <Col>9:30</Col>
+                <Col>9:30:00</Col>
             </Row>
             <Row>
                 <Col className={classes.first_column}><div className={classes.lifeSupportDetails}>Eating:</div></Col>
-                <Col>1:00</Col>
+                <Col>1:00:00</Col>
             </Row>
             <Row>
                 <Col className={classes.first_column}><div className={classes.lifeSupportDetails}>Sleeping:</div></Col>
-                <Col>8:00</Col>
+                <Col>8:00:00</Col>
             </Row>
             <Row>
                 <Col className={classes.first_column}><div className={classes.lifeSupportDetails}>Spacing Out:</div></Col>
-                <Col>0:30</Col>
+                <Col>0:30:00</Col>
             </Row>
             <Row>
                 <Col className={classes.first_column}>Untracked Time:</Col>
