@@ -1,0 +1,9 @@
+.pie_chart_container {
+  width: 200px;
+  height: 200px;
+}
+
+.pie_chart {
+  width: 100%;
+  height: 100%;
+}

@@ -2,6 +2,9 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import classes from './TodayPlanSummary.module.css';
 
+/* ========== import React components ========== */
+import PieChart from './PieChart';
+
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -106,6 +109,16 @@ const TodayPlanSummary = (props) => {
             <Row>
                 <Col className={classes.first_column}>Untracked Time:</Col>
                 <Col>{secondsToHMS(untrackedTime)}</Col>
+            </Row>
+
+            <Row className={classes.dividing_line} />
+
+            <Row><h4>Progress Stats</h4></Row>
+            <Row className={classes.pie_chart_row}>
+                <PieChart
+                    expectedTimeToday={expectedTimeToday}
+                    remainingPlannedTime={remainingPlannedTime}
+                />
             </Row>
         </React.Fragment>
         

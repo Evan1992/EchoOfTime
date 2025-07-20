@@ -12,3 +12,7 @@
     background-color: #ccc; /* or any color you prefer */
     margin: 10px 0; /* space around the line */
 }
+
+.pie_chart_row {
+  margin-top: -20px; /* Move up the PieChart a bit */
+}
