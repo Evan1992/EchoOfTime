@@ -52,6 +52,14 @@ const MainNavigation = () => {
             </li>
             <li>
               <Link
+                to='/sprint'
+                className={activeTab === '/sprint' ? classes.active : ''}
+                onClick={() => handleLinkClick('/sprint')}>
+                Sprint
+              </Link>
+            </li>
+            <li>
+              <Link
                 to='/today'
                 className={activeTab === '/today' ? classes.active : ''}
                 onClick={() => handleLinkClick('/today')}>

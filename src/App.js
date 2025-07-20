@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /* ========== import React components ========== */
 import Layout from './components/Layout/Layout';
+import Sprint from './components/Dashboards/Sprint/Sprint';
 import TodayPlans from './components/Dashboards/Today/TodayPlans';
 import Backlog from './components/Dashboards/Backlog/Backlog';
 import LongTermPlan from './components/Plans/LongTermPlans/LongTermPlan';
@@ -31,7 +32,9 @@ const App = () => {
             {isLoggedIn && (
               <Route path='/' element={<LongTermPlan />} />
             )}
-
+            {isLoggedIn && (
+              <Route path='/sprint' element={<Sprint />} />
+            )}
             {isLoggedIn && (
               <Route path='/today' element={<TodayPlans />} />
             )}
