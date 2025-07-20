@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
-import DailyPlans from '../DailyPlans/DailyPlans';
+import Rewards from '../../Rewards/Rewards';
 import ShortTermPlanContent from './ShortTermPlanContent';
 
 /* ========== import other libraries ========== */
@@ -62,6 +62,9 @@ const ShortTermPlan = () => {
                     postPlan={addShortTermPlanHandler}
                 />
             </section>
+
+            <Rewards />
+
         </React.Fragment>   
     )
 }

@@ -1,0 +1,6 @@
+.rewards_container {
+    margin: 1rem auto;
+    width: 95%;
+    max-width: 50rem;
+    border-bottom: 1px solid #e0e0e0; /* light gray line */
+}
