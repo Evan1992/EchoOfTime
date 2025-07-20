@@ -41,3 +41,10 @@
     margin-left: 0;
 }
 
+.dividing_line {
+    width: 50%;
+    height: 1px;
+    background-color: #ccc; /* or any color you prefer */
+    margin: 10px 0; /* space around the line */
+}
+
