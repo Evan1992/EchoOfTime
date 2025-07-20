@@ -234,12 +234,10 @@ const TodayPlans = () => {
                             <Row>
                                 <Focus />
                             </Row>
-                            <Row>
-                                <TodayPlanSummary
-                                    today_plans={plan.today.today_plans}
-                                    used_time={plan.today.used_time}
-                                />
-                            </Row>
+                            <TodayPlanSummary
+                                today_plans={plan.today.today_plans}
+                                used_time={plan.today.used_time}
+                            />
                         </Container>
                     </Col>
                 </Row>

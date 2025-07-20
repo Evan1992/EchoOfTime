@@ -1,3 +1,14 @@
 .lifeSupportDetails {
     margin-left: 20px; /* or use padding-left */
 }
+
+.first_column {
+    max-width: 250px
+}
+
+.dividing_line {
+    width: 50%;
+    height: 1px;
+    background-color: #ccc; /* or any color you prefer */
+    margin: 10px 0; /* space around the line */
+}

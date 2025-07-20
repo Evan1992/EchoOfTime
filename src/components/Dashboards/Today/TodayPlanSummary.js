@@ -2,6 +2,10 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import classes from './TodayPlanSummary.module.css';
 
+/* ========== import other libraries ========== */
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 const TodayPlanSummary = (props) => {
     let expectedTimeToday = 0;
     let remainingPlannedTime = 0;
@@ -64,16 +68,45 @@ const TodayPlanSummary = (props) => {
 
     return (
         <React.Fragment>
-            <div>Total Planned Time: {secondsToHMS(expectedTimeToday)}</div>
-            <div>Remaining Planned Time: {secondsToHMS(remainingPlannedTime)}</div>
-            <div>Total Used Time: {secondsToHMS(props.used_time)}</div>
-            <div>Sleep in: <span>{sleepCountdown}</span></div>
-            <div>Life Support: 9:30
-                <div className={classes.lifeSupportDetails}>Eating: 1:00</div>
-                <div className={classes.lifeSupportDetails}>Sleeping: 8:00</div>
-                <div className={classes.lifeSupportDetails}>Spacing Out: 0:30</div>
-            </div>
-            <div>Untracked Time: {secondsToHMS(untrackedTime)}</div>
+            <Row>
+                <Col className={classes.first_column}>Total Planned Time:</Col>
+                <Col>{secondsToHMS(expectedTimeToday)}</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column}>Remaining Planned Time:</Col>
+                <Col>{secondsToHMS(remainingPlannedTime)}</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column}>Total Used Time:</Col>
+                <Col>{secondsToHMS(props.used_time)}</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column}>Sleep in:</Col>
+                <Col><span>{sleepCountdown}</span></Col>
+            </Row>
+
+            <Row className={classes.dividing_line}/>
+
+            <Row>
+                <Col className={classes.first_column}>Life Support:</Col>
+                <Col>9:30</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column}><div className={classes.lifeSupportDetails}>Eating:</div></Col>
+                <Col>1:00</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column}><div className={classes.lifeSupportDetails}>Sleeping:</div></Col>
+                <Col>8:00</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column}><div className={classes.lifeSupportDetails}>Spacing Out:</div></Col>
+                <Col>0:30</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column}>Untracked Time:</Col>
+                <Col>{secondsToHMS(untrackedTime)}</Col>
+            </Row>
         </React.Fragment>
         
     )
