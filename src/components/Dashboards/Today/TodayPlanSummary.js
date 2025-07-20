@@ -9,6 +9,12 @@ import PieChart from './PieChart';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+
+const EATING_TIME_SECONDS = 1 * 60 * 60;
+const SLEEPING_TIME_SECONDS = 8 * 60 * 60;
+const SPACING_OUT_TIME_SECONDS = 30 * 60;
+const DAY_SECONDS = 24 * 60 * 60;
+
 const TodayPlanSummary = (props) => {
     let expectedTimeToday = 0;
     let remainingPlannedTime = 0;
@@ -67,7 +73,7 @@ const TodayPlanSummary = (props) => {
         return `${hour}:${minute}:${second}`
     }
 
-    const untrackedTime = 24 * 60 * 60 - expectedTimeToday - 1 * 60 * 60 - 8 * 60 * 60 - 30 * 60; // 1 hour eating, 8 hours sleeping, 30 minutes spacing out
+    const untrackedTime = DAY_SECONDS - expectedTimeToday - EATING_TIME_SECONDS - SLEEPING_TIME_SECONDS - SPACING_OUT_TIME_SECONDS;
 
     return (
         <React.Fragment>
