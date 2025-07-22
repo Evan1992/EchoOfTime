@@ -38,7 +38,7 @@ const PieChart = (props) => {
                 {greenEnd === 360 ? (
                     <circle cx="20" cy="20" r="16" fill="#39a721" />
                 ) : (
-                    <circle cx="20" cy="20" r="8" fill="#ededed" />
+                    <circle cx="20" cy="20" r="16" fill="#ededed" />
                 )}
                 <path
                     d={describeArc(20, 20, 16, greenStart, greenEnd)}
