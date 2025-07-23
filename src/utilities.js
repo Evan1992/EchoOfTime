@@ -44,13 +44,14 @@ const isTomorrow = (plan_date) => {
     const [year, month, day] = plan_date.split("-");
 
     const now = new Date();
-    // Only consider as tomorrow if current time is after 2:00am
-    if (now.getHours() < 2) {
-        return false;
-    }
 
-    const tomorrow = new Date();
-    tomorrow.setDate(now.getDate() + 1);
+    // If before 2:00am, treat tomorrow as today + 1 day
+    let tomorrow = new Date(now);
+    if (now.getHours() < 2) {
+        tomorrow.setDate(now.getDate());
+    } else {
+        tomorrow.setDate(now.getDate() + 1);
+    }
 
     if (
         Number(year) === tomorrow.getFullYear() &&
