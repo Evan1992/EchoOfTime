@@ -269,7 +269,7 @@ const TodayPlan = (props) => {
                         <img className={classes.plan_check_button} onClick={checkPlanHandler} src="https://img.icons8.com/ios-filled/50/null/checkmark--v1.png" alt='' />
                     )}
                 </Col>
-                <Col xs={{ span: 5 }}>
+                <Col xs={{ span: 6 }}>
                     <div style={{display:'flex', justifyContent:'left', padding: 0, paddingLeft:`calc(${props.today_plan.rank} * 20px)`}}>
                         <div className={classes.expand_collapse} onClick={childrenToggleHandler} >
                             {/* Ternary expression: render the icon conditionally based on the state show_children using ternary operator */}
@@ -288,7 +288,7 @@ const TodayPlan = (props) => {
                 </Col>
                 {/* p-0: Padding of 0 */}
                 {/* Override the css style flex: 1 0; as it's the default behavior of the react-bootstrap Col component */}
-                <Col className="p-0" style={{width: '10%', flex: '0 0 auto'}}>
+                <Col className="p-0" style={{width: '15%', flex: '0 0 auto'}}>
                     {props.today_plan.completed === false ? (
                         <div>
                             <input className={classes.input_time} type="number" ref={inputExpectedHours} onBlur={expectedHoursChangeHandler} defaultValue={props.today_plan.expected_hours} />:
@@ -301,7 +301,7 @@ const TodayPlan = (props) => {
                         </div>
                     )}
                 </Col>
-                <Col xs={1} style={{width: '5%', padding: 0}}>
+                <Col xs={1} style={{width: '6%', padding: 0}}>
                     <Timer
                         id={props.today_plan.id}
                         used_seconds={props.today_plan.seconds}
