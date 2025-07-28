@@ -288,7 +288,7 @@ const TodayPlan = (props) => {
                 </Col>
                 {/* p-0: Padding of 0 */}
                 {/* Override the css style flex: 1 0; as it's the default behavior of the react-bootstrap Col component */}
-                <Col className="p-0" style={{width: '15%', flex: '0 0 auto'}}>
+                <Col className="p-0" style={{width: '12%', flex: '0 0 auto'}}>
                     {props.today_plan.completed === false ? (
                         <div>
                             <input className={classes.input_time} type="number" ref={inputExpectedHours} onBlur={expectedHoursChangeHandler} defaultValue={props.today_plan.expected_hours} />:
@@ -311,7 +311,7 @@ const TodayPlan = (props) => {
                         timerHolder={props.timerHolder} />
                 </Col>
                 {/* Show the date of the plan */}
-                <Col style={{maxWidth: "10%"}}>
+                <Col style={{width: "12%", flex: '0 0 auto'}}>
                     {dateTransformHandler(_date)}
                 </Col>
                 {/* Calendar */}
