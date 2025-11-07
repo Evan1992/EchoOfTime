@@ -73,7 +73,7 @@ const TodayPlanSummary = (props) => {
         return `${hour}:${minute}:${second}`
     }
 
-    const untrackedTime = DAY_SECONDS - expectedTimeToday - EATING_TIME_SECONDS - SLEEPING_TIME_SECONDS - SPACING_OUT_TIME_SECONDS;
+    const untrackedTime = Math.max(0, DAY_SECONDS - expectedTimeToday - EATING_TIME_SECONDS - SLEEPING_TIME_SECONDS - SPACING_OUT_TIME_SECONDS);
 
     return (
         <React.Fragment>
