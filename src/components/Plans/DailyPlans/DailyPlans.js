@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import NewDailyPlan from './NewDailyPlan';
 import DailyPlan from './DailyPlan';
 import TomorrowPreview from '../TomorrowPlans/TomorrowPreview';
+import TodoEverydayPlans from '../TodoEverydayPlans/TodoEverydayPlans';
 import AuthContext from '../../../store/auth-context';
 
 /* ========== import other libraries ========== */
@@ -87,7 +88,14 @@ const DailyPlans = () => {
                         <NewDailyPlan />
                     </Row>
 
-                    {/* Separation between DailyPlans and TomorrowPreview */}
+                    {/* Separation between DailyPlans and TodoEverydayPlans */}
+                    <div style={{height: "50px"}} />
+
+                    <Row>
+                        <TodoEverydayPlans />
+                    </Row>
+
+                    {/* Separation between TodoEverydayPlans and TomorrowPreview */}
                     <div style={{height: "50px"}} />
 
                     <Row>
