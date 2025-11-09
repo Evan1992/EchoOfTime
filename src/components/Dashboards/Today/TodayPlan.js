@@ -33,7 +33,7 @@ const TodayPlan = (props) => {
     const [todayPlanChanged, setTodayPlanChanged] = useState(false);
 
     // keep always-fresh refs for anything needed in cleanup
-    function useLatest(value) {
+    const useLatest = (value) => {
         const ref = React.useRef(value);
         React.useEffect(() => { ref.current = value; });
         return ref;
@@ -45,9 +45,9 @@ const TodayPlan = (props) => {
     // NEW: one-time effect whose *cleanup* runs on unmount
     useEffect(() => {
         return () => {
-            const timerActiveRefCurrent = timerActiveRef.current;
-            const timerHolderRefCurrent = timerHolderRef.current;
-            const secondsRefCurrent = secondsRef.current;
+            const timerActiveRefCurrent = timerActiveRef.current; // eslint-disable-line react-hooks/exhaustive-deps
+            const timerHolderRefCurrent = timerHolderRef.current; // eslint-disable-line react-hooks/exhaustive-deps
+            const secondsRefCurrent = secondsRef.current; // eslint-disable-line react-hooks/exhaustive-deps
             if (timerActiveRefCurrent && timerHolderRefCurrent === props.today_plan.id) {
                 dispatch(
                     activePlanActions.updateTime({
@@ -65,7 +65,9 @@ const TodayPlan = (props) => {
                 props.plan.today.today_plans,
                 props.plan.today.used_time))
         };
-    }, [dispatch, authCtx, props.plan]);
+    // We intentionally want unmount-only + latest refs in cleanup.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if(todayPlanChanged === true) {
