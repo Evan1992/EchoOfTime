@@ -67,7 +67,7 @@ const TodayPlan = (props) => {
         };
     // We intentionally want unmount-only + latest refs in cleanup.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, []); // deps = [], the cleanup runs only once on unmount
 
     useEffect(() => {
         if(todayPlanChanged === true) {
@@ -427,3 +427,9 @@ export default TodayPlan
 // flex-grow: 0; The item will not grow to fill available space
 // flex-shrink: 0; The item will not shrink if there is not enough space
 // flex-basis: auto; The item's size is based on its content for width/height properties
+
+/* Unmount cleanup */
+// Refer to mix_general.md
+
+/* eslint-disable-line */
+// It suppresses the warning for the specific line where it's added.
