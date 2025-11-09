@@ -48,7 +48,7 @@ const TodayPlan = (props) => {
             const timerActiveRefCurrent = timerActiveRef.current; // eslint-disable-line react-hooks/exhaustive-deps
             const timerHolderRefCurrent = timerHolderRef.current; // eslint-disable-line react-hooks/exhaustive-deps
             const secondsRefCurrent = secondsRef.current; // eslint-disable-line react-hooks/exhaustive-deps
-            if (timerActiveRefCurrent && timerHolderRefCurrent === props.today_plan.id) {
+            if (secondsRefCurrent !== seconds && timerActiveRefCurrent && timerHolderRefCurrent === props.today_plan.id) {
                 dispatch(
                     activePlanActions.updateTime({
                         id: props.today_plan.id,
@@ -56,14 +56,14 @@ const TodayPlan = (props) => {
                         new_seconds: secondsRefCurrent - props.today_plan.seconds,
                     })
                 );
-            }
 
-            // Persist the freshest plan snapshot to backend
-            dispatch(sendDailyPlanData(authCtx, props.plan));
-            dispatch(updateToday(authCtx,
-                props.plan.today.date,
-                props.plan.today.today_plans,
-                props.plan.today.used_time))
+                // Persist the freshest plan snapshot to backend
+                dispatch(sendDailyPlanData(authCtx, props.plan));
+                dispatch(updateToday(authCtx,
+                    props.plan.today.date,
+                    props.plan.today.today_plans,
+                    props.plan.today.used_time))
+            }
         };
     // We intentionally want unmount-only + latest refs in cleanup.
     // eslint-disable-next-line react-hooks/exhaustive-deps
