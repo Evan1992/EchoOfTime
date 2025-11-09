@@ -32,6 +32,41 @@ const TodayPlan = (props) => {
     const [_date, setDate] = useState(props.today_plan.date);
     const [todayPlanChanged, setTodayPlanChanged] = useState(false);
 
+    // keep always-fresh refs for anything needed in cleanup
+    function useLatest(value) {
+        const ref = React.useRef(value);
+        React.useEffect(() => { ref.current = value; });
+        return ref;
+    }
+    const secondsRef = useLatest(seconds);
+    const timerActiveRef = useLatest(props.isTimerActive);
+    const timerHolderRef = useLatest(props.timerHolder);
+
+    // NEW: one-time effect whose *cleanup* runs on unmount
+    useEffect(() => {
+        return () => {
+            const timerActiveRefCurrent = timerActiveRef.current;
+            const timerHolderRefCurrent = timerHolderRef.current;
+            const secondsRefCurrent = secondsRef.current;
+            if (timerActiveRefCurrent && timerHolderRefCurrent === props.today_plan.id) {
+                dispatch(
+                    activePlanActions.updateTime({
+                        id: props.today_plan.id,
+                        seconds: secondsRefCurrent,
+                        new_seconds: secondsRefCurrent - props.today_plan.seconds,
+                    })
+                );
+            }
+
+            // Persist the freshest plan snapshot to backend
+            dispatch(sendDailyPlanData(authCtx, props.plan));
+            dispatch(updateToday(authCtx,
+                props.plan.today.date,
+                props.plan.today.today_plans,
+                props.plan.today.used_time))
+        };
+    }, [dispatch, authCtx, props.plan]);
+
     useEffect(() => {
         if(todayPlanChanged === true) {
             dispatch(sendDailyPlanData(authCtx, props.plan))
