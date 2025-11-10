@@ -40,7 +40,7 @@ const NewDailyPlan = (props) => {
             }
             setIsAddNewPlan(false);
         }
-    }, [dispatch, props.date, authCtx, plan, isAddNewPlan])
+    }, [dispatch, props.date, props.isBacklog, authCtx, backlogPlan, plan, isAddNewPlan])
 
     const formToggleHandler = () => {
         setShowForm(!showForm);
