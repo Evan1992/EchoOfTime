@@ -21,7 +21,9 @@ const TodoEverydayPlans = () => {
                 </Row>
                 <Row>
                     <Col xs={2} />
-                    <NewDailyPlan />
+                    <NewDailyPlan
+                        isTodoEveryPlan={true}
+                    />
                 </Row>
             </Container>
         </React.Fragment>

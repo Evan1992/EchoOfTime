@@ -10,6 +10,7 @@ const initialState = {
         description: "",
         date: null,
         daily_plans: [],
+        todo_everyday_plans: [],
         changed: false
     },
     today: {
@@ -191,6 +192,15 @@ const activePlanSlice = createSlice({
                 daily_plans: []
             };
             state.changed = true;
+        },
+        addTodoEverydayPlan(state, action) {
+            if (!state.short_term_plan.todo_everyday_plans) {
+                console.log(action.payload.todo_everyday_plan);
+                state.short_term_plan.todo_everyday_plans = [];
+                state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
+            } else {
+                // TODO
+            }
         },
         addDailyPlan(state, action) {
             if(!state.short_term_plan.daily_plans) {

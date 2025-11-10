@@ -62,6 +62,7 @@ const NewDailyPlan = (props) => {
                         formToggler={formToggleHandler}
                         setIsAddNewPlan={setIsAddNewPlan}
                         isBacklog={props.isBacklog}
+                        isTodoEveryPlan={props.isTodoEveryPlan}
                     />
                 </Col>
             }
