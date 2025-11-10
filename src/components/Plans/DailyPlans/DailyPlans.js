@@ -92,7 +92,14 @@ const DailyPlans = () => {
                     <div style={{height: "50px"}} />
 
                     <Row>
-                        <TodoEverydayPlans />
+                        <TodoEverydayPlans
+                            isTimerActive={isTimerActive}
+                            setIsTimerActive={setIsTimerActive}
+                            timerHolder={timerHolder}
+                            setTimerHolder={setTimerHolder}
+                            highlight={highlight}
+                            setHighlight={setHighlight}
+                        />
                     </Row>
 
                     {/* Separation between TodoEverydayPlans and TomorrowPreview */}
