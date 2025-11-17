@@ -270,7 +270,8 @@ export const sendDailyPlanData = (authCtx, plan) => {
                         title: plan.short_term_plan.title,
                         description: plan.short_term_plan.description,
                         date: plan.short_term_plan.date,
-                        daily_plans: plan.short_term_plan.daily_plans
+                        daily_plans: plan.short_term_plan.daily_plans,
+                        todo_everyday_plans: plan.short_term_plan.todo_everyday_plans
                     })
                 }
             )
