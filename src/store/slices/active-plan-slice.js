@@ -417,6 +417,14 @@ const activePlanSlice = createSlice({
                 }
                 parent_id = new_parent_id;
             }
+        },
+        updateTimeForTodoEverydayPlans(state, action) {
+            for (const todo_everyday_plan of state.short_term_plan.todo_everyday_plans) {
+                if (todo_everyday_plan.id === action.payload.id) {
+                    todo_everyday_plan.seconds = action.payload.seconds;
+                    break;
+                }
+            }
         }
     }
 })

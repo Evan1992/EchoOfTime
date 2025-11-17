@@ -31,6 +31,7 @@ const TodoEverydayPlans = (props) => {
                             key={dailyPlan.id}
                             id={dailyPlan.id}
                             daily_plan={dailyPlan}
+                            isTodoEveryPlan={true}
                             isTimerActive={props.isTimerActive}
                             setIsTimerActive={props.setIsTimerActive}
                             timerHolder={props.timerHolder}

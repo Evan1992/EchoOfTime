@@ -47,6 +47,8 @@ const DailyPlan = (props) => {
         if(dailyPlanChanged === true) {
             if (props.isBacklog) {
                 dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
+            } else if( props.isTodoEveryPlan) {
+                dispatch(sendDailyPlanData(authCtx, plan));
             } else {
                 dispatch(sendDailyPlanData(authCtx, props.plan))
                 dispatch(updateToday(authCtx,
@@ -243,6 +245,13 @@ const DailyPlan = (props) => {
                         id: props.id,
                         seconds: seconds,
                         new_seconds: seconds-props.daily_plan.seconds
+                    })
+                )
+            } else if (props.isTodoEveryPlan) {
+                dispatch(
+                    activePlanActions.updateTimeForTodoEverydayPlans({
+                        id: props.id,
+                        seconds: seconds
                     })
                 )
             } else {
