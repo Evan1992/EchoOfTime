@@ -194,11 +194,41 @@ const activePlanSlice = createSlice({
             state.changed = true;
         },
         addTodoEverydayPlan(state, action) {
+            console.log(action.payload.parent_id);
             if (!state.short_term_plan.todo_everyday_plans) {
                 state.short_term_plan.todo_everyday_plans = [];
                 state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
             } else {
-                // TODO
+                if (action.payload.parent_id === undefined) {
+                    // The new todo everyday plan is the root plan if action.payload.parent_id is undefined
+                    state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
+                } else {
+                    for (const [index, todo_everyday_plan] of state.short_term_plan.todo_everyday_plans.entries()) {
+                        if (todo_everyday_plan.id === action.payload.parent_id) {
+                            if (index + 1 === state.short_term_plan.todo_everyday_plans.length) {
+                                // If the parent plan is the last plan in the list, just push the new daily plan to the end
+                                state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
+                            } else {
+                                // Given the index of the parent, insert the new daily plan to the end of all the child plans of the parent
+                                const parent_ids = new Set([action.payload.parent_id]);
+                                for (let i = index+1; i < state.short_term_plan.todo_everyday_plans.length; i++) {
+                                    if(parent_ids.has(state.short_term_plan.todo_everyday_plans[i].parent_id)) {
+                                        parent_ids.add(state.short_term_plan.todo_everyday_plans[i].id)
+                                    } else {
+                                        state.short_term_plan.todo_everyday_plans = state.short_term_plan.todo_everyday_plans.toSpliced(i, 0, action.payload.todo_everyday_plan);
+                                        break;
+                                    }
+                                    if(i+1 === state.short_term_plan.todo_everyday_plans.length) {
+                                        state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
+                                        break; // if not break, we'll fall into infinite loop
+                                    }
+                                }
+                            }
+                            state.short_term_plan.todo_everyday_plans[index].has_children = true;
+                            break;
+                        }
+                    }
+                }
             }
         },
         addDailyPlan(state, action) {

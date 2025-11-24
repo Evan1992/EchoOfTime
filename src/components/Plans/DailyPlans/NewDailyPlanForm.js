@@ -46,7 +46,8 @@ const NewDailyPlanForm = (props) => {
         } else if (props.isTodoEveryPlan) {
             dispatch(
                 activePlanActions.addTodoEverydayPlan({
-                    todo_everyday_plan: newDailyPlan
+                    todo_everyday_plan: newDailyPlan,
+                    parent_id: props.parent_id
                 })
             );
         } else {
