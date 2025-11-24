@@ -63,7 +63,15 @@ const isTomorrow = (plan_date) => {
     return false;
 }
 
-export { isToday, isTomorrow };
+const getTodayDateString = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+    const day = today.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+export { isToday, isTomorrow, getTodayDateString };
 
 /* ========== Learning ========== */
 /* Export functions */

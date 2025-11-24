@@ -15,6 +15,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 import { isToday } from '../../../utilities';
 import { sendDailyPlanData, sendPlanData, updateToday, fetchPlanData, refreshToday } from '../../../store/slices/active-plan-actions';
+import { getTodayDateString } from '../../../utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
@@ -145,14 +146,6 @@ const TodayPlans = () => {
 
         return result;
     }, [plan.today.today_plans, plan.short_term_plan.daily_plans, filter, findAllParentPlans])
-
-    const getTodayDateString = () => {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
-        const day = today.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
 
     const toggleFilterOptions = () => {
         setFilterOptionsVisible((prevState) => !prevState);
