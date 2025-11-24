@@ -320,6 +320,12 @@ const activePlanSlice = createSlice({
                     }
                 }
             }
+            // Show children plans for todo everyday plan
+            for (const todo_everyday_plan of state.short_term_plan.todo_everyday_plans) {
+                if (todo_everyday_plan.parent_id === action.payload.id) {
+                    todo_everyday_plan.show_plan = true;
+                }
+            }
         },
         hideChildPlan(state, action) {
             let parent_ids = new Set([action.payload.id]);
@@ -341,7 +347,16 @@ const activePlanSlice = createSlice({
                     }
                 }
             }
-
+            // Hide children plans for todo everyday plan
+            parent_ids = new Set([action.payload.id]);
+            for (const todo_everyday_plan of state.short_term_plan.todo_everyday_plans) {
+                if (parent_ids.has(todo_everyday_plan.parent_id)) {
+                    todo_everyday_plan.show_plan = false;
+                    if (todo_everyday_plan.has_children === true) {
+                        parent_ids.add(todo_everyday_plan.id);
+                    }
+                }
+            }
         },
         setExpectedHours(state, action) {
             for (const daily_plan of state.short_term_plan.daily_plans) {
