@@ -95,8 +95,61 @@ const setDateForToday = (state, action) => {
     }
 }
 
+const addDailyPlanToList = (state, action, dailyPlans)  => {
+    if(!dailyPlans) {
+        dailyPlans = [];
+        dailyPlans.push(action.payload.daily_plan);
+    } else {
+        if (action.payload.parent_id === undefined) {
+            // The new daily plan is the root plan if action.payload.parent_id is undefined
+            dailyPlans.push(action.payload.daily_plan);
+        } else {
+            for (const [index, daily_plan] of dailyPlans.entries()) {
+                if (daily_plan.id === action.payload.parent_id) {
+                    // Set the date for action.payload.daily_plan to be same as its parent
+                    // However, for plan added from Today page, the date is already set to today
+                    if (!action.payload.daily_plan.date) {
+                        action.payload.daily_plan.date = daily_plan.date
+                    }
+
+                    if (index + 1 === dailyPlans.length) {
+                        // If the parent plan is the last plan in the list, just push the new daily plan to the end
+                        dailyPlans.push(action.payload.daily_plan);
+                    } else {
+                        // Given the index of the parent, insert the new daily plan to the end of all the child plans of the parent
+                        const parent_ids = new Set([action.payload.parent_id]);
+                        for (let i = index+1; i < dailyPlans.length; i++) {
+                            if(parent_ids.has(dailyPlans[i].parent_id)) {
+                                parent_ids.add(dailyPlans[i].id)
+                            } else {
+                                dailyPlans = dailyPlans.toSpliced(i, 0, action.payload.daily_plan);
+                                break;
+                            }
+                            if(i+1 === dailyPlans.length) {
+                                dailyPlans.push(action.payload.daily_plan);
+                                break; // if not break, we'll fall into infinite loop
+                            }
+                        }
+                    }
+                    dailyPlans[index].has_children = true;
+                    break;
+                }
+            }
+        }
+        // Add daily plan to state.today.today_plans if the plan is added from Today page
+        if (action.payload.daily_plan.date !== "" && isToday(action.payload.daily_plan.date)) {
+            if (state.today.today_plans !== undefined) {
+                state.today.today_plans.push(action.payload.daily_plan)
+            } else {
+                state.today.today_plans = [action.payload.daily_plan]
+            }
+        }
+    }
+    return dailyPlans;
+}
+
 /* Reducer function outside of createSlice() so we can reuse this function */
-const deleteDailyPlanFromArray = (action, dailyPlans = []) => {
+const deleteDailyPlanFromList = (action, dailyPlans = []) => {
     // Delete current plan and all its children plans
     const new_daily_plans = [];
     let id = action.payload.id;
@@ -193,104 +246,22 @@ const activePlanSlice = createSlice({
             };
             state.changed = true;
         },
-        addTodoEverydayPlan(state, action) {
-            if (!state.short_term_plan.todo_everyday_plans) {
-                state.short_term_plan.todo_everyday_plans = [];
-                state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
-            } else {
-                if (action.payload.parent_id === undefined) {
-                    // The new todo everyday plan is the root plan if action.payload.parent_id is undefined
-                    state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
-                } else {
-                    for (const [index, todo_everyday_plan] of state.short_term_plan.todo_everyday_plans.entries()) {
-                        if (todo_everyday_plan.id === action.payload.parent_id) {
-                            if (index + 1 === state.short_term_plan.todo_everyday_plans.length) {
-                                // If the parent plan is the last plan in the list, just push the new daily plan to the end
-                                state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
-                            } else {
-                                // Given the index of the parent, insert the new daily plan to the end of all the child plans of the parent
-                                const parent_ids = new Set([action.payload.parent_id]);
-                                for (let i = index+1; i < state.short_term_plan.todo_everyday_plans.length; i++) {
-                                    if(parent_ids.has(state.short_term_plan.todo_everyday_plans[i].parent_id)) {
-                                        parent_ids.add(state.short_term_plan.todo_everyday_plans[i].id)
-                                    } else {
-                                        state.short_term_plan.todo_everyday_plans = state.short_term_plan.todo_everyday_plans.toSpliced(i, 0, action.payload.todo_everyday_plan);
-                                        break;
-                                    }
-                                    if(i+1 === state.short_term_plan.todo_everyday_plans.length) {
-                                        state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
-                                        break; // if not break, we'll fall into infinite loop
-                                    }
-                                }
-                            }
-                            state.short_term_plan.todo_everyday_plans[index].has_children = true;
-                            break;
-                        }
-                    }
-                }
-            }
+        addDailyPlanForTodoEveryPlan(state, action) {
+            state.short_term_plan.todo_everyday_plans = addDailyPlanToList(state, action, state.short_term_plan.todo_everyday_plans);
         },
         addDailyPlan(state, action) {
-            if(!state.short_term_plan.daily_plans) {
-                state.short_term_plan.daily_plans = [];
-                state.short_term_plan.daily_plans.push(action.payload.daily_plan);
-            } else {
-                if (action.payload.parent_id === undefined) {
-                    // The new daily plan is the root plan if action.payload.parent_id is undefined
-                    state.short_term_plan.daily_plans.push(action.payload.daily_plan);
-                } else {
-                    for (const [index, daily_plan] of state.short_term_plan.daily_plans.entries()) {
-                        if (daily_plan.id === action.payload.parent_id) {
-                            // Set the date for action.payload.daily_plan to be same as its parent
-                            // However, for plan added from Today page, the date is already set to today
-                            if (!action.payload.daily_plan.date) {
-                                action.payload.daily_plan.date = daily_plan.date
-                            }
-
-                            if (index + 1 === state.short_term_plan.daily_plans.length) {
-                                // If the parent plan is the last plan in the list, just push the new daily plan to the end
-                                state.short_term_plan.daily_plans.push(action.payload.daily_plan);
-                            } else {
-                                // Given the index of the parent, insert the new daily plan to the end of all the child plans of the parent
-                                const parent_ids = new Set([action.payload.parent_id]);
-                                for (let i = index+1; i < state.short_term_plan.daily_plans.length; i++) {
-                                    if(parent_ids.has(state.short_term_plan.daily_plans[i].parent_id)) {
-                                        parent_ids.add(state.short_term_plan.daily_plans[i].id)
-                                    } else {
-                                        state.short_term_plan.daily_plans = state.short_term_plan.daily_plans.toSpliced(i, 0, action.payload.daily_plan);
-                                        break;
-                                    }
-                                    if(i+1 === state.short_term_plan.daily_plans.length) {
-                                        state.short_term_plan.daily_plans.push(action.payload.daily_plan);
-                                        break; // if not break, we'll fall into infinite loop
-                                    }
-                                }
-                            }
-                            state.short_term_plan.daily_plans[index].has_children = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // Add daily plan to state.today.today_plans if the plan is added from Today page
-            if (action.payload.daily_plan.date !== "" && isToday(action.payload.daily_plan.date)) {
-                if (state.today.today_plans !== undefined) {
-                    state.today.today_plans.push(action.payload.daily_plan)
-                } else {
-                    state.today.today_plans = [action.payload.daily_plan]
-                }
-            }
+            state.short_term_plan.daily_plans = addDailyPlanToList(state, action, state.short_term_plan.daily_plans);
         },
+
         deleteDailyPlan(state, action) {
-            state.short_term_plan.daily_plans = deleteDailyPlanFromArray(action, state.short_term_plan.daily_plans)
+            state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans)
         },
         deleteDailyPlanForTodoEveryPlan(state, action) {
-            state.short_term_plan.todo_everyday_plans = deleteDailyPlanFromArray(action, state.short_term_plan.todo_everyday_plans);
+            state.short_term_plan.todo_everyday_plans = deleteDailyPlanFromList(action, state.short_term_plan.todo_everyday_plans);
         },
         deleteTodayPlan,
         checkDailyPlan(state, action) {
-            state.short_term_plan.daily_plans = deleteDailyPlanFromArray(action, state.short_term_plan.daily_plans);
+            state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans);
         },
         checkTodayPlan(state, action) {
             // Check the plan and all its children plans
