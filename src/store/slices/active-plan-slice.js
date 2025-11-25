@@ -194,7 +194,6 @@ const activePlanSlice = createSlice({
             state.changed = true;
         },
         addTodoEverydayPlan(state, action) {
-            console.log(action.payload.parent_id);
             if (!state.short_term_plan.todo_everyday_plans) {
                 state.short_term_plan.todo_everyday_plans = [];
                 state.short_term_plan.todo_everyday_plans.push(action.payload.todo_everyday_plan);
