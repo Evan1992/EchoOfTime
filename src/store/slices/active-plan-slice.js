@@ -96,7 +96,7 @@ const setDateForToday = (state, action) => {
 }
 
 /* Reducer function outside of createSlice() so we can reuse this function */
-const deleteDailyPlan = (state, action) => {
+const deleteDailyPlanFromArray = (action, dailyPlans = []) => {
     // Delete current plan and all its children plans
     const new_daily_plans = [];
     let id = action.payload.id;
@@ -106,7 +106,7 @@ const deleteDailyPlan = (state, action) => {
     const parent_id = action.payload.parent_id;
     let has_children = false;
 
-    for(const daily_plan of state.short_term_plan.daily_plans) {
+    for(const daily_plan of dailyPlans) {
         // Not adding current plan and all its children plans to the new_daily_plans
         if(daily_plan.id !== id && !parent_ids.has(daily_plan.parent_id) ) {
             new_daily_plans.push(daily_plan);
@@ -122,7 +122,7 @@ const deleteDailyPlan = (state, action) => {
 
     // Update parent plan's has_chidlren attribute
     if(has_children === false) {
-        for(const daily_plan of state.short_term_plan.daily_plans) {
+        for(const daily_plan of dailyPlans) {
             if(daily_plan.id === parent_id) {
                 daily_plan.has_children = false;
                 break;
@@ -130,44 +130,7 @@ const deleteDailyPlan = (state, action) => {
         }
     }
 
-    state.short_term_plan.daily_plans = new_daily_plans;
-}
-
-const deleteDailyPlanForTodoEveryPlan = (state, action) => {
-    // Delete current plan and all its children plans
-    const new_daily_plans = [];
-    let id = action.payload.id;
-    const parent_ids = new Set([id])
-
-    // The two variables below are used to update current plan's parent plan's attribute has_children
-    const parent_id = action.payload.parent_id;
-    let has_children = false;
-
-    for(const daily_plan of state.short_term_plan.todo_everyday_plans) {
-        // Not adding current plan and all its children plans to the new_daily_plans
-        if(daily_plan.id !== id && !parent_ids.has(daily_plan.parent_id) ) {
-            new_daily_plans.push(daily_plan);
-        } else {
-            parent_ids.add(daily_plan.id);
-        }
-
-        // If parent plan still has children under it other than current plan
-        if(daily_plan.id !== id && parent_id !== undefined && daily_plan.parent_id === parent_id) {
-            has_children = true;
-        }
-    }
-
-    // Update parent plan's has_chidlren attribute
-    if(has_children === false) {
-        for(const daily_plan of state.short_term_plan.todo_everyday_plans) {
-            if(daily_plan.id === parent_id) {
-                daily_plan.has_children = false;
-                break;
-            }
-        }
-    }
-
-    state.short_term_plan.todo_everyday_plans = new_daily_plans;
+    return new_daily_plans;
 }
 
 const deleteTodayPlan = (state, action) => {
@@ -320,11 +283,15 @@ const activePlanSlice = createSlice({
                 }
             }
         },
-        deleteDailyPlan,
-        deleteDailyPlanForTodoEveryPlan,
+        deleteDailyPlan(state, action) {
+            state.short_term_plan.daily_plans = deleteDailyPlanFromArray(action, state.short_term_plan.daily_plans)
+        },
+        deleteDailyPlanForTodoEveryPlan(state, action) {
+            state.short_term_plan.todo_everyday_plans = deleteDailyPlanFromArray(action, state.short_term_plan.todo_everyday_plans);
+        },
         deleteTodayPlan,
         checkDailyPlan(state, action) {
-            deleteDailyPlan(state, action);
+            state.short_term_plan.daily_plans = deleteDailyPlanFromArray(action, state.short_term_plan.daily_plans);
         },
         checkTodayPlan(state, action) {
             // Check the plan and all its children plans
