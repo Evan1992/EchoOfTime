@@ -136,7 +136,7 @@ const addDailyPlanToList = (state, action, dailyPlans)  => {
                 }
             }
         }
-        // Add daily plan to state.today.today_plans if the plan is added from Today page
+        // Add daily plan to state.today.today_plans if the plan is added eithr from Today page or through Todo Everyday
         if (action.payload.daily_plan.date !== "" && isToday(action.payload.daily_plan.date)) {
             if (state.today.today_plans !== undefined) {
                 state.today.today_plans.push(action.payload.daily_plan)
