@@ -250,7 +250,7 @@ const activePlanSlice = createSlice({
             state.changed = true;
         },
         addDailyPlanForTodoEveryPlan(state, action) {
-            state.short_term_plan.todo_everyday_plans = addDailyPlanToList(state, action, state.short_term_plan.todo_everyday_plans);
+            state.short_term_plan.todo_everyday.todo_everyday_plans = addDailyPlanToList(state, action, state.short_term_plan.todo_everyday.todo_everyday_plans);
         },
         addDailyPlan(state, action) {
             state.short_term_plan.daily_plans = addDailyPlanToList(state, action, state.short_term_plan.daily_plans);
@@ -259,14 +259,14 @@ const activePlanSlice = createSlice({
             state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans)
         },
         deleteDailyPlanForTodoEveryPlan(state, action) {
-            state.short_term_plan.todo_everyday_plans = deleteDailyPlanFromList(action, state.short_term_plan.todo_everyday_plans);
+            state.short_term_plan.todo_everyday.todo_everyday_plans = deleteDailyPlanFromList(action, state.short_term_plan.todo_everyday.todo_everyday_plans);
         },
         deleteTodayPlan,
         checkDailyPlan(state, action) {
             state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans);
         },
         checkDailyPlanForTodoEveryPlan(state, action) {
-            state.short_term_plan.todo_everyday_plans = deleteDailyPlanFromList(action, state.short_term_plan.todo_everyday_plans);
+            state.short_term_plan.todo_everyday.todo_everyday_plans = deleteDailyPlanFromList(action, state.short_term_plan.todo_everyday.todo_everyday_plans);
         },
         checkTodayPlan(state, action) {
             // Check the plan and all its children plans
@@ -301,7 +301,7 @@ const activePlanSlice = createSlice({
                 }
             }
             // Show children plans for todo everyday plan
-            for (const todo_everyday_plan of state.short_term_plan.todo_everyday_plans) {
+            for (const todo_everyday_plan of state.short_term_plan.todo_everyday.todo_everyday_plans) {
                 if (todo_everyday_plan.parent_id === action.payload.id) {
                     todo_everyday_plan.show_plan = true;
                 }
@@ -329,7 +329,7 @@ const activePlanSlice = createSlice({
             }
             // Hide children plans for todo everyday plan
             parent_ids = new Set([action.payload.id]);
-            for (const todo_everyday_plan of state.short_term_plan.todo_everyday_plans) {
+            for (const todo_everyday_plan of state.short_term_plan.todo_everyday.todo_everyday_plans) {
                 if (parent_ids.has(todo_everyday_plan.parent_id)) {
                     todo_everyday_plan.show_plan = false;
                     if (todo_everyday_plan.has_children === true) {
@@ -444,7 +444,7 @@ const activePlanSlice = createSlice({
             }
         },
         updateTimeForTodoEverydayPlans(state, action) {
-            for (const todo_everyday_plan of state.short_term_plan.todo_everyday_plans) {
+            for (const todo_everyday_plan of state.short_term_plan.todo_everyday.todo_everyday_plans) {
                 if (todo_everyday_plan.id === action.payload.id) {
                     todo_everyday_plan.seconds = action.payload.seconds;
                     break;

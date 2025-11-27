@@ -40,11 +40,12 @@ const TodoEverydayPlans = (props) => {
                 </Row>
 
                 {
-                    plan.short_term_plan.todo_everyday_plans &&
-                    plan.short_term_plan.todo_everyday_plans.map((dailyPlan, index) => {
+                    plan.short_term_plan.todo_everyday.todo_everyday_plans &&
+                    plan.short_term_plan.todo_everyday.todo_everyday_plans.map((dailyPlan, index) => {
                         let show_children = false;
                         if(dailyPlan.has_children) {
-                            if(index+1 < plan.short_term_plan.todo_everyday_plans.length && plan.short_term_plan.todo_everyday_plans[index+1].show_plan) {
+                            if(index+1 < plan.short_term_plan.todo_everyday.todo_everyday_plans.length &&
+                                plan.short_term_plan.todo_everyday.todo_everyday_plans[index+1].show_plan) {
                                 show_children = true;
                             }
                         }
