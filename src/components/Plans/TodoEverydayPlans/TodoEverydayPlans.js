@@ -65,7 +65,6 @@ const TodoEverydayPlans = (props) => {
                                 setHighlight={props.setHighlight}
                             />
                         }
-
                     })
                 }
 

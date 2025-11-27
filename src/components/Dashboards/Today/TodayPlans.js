@@ -23,6 +23,12 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import classes from './TodayPlans.module.css';
 
 
+/**
+ * New today plan will be added to plan.today.today_plans when:
+ *  1. User adds a new plan from Today tab
+ *  2. User toggle the date and the date is today from Sprint tab
+ * @returns TodayPlans component which displays all plans for today
+ */
 const TodayPlans = () => {
     const authCtx = useContext(AuthContext);
     const plan = useSelector((state) => state.activePlan);
