@@ -252,7 +252,6 @@ const activePlanSlice = createSlice({
         addDailyPlan(state, action) {
             state.short_term_plan.daily_plans = addDailyPlanToList(state, action, state.short_term_plan.daily_plans);
         },
-
         deleteDailyPlan(state, action) {
             state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans)
         },
@@ -262,6 +261,9 @@ const activePlanSlice = createSlice({
         deleteTodayPlan,
         checkDailyPlan(state, action) {
             state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans);
+        },
+        checkDailyPlanForTodoEveryPlan(state, action) {
+            state.short_term_plan.todo_everyday_plans = deleteDailyPlanFromList(action, state.short_term_plan.todo_everyday_plans);
         },
         checkTodayPlan(state, action) {
             // Check the plan and all its children plans

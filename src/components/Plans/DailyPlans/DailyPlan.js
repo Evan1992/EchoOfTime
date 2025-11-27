@@ -318,6 +318,13 @@ const DailyPlan = (props) => {
                     parent_id: props.daily_plan.parent_id
                 })
             )
+        } else if (props.isTodoEveryPlan) {
+            dispatch(
+                activePlanActions.checkDailyPlanForTodoEveryPlan({
+                    id:props.id,
+                    parent_id: props.daily_plan.parent_id
+                })
+            )
         } else {
             dispatch(
                 activePlanActions.checkDailyPlan({
