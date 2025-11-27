@@ -66,6 +66,7 @@ const TodoEverydayPlans = (props) => {
                                 setHighlight={props.setHighlight}
                             />
                         }
+                        return <div key={dailyPlan.id} />
                     })
                 }
 
