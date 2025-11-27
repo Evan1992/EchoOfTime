@@ -11,7 +11,7 @@ const initialState = {
         date: null,
         daily_plans: [],
         todo_everyday: {
-            date: "",
+            dateOfToday: "",
             todo_everyday_plans: []
         },
         changed: false
