@@ -47,8 +47,8 @@ const DailyPlan = (props) => {
         if(dailyPlanChanged === true) {
             if (props.isBacklog) {
                 dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
-            } else if( props.isTodoEveryPlan) {
-                dispatch(sendDailyPlanData(authCtx, plan));
+            } else if(props.isTodoEveryPlan) {
+                dispatch(sendDailyPlanData(authCtx, props.plan));
             } else {
                 dispatch(sendDailyPlanData(authCtx, props.plan))
                 dispatch(updateToday(authCtx,
@@ -58,7 +58,7 @@ const DailyPlan = (props) => {
             }
             setDailyPlanChanged(false);
         }
-    }, [dispatch, authCtx, props.isBacklog, props.plan, backlogPlan, dailyPlanChanged])
+    }, [dispatch, authCtx, props.isBacklog, props.isTodoEveryPlan, props.plan, backlogPlan, dailyPlanChanged])
 
     useEffect(() => {
         if(isAddNewPlan) {
