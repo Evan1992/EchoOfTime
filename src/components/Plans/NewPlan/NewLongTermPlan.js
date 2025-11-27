@@ -51,7 +51,11 @@ const NewLongTermPlan = (props) => {
                     title: "",
                     description: "",
                     date: null,
-                    daily_plans: []
+                    daily_plans: [],
+                    todo_everyday: {
+                        date: dateTodayISO,
+                        todo_everyday_plans: []
+                    },
                 }
             })
         )
