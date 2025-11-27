@@ -10,7 +10,10 @@ const initialState = {
         description: "",
         date: null,
         daily_plans: [],
-        todo_everyday_plans: [],
+        todo_everyday: {
+            date: "",
+            todo_everyday_plans: []
+        },
         changed: false
     },
     today: {
