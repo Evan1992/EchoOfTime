@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
 import { getTodayDateString } from '../../../utilities';
-import { sendPlanData } from '../../../store/slices/active-plan-actions';
+import { refreshTodoEveryday, sendPlanData } from '../../../store/slices/active-plan-actions';
+import { isToday } from '../../../utilities';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
@@ -17,6 +18,7 @@ import DailyPlan from '../DailyPlans/DailyPlan';
 const TodoEverydayPlans = (props) => {
     const authCtx = useContext(AuthContext);
     const plan = useSelector((state) => state.activePlan);
+    const [fetched, setFetched] = useState(false);
     const [planDeleted, setPlanDeleted] = useState(false);
     const dispatch = useDispatch();
 
@@ -28,6 +30,20 @@ const TodoEverydayPlans = (props) => {
             setPlanDeleted(false);
         }
     }, [dispatch, authCtx, plan, planDeleted])
+
+    // Update todo_everyday_plans if date fetched from database is not today
+    useEffect(() => {
+        if(plan.title !== "" && plan.short_term_plan.todo_everyday.dateOfToday !== "" && !isToday(plan.short_term_plan.todo_everyday.dateOfToday)) {
+            let new_todo_everyday_plans = []
+            for (const daily_plan of plan.short_term_plan.todo_everyday.todo_everyday_plans) {
+                new_todo_everyday_plans.push({
+                    ...daily_plan,
+                    date: getTodayDateString()
+                })
+            }
+            dispatch(refreshTodoEveryday(authCtx, new_todo_everyday_plans));
+        }
+    }, [authCtx, plan])
 
     return (
         <React.Fragment>
