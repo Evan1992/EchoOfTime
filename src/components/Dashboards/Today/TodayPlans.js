@@ -61,6 +61,13 @@ const TodayPlans = () => {
                     new_today_plans.push(daily_plan);
                 }
             }
+            // Add plans from todo_everyday_plans to today_plans
+            for (const daily_plan of plan.short_term_plan.todo_everyday.todo_everyday_plans) {
+                new_today_plans.push({
+                    ...daily_plan,
+                    date: getTodayDateString()
+                })
+            }
             dispatch(refreshToday(authCtx, new_today_plans));
         }
     }, [authCtx, dispatch, fetched, plan])
