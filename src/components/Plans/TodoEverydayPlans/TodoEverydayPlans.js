@@ -18,7 +18,6 @@ import DailyPlan from '../DailyPlans/DailyPlan';
 const TodoEverydayPlans = (props) => {
     const authCtx = useContext(AuthContext);
     const plan = useSelector((state) => state.activePlan);
-    const [fetched, setFetched] = useState(false);
     const [planDeleted, setPlanDeleted] = useState(false);
     const dispatch = useDispatch();
 
@@ -43,7 +42,7 @@ const TodoEverydayPlans = (props) => {
             }
             dispatch(refreshTodoEveryday(authCtx, new_todo_everyday_plans));
         }
-    }, [authCtx, plan])
+    }, [authCtx, dispatch, plan])
 
     return (
         <React.Fragment>
