@@ -159,7 +159,7 @@ export const refreshTodoEveryday = (authCtx, todo_everyday_plans) => {
                 {
                     method: 'PUT',
                     body: JSON.stringify({
-                        date: dateTodayISO,
+                        dateOfToday: dateTodayISO,
                         todo_everyday_plans: todo_everyday_plans,
                     })
                 }
