@@ -49,6 +49,10 @@ const DailyPlan = (props) => {
                 dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
             } else if(props.isTodoEveryPlan) {
                 dispatch(sendDailyPlanData(authCtx, plan));
+                dispatch(updateToday(authCtx,
+                    plan.today.date,
+                    plan.today.today_plans,
+                    plan.today.used_time))
             } else {
                 dispatch(sendDailyPlanData(authCtx, plan))
                 dispatch(updateToday(authCtx,
@@ -66,6 +70,11 @@ const DailyPlan = (props) => {
                 dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
             } else {
                 dispatch(sendDailyPlanData(authCtx, plan));
+                // When adding a new plan, update today_plans as well no matter whether the new plan's date is today or not
+                dispatch(updateToday(authCtx,
+                    plan.today.date,
+                    plan.today.today_plans,
+                    plan.today.used_time))
             }
             setIsAddNewPlan(false);
         }
