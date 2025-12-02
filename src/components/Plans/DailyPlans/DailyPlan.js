@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
@@ -35,6 +35,8 @@ const DailyPlan = (props) => {
     const [_date, setDate] = useState(props.daily_plan.date);
     const [showCalendar, setShowCalendar] = useState(false);
     const [isAddNewPlan, setIsAddNewPlan] = useState(false);
+    let inputExpectedHours = useRef();
+    let inputExpectedMinutes = useRef();
 
     // When changing parent plan's date, all its children plans' date should be updated
     useEffect(() => {
@@ -403,8 +405,8 @@ const DailyPlan = (props) => {
                 </Col>
 
                 <Col xs="auto">
-                    <input className={classes.input_time} type="number" onChange={expectedHoursChangeHandler} value={props.daily_plan.expected_hours} />:
-                    <input className={classes.input_time} type="number" onChange={expectedMinutesChangeHandler} value={props.daily_plan.expected_minutes} />
+                    <input className={classes.input_time} type="number" ref={inputExpectedHours} onBlur={expectedHoursChangeHandler} defaultValue={props.daily_plan.expected_hours} />:
+                    <input className={classes.input_time} type="number" ref={inputExpectedMinutes} onBlur={expectedMinutesChangeHandler} defaultValue={props.daily_plan.expected_minutes} />
                 </Col>
 
                 <Col xs={1} style={{padding: 0}}>
