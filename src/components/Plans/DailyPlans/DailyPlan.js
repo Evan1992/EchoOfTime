@@ -265,9 +265,11 @@ const DailyPlan = (props) => {
                 )
             } else if (props.isTodoEveryPlan) {
                 dispatch(
-                    activePlanActions.updateTimeForTodoEverydayPlans({
+                    activePlanActions.updateTime({
                         id: props.id,
-                        seconds: seconds
+                        seconds: seconds,
+                        new_seconds: seconds-props.daily_plan.seconds,
+                        isTodoEveryPlan: true
                     })
                 )
             } else {

@@ -400,9 +400,11 @@ const activePlanSlice = createSlice({
             }
         },
         updateTime(state, action) {
+            const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
+
             // Update both current plan and its parent plans
             let parent_id;
-            for (const daily_plan of state.short_term_plan.daily_plans) {
+            for (const daily_plan of targetList) {
                 if (daily_plan.id === action.payload.id) {
                     daily_plan.seconds = action.payload.seconds;
 
@@ -415,7 +417,7 @@ const activePlanSlice = createSlice({
                 }
             }
             while (parent_id !== undefined) {
-                for (const daily_plan of state.short_term_plan.daily_plans) {
+                for (const daily_plan of targetList) {
                     if (daily_plan.id === parent_id) {
                         daily_plan.seconds += action.payload.new_seconds;
                         parent_id = daily_plan.parent_id;
@@ -442,14 +444,6 @@ const activePlanSlice = createSlice({
                     }
                 }
                 parent_id = new_parent_id;
-            }
-        },
-        updateTimeForTodoEverydayPlans(state, action) {
-            for (const todo_everyday_plan of state.short_term_plan.todo_everyday.todo_everyday_plans) {
-                if (todo_everyday_plan.id === action.payload.id) {
-                    todo_everyday_plan.seconds = action.payload.seconds;
-                    break;
-                }
             }
         }
     }
