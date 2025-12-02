@@ -48,17 +48,17 @@ const DailyPlan = (props) => {
             if (props.isBacklog) {
                 dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
             } else if(props.isTodoEveryPlan) {
-                dispatch(sendDailyPlanData(authCtx, props.plan));
+                dispatch(sendDailyPlanData(authCtx, plan));
             } else {
-                dispatch(sendDailyPlanData(authCtx, props.plan))
+                dispatch(sendDailyPlanData(authCtx, plan))
                 dispatch(updateToday(authCtx,
-                    props.plan.today.date,
-                    props.plan.today.today_plans,
-                    props.plan.today.used_time))
+                    plan.today.date,
+                    plan.today.today_plans,
+                    plan.today.used_time))
             }
             setDailyPlanChanged(false);
         }
-    }, [dispatch, authCtx, props.isBacklog, props.isTodoEveryPlan, props.plan, backlogPlan, dailyPlanChanged])
+    }, [dispatch, authCtx, props.isBacklog, props.isTodoEveryPlan, plan, backlogPlan, dailyPlanChanged])
 
     useEffect(() => {
         if(isAddNewPlan) {
@@ -99,6 +99,14 @@ const DailyPlan = (props) => {
                     hours: event.target.value
                 })
             )
+        } else if (props.isTodoEveryPlan) {
+            dispatch(
+                activePlanActions.setExpectedHours({
+                    id: props.id,
+                    hours:event.target.value,
+                    isTodoEveryPlan: true
+                })
+            )
         } else {
             dispatch(
                 activePlanActions.setExpectedHours({
@@ -117,6 +125,14 @@ const DailyPlan = (props) => {
                 backlogPlanActions.setExpectedMinutes({
                     id: props.id,
                     minutes: event.target.value
+                })
+            )
+        } else if (props.isTodoEveryPlan) {
+            dispatch(
+                activePlanActions.setExpectedMinutes({
+                    id: props.id,
+                    minutes:event.target.value,
+                    isTodoEveryPlan: true
                 })
             )
         } else {
