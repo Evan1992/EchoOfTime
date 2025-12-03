@@ -191,6 +191,14 @@ const DailyPlan = (props) => {
                     date:dateToSet
                 })
             )
+        } else if (props.isTodoEveryPlan) {
+            dispatch(
+                activePlanActions.setDate({
+                    id:props.id,
+                    date:dateToSet,
+                    isTodoEveryPlan: true
+                })
+            )
         } else {
             dispatch(
                 activePlanActions.setDate({

@@ -24,8 +24,8 @@ const initialState = {
     changed: false
 }
 
-const setDateForToday = (state, action) => {
-    for(const daily_plan of state.short_term_plan.daily_plans) {
+const setDateForToday = (state, action, targetList) => {
+    for(const daily_plan of targetList) {
         if(daily_plan.id === action.payload.id) {
             // Add daily plan and its child plans to state.today.today_plans if the date is set to today
             if (isToday(action.payload.date)) {
@@ -38,7 +38,7 @@ const setDateForToday = (state, action) => {
                 let plan_id_process_queue = [action.payload.id];
                 while (plan_id_process_queue.length > 0) {
                     const current_id = plan_id_process_queue.pop();
-                    for (const daily_plan of state.short_term_plan.daily_plans) {
+                    for (const daily_plan of targetList) {
                         if (daily_plan.parent_id === current_id) {
                             // Determine if the plan is already in today_plans before adding
                             let already_in_today_plans = false;
@@ -62,7 +62,7 @@ const setDateForToday = (state, action) => {
                 let plan_id_process_queue = [action.payload.id];
                 while (plan_id_process_queue.length > 0) {
                     const current_id = plan_id_process_queue.pop();
-                    for (const daily_plan of state.short_term_plan.daily_plans) {
+                    for (const daily_plan of targetList) {
                         if (daily_plan.parent_id === current_id) {
                             state.today.today_plans = state.today.today_plans.filter((plan) => plan.id !== daily_plan.id);
                             plan_id_process_queue.push(daily_plan.id);
@@ -378,19 +378,20 @@ const activePlanSlice = createSlice({
             }
         },
         setDate(state, action) {
-            setDateForToday(state, action);
+            const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
+            setDateForToday(state, action, targetList);
 
-            for (const [index, daily_plan] of state.short_term_plan.daily_plans.entries()) {
+            for (const [index, daily_plan] of targetList.entries()) {
                 if (daily_plan.id === action.payload.id) {
                     // Update the date of the current plan and all its children plans
                     daily_plan.date = action.payload.date;
                     if (daily_plan.has_children) {
                         const parent_plan_ids = new Set([daily_plan.id]);
-                        for (let i = index + 1; i < state.short_term_plan.daily_plans.length; i++) {
-                            if (parent_plan_ids.has(state.short_term_plan.daily_plans[i].parent_id)) {
-                                state.short_term_plan.daily_plans[i].date = action.payload.date;
-                                if (state.short_term_plan.daily_plans[i].has_children) {
-                                    parent_plan_ids.add(state.short_term_plan.daily_plans[i].id);
+                        for (let i = index + 1; i < targetList.length; i++) {
+                            if (parent_plan_ids.has(targetList[i].parent_id)) {
+                                targetList[i].date = action.payload.date;
+                                if (targetList[i].has_children) {
+                                    parent_plan_ids.add(targetList[i].id);
                                 }
                             } else {
                                 break;
