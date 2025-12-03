@@ -37,6 +37,7 @@ const TodoEverydayPlans = (props) => {
             for (const daily_plan of plan.short_term_plan.todo_everyday.todo_everyday_plans) {
                 new_todo_everyday_plans.push({
                     ...daily_plan,
+                    completed: false,
                     date: getTodayDateString()
                 })
             }
