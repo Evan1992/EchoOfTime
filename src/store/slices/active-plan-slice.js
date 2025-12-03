@@ -265,9 +265,6 @@ const activePlanSlice = createSlice({
         checkDailyPlan(state, action) {
             state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans);
         },
-        checkDailyPlanForTodoEveryPlan(state, action) {
-            state.short_term_plan.todo_everyday.todo_everyday_plans = deleteDailyPlanFromList(action, state.short_term_plan.todo_everyday.todo_everyday_plans);
-        },
         checkTodayPlan(state, action) {
             // Check the plan and all its children plans
             const plan_ids_to_check = new Set();
@@ -284,6 +281,11 @@ const activePlanSlice = createSlice({
             for (const today_plan of state.today.today_plans) {
                 if (plan_ids_to_check.has(today_plan.id)) {
                     today_plan.completed = true;
+                }
+            }
+            for (const todo_everyday_plan of state.short_term_plan.todo_everyday.todo_everyday_plans) {
+                if (plan_ids_to_check.has(todo_everyday_plan.id)) {
+                    todo_everyday_plan.completed = true;
                 }
             }
         },
