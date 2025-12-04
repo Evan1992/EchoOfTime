@@ -135,6 +135,17 @@ const addDailyPlanToList = (state, action, dailyPlans)  => {
                         }
                     }
                     dailyPlans[index].has_children = true;
+
+                    // Update today_plan.has_children if a child plan is added either from Today page or through Todo Everyday
+                    if (action.payload.daily_plan.date !== "" && isToday(action.payload.daily_plan.date)) {
+                        for (const today_plan of state.today.today_plans) {
+                            if (today_plan.id === action.payload.parent_id) {
+                                today_plan.has_children = true;
+                                break;
+                            }
+                        }
+                    }
+
                     break;
                 }
             }
