@@ -163,7 +163,7 @@ const addDailyPlanToList = (state, action, dailyPlans)  => {
 }
 
 /* Reducer function outside of createSlice() so we can reuse this function */
-const deleteDailyPlanFromList = (action, dailyPlans = []) => {
+const deleteDailyPlanFromList = (state, action, dailyPlans = []) => {
     // Delete current plan and all its children plans
     const new_daily_plans = [];
     let id = action.payload.id;
@@ -189,9 +189,15 @@ const deleteDailyPlanFromList = (action, dailyPlans = []) => {
 
     // Update parent plan's has_chidlren attribute
     if(has_children === false) {
-        for(const daily_plan of dailyPlans) {
+        for (const daily_plan of dailyPlans) {
             if(daily_plan.id === parent_id) {
                 daily_plan.has_children = false;
+                break;
+            }
+        }
+        for (const today_plan of state.today.today_plans) {
+            if (today_plan.id === parent_id) {
+                today_plan.has_children = false;
                 break;
             }
         }
@@ -267,14 +273,14 @@ const activePlanSlice = createSlice({
             state.short_term_plan.daily_plans = addDailyPlanToList(state, action, state.short_term_plan.daily_plans);
         },
         deleteDailyPlan(state, action) {
-            state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans)
+            state.short_term_plan.daily_plans = deleteDailyPlanFromList(state, action, state.short_term_plan.daily_plans)
         },
         deleteDailyPlanForTodoEveryPlan(state, action) {
-            state.short_term_plan.todo_everyday.todo_everyday_plans = deleteDailyPlanFromList(action, state.short_term_plan.todo_everyday.todo_everyday_plans);
+            state.short_term_plan.todo_everyday.todo_everyday_plans = deleteDailyPlanFromList(state, action, state.short_term_plan.todo_everyday.todo_everyday_plans);
         },
         deleteTodayPlan,
         checkDailyPlan(state, action) {
-            state.short_term_plan.daily_plans = deleteDailyPlanFromList(action, state.short_term_plan.daily_plans);
+            state.short_term_plan.daily_plans = deleteDailyPlanFromList(state, action, state.short_term_plan.daily_plans);
         },
         checkTodayPlan(state, action) {
             // Check the plan and all its children plans
