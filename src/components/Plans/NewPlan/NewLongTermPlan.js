@@ -29,6 +29,15 @@ const NewLongTermPlan = (props) => {
         }
     }
 
+    // Cancel edit when focus leaves the form (but not when focus moves between form controls)
+    const onFormBlur = (event) => {
+        const next = event.relatedTarget;
+        // If focus is moving to an element outside the form (or nowhere), close the editor
+        if (!event.currentTarget.contains(next)) {
+            props.editPlanHandler(false);
+        }
+    }
+
     const onSubmit = (event) => {
         event.preventDefault();
 
@@ -66,7 +75,7 @@ const NewLongTermPlan = (props) => {
     return (
         <section className={classes.card}>
             <h1>Marathon</h1>
-            <form onSubmit = {onSubmit}>
+            <form onSubmit = {onSubmit} onBlur={onFormBlur}>
                 <div className={classes.input_form}>
                     <input className={classes.input_title}
                         type = "text"

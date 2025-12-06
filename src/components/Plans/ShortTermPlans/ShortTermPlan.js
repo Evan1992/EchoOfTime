@@ -59,6 +59,7 @@ const ShortTermPlan = () => {
                     inputTitle={plan.short_term_plan.title}
                     inputDescription={plan.short_term_plan.description}
                     isEditing={isEditing}
+                    editPlanHandler={editPlanHandler}
                     postPlan={addShortTermPlanHandler}
                 />
             </section>
