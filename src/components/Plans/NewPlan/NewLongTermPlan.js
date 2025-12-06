@@ -74,6 +74,7 @@ const NewLongTermPlan = (props) => {
                         placeholder = "Title"
                         aria-label = "Title"
                         ref = {inputTitle}
+                        defaultValue = {props.inputTitle}
                         onFocus={onFocus}
                         onKeyDown={onKeyDown}
                     />
@@ -85,6 +86,7 @@ const NewLongTermPlan = (props) => {
                         placeholder = "Details (Markdown supported)"
                         aria-label = "Description"
                         ref = {inputDescription}
+                        defaultValue = {props.inputDescription}
                         onFocus={onFocus}
                         onInput = {onInput}
                     />
