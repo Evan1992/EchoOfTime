@@ -300,9 +300,11 @@ const activePlanSlice = createSlice({
                     today_plan.completed = true;
                 }
             }
-            for (const todo_everyday_plan of state.short_term_plan.todo_everyday.todo_everyday_plans) {
-                if (plan_ids_to_check.has(todo_everyday_plan.id)) {
-                    todo_everyday_plan.completed = true;
+            if (state.short_term_plan.todo_everyday.todo_everyday_plans !== undefined) {
+                for (const todo_everyday_plan of state.short_term_plan.todo_everyday.todo_everyday_plans) {
+                    if (plan_ids_to_check.has(todo_everyday_plan.id)) {
+                        todo_everyday_plan.completed = true;
+                    }
                 }
             }
         },
