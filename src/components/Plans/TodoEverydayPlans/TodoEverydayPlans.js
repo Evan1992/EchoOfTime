@@ -32,7 +32,10 @@ const TodoEverydayPlans = (props) => {
 
     // Update todo_everyday_plans if date fetched from database is not today
     useEffect(() => {
-        if(plan.title !== "" && plan.short_term_plan.todo_everyday.dateOfToday !== "" && !isToday(plan.short_term_plan.todo_everyday.dateOfToday)) {
+        if(plan.title !== "" &&
+            plan.short_term_plan.todo_everyday.dateOfToday !== "" &&
+            !isToday(plan.short_term_plan.todo_everyday.dateOfToday) &&
+            plan.short_term_plan.todo_everyday.todo_everyday_plans !== undefined) {
             let new_todo_everyday_plans = []
             for (const daily_plan of plan.short_term_plan.todo_everyday.todo_everyday_plans) {
                 new_todo_everyday_plans.push({
