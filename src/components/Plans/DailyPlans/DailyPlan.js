@@ -88,17 +88,33 @@ const DailyPlan = (props) => {
 
     const childrenToggleHandler = () => {
         if(props.show_children) {
-            dispatch(
-                activePlanActions.hideChildPlan({
-                    id:props.id
-                })
-            )
+            if (props.isBacklog) {
+                dispatch(
+                    backlogPlanActions.hideChildPlan({
+                        id: props.id,
+                    })
+                );
+            } else {
+                dispatch(
+                    activePlanActions.hideChildPlan({
+                        id:props.id
+                    })
+                );
+            }
         } else {
-            dispatch(
-                activePlanActions.showChildPlan({
-                    id:props.id
-                })
-            );
+            if (props.isBacklog) {
+                dispatch(
+                    backlogPlanActions.showChildPlan({
+                        id: props.id,
+                    })
+                );
+            } else {
+                dispatch(
+                    activePlanActions.showChildPlan({
+                        id:props.id
+                    })
+                );
+            }
         }
     }
 

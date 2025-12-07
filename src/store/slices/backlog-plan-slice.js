@@ -84,6 +84,24 @@ const backlogPlanSlice = createSlice({
 
             state.daily_plans = new_daily_plans;
         },
+        showChildPlan(state, action) {
+            for (const daily_plan of state.daily_plans) {
+                if (daily_plan.parent_id === action.payload.id) {
+                    daily_plan.show_plan = true;
+                }
+            }
+        },
+        hideChildPlan(state, action) {
+            let parent_ids = new Set([action.payload.id]);
+            for (const daily_plan of state.daily_plans) {
+                if (parent_ids.has(daily_plan.parent_id)) {
+                    daily_plan.show_plan = false;
+                    if (daily_plan.has_children === true) {
+                        parent_ids.add(daily_plan.id);
+                    }
+                }
+            }
+        },
         setExpectedHours(state, action) {
             for (const daily_plan of state.daily_plans) {
                 if (daily_plan.id === action.payload.id) {
