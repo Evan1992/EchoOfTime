@@ -13,9 +13,8 @@ import AuthContext from '../../../store/auth-context';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
-import { isToday } from '../../../utilities';
 import { sendDailyPlanData, sendPlanData, updateToday, fetchPlanData, refreshToday } from '../../../store/slices/active-plan-actions';
-import { getTodayDateString } from '../../../utilities';
+import { isToday, getDateString, getTodayDateString } from '../../../utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 
@@ -172,6 +171,19 @@ const TodayPlans = () => {
         setFilterOptionsVisible(false); // Hide options after selection
     };
 
+    /**
+     * When adding a new plan from Today page, if current time is before 2:00am, treat it as today
+     */
+    const _getDateString = () => {
+        if (isToday(getTodayDateString())) {
+            return getTodayDateString();
+        } else {
+            const now = new Date();
+            now.setDate(now.getDate() - 1);
+            return getDateString(now);
+        }
+    }
+
     return (
         <React.Fragment>
             <div className={classes.filter_module}>
@@ -233,7 +245,7 @@ const TodayPlans = () => {
                             <Row>
                                 <Col xs="auto" style={{width: "30px"}}/>
                                 <NewDailyPlan
-                                    date={getTodayDateString()}
+                                    date={_getDateString()}
                                 />
                             </Row>
                         </Container>

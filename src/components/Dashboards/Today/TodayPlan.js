@@ -14,6 +14,7 @@ import Container from 'react-bootstrap/Container';
 import Calendar from 'react-calendar';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
 import { sendDailyPlanData, updateToday } from '../../../store/slices/active-plan-actions';
+import { isToday, getDateString, getTodayDateString } from '../../../utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -282,13 +283,18 @@ const TodayPlan = (props) => {
         props.set_plan_deleted(true);
     }
 
-    const getTodayDateString = () => {
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
-        const day = today.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
+    /**
+     * When adding a new plan from Today page, if current time is before 2:00am, treat it as today
+     */
+    const _getDateString = () => {
+        if (isToday(getTodayDateString())) {
+            return getTodayDateString();
+        } else {
+            const now = new Date();
+            now.setDate(now.getDate() - 1);
+            return getDateString(now);
+        }
+    }
 
     return (
         <React.Fragment>
@@ -396,7 +402,7 @@ const TodayPlan = (props) => {
                                 <NewDailyPlanForm
                                     parent_id={props.today_plan.id}
                                     rank={props.today_plan.rank+1}
-                                    date={getTodayDateString()}
+                                    date={_getDateString()}
                                     formToggler={formToggleHandler}
                                     setIsAddNewPlan={setIsAddNewPlan}
                                 />
