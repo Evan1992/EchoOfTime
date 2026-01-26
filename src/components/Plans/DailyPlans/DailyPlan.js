@@ -471,7 +471,7 @@ const DailyPlan = (props) => {
                     {priority === 0 ? (
                         <img className={classes.calendar_icon} onClick={priorityToggleHandler} src="https://img.icons8.com/?size=100&id=5342&format=png&color=000000" alt='priority' />
                     ) : (
-                        <div onClick={priorityToggleHandler} style={{cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', width: '100%', textAlign: 'center'}}>
+                        <div onClick={priorityToggleHandler} style={{cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', width: '100%', textAlign: 'center', color: priority === 1 ? '#ff6b6b' : priority === 2 ? '#ffb800' : '#51cf66'}}>
                             {priority}
                         </div>
                     )}
@@ -486,7 +486,9 @@ const DailyPlan = (props) => {
                                         border: '1px solid #ccc',
                                         borderRadius: '4px',
                                         cursor: 'pointer',
-                                        backgroundColor: '#fff'
+                                        backgroundColor: '#fff',
+                                        color: '#ff6b6b',
+                                        fontWeight: 'bold'
                                     }}
                                     onClick={() => priorityChangeHandler(1)}
                                 >
@@ -499,7 +501,9 @@ const DailyPlan = (props) => {
                                         border: '1px solid #ccc',
                                         borderRadius: '4px',
                                         cursor: 'pointer',
-                                        backgroundColor: '#fff'
+                                        backgroundColor: '#fff',
+                                        color: '#ffb800',
+                                        fontWeight: 'bold'
                                     }}
                                     onClick={() => priorityChangeHandler(2)}
                                 >
@@ -512,7 +516,9 @@ const DailyPlan = (props) => {
                                         border: '1px solid #ccc',
                                         borderRadius: '4px',
                                         cursor: 'pointer',
-                                        backgroundColor: '#fff'
+                                        backgroundColor: '#fff',
+                                        color: '#51cf66',
+                                        fontWeight: 'bold'
                                     }}
                                     onClick={() => priorityChangeHandler(3)}
                                 >
