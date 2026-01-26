@@ -35,6 +35,7 @@ const DailyPlan = (props) => {
     const [_date, setDate] = useState(props.daily_plan.date);
     const [showCalendar, setShowCalendar] = useState(false);
     const [showPriority, setShowPriority] = useState(false);
+    const [priority, setPriority] = useState(props.daily_plan.priority);
     const [isAddNewPlan, setIsAddNewPlan] = useState(false);
     let inputExpectedHours = useRef();
     let inputExpectedMinutes = useRef();
@@ -184,10 +185,12 @@ const DailyPlan = (props) => {
     }
 
     const priorityChangeHandler = (priority) => {
+        setPriority(priority);
+        setShowPriority(false);
         dispatch(
             activePlanActions.setPriority({
                 id: props.id,
-                priority: priority
+                priority
             })
         )
 
@@ -465,7 +468,13 @@ const DailyPlan = (props) => {
 
                 {/* Priority */}
                 <Col xs="auto" style={{padding: 0}}>
-                    <img className={classes.calendar_icon} onClick={priorityToggleHandler} src="https://img.icons8.com/?size=100&id=5342&format=png&color=000000" alt='priority' />
+                    {priority === 0 ? (
+                        <img className={classes.calendar_icon} onClick={priorityToggleHandler} src="https://img.icons8.com/?size=100&id=5342&format=png&color=000000" alt='priority' />
+                    ) : (
+                        <div onClick={priorityToggleHandler} style={{cursor: 'pointer', fontSize: '16px', fontWeight: 'bold'}}>
+                            {priority}
+                        </div>
+                    )}
                     {showPriority &&
                         <React.Fragment>
                             <Backdrop onClick={priorityToggleHandler} />
