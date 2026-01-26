@@ -396,6 +396,30 @@ const activePlanSlice = createSlice({
                 }
             }
         },
+        setPriority(state, action) {
+            const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
+
+            for (const [index, daily_plan] of targetList.entries()) {
+                if (daily_plan.id === action.payload.id) {
+                    // Update the priority of the current plan and all its children plans
+                    daily_plan.priority = action.payload.priority;
+                    if (daily_plan.has_children) {
+                        const parent_plan_ids = new Set([daily_plan.id]);
+                        for (let i = index + 1; i < targetList.length; i++) {
+                            if (parent_plan_ids.has(targetList[i].parent_id)) {
+                                targetList[i].priority = action.payload.priority;
+                                if (targetList[i].has_children) {
+                                    parent_plan_ids.add(targetList[i].id);
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        },
         setDate(state, action) {
             const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
             setDateForToday(state, action, targetList);

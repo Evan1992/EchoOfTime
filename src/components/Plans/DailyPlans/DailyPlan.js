@@ -34,6 +34,7 @@ const DailyPlan = (props) => {
     const [showForm, setShowForm] = useState(false);
     const [_date, setDate] = useState(props.daily_plan.date);
     const [showCalendar, setShowCalendar] = useState(false);
+    const [showPriority, setShowPriority] = useState(false);
     const [isAddNewPlan, setIsAddNewPlan] = useState(false);
     let inputExpectedHours = useRef();
     let inputExpectedMinutes = useRef();
@@ -176,6 +177,21 @@ const DailyPlan = (props) => {
 
     const highlightHandler = () => {
         props.setHighlight(props.daily_plan.id);
+    }
+
+    const priorityToggleHandler = () => {
+        setShowPriority(showPriority => !showPriority)
+    }
+
+    const priorityChangeHandler = (priority) => {
+        dispatch(
+            activePlanActions.setPriority({
+                id: props.id,
+                priority: priority
+            })
+        )
+
+        setDailyPlanChanged(true);
     }
 
     const calendarToggleHandler = () => {
@@ -445,6 +461,57 @@ const DailyPlan = (props) => {
                 {/* Show the date of the plan */}
                 <Col style={{'maxWidth': "10%"}}>
                     {dateTransformHandler(_date)}
+                </Col>
+
+                {/* Priority */}
+                <Col xs="auto" style={{padding: 0}}>
+                    <img className={classes.calendar_icon} onClick={priorityToggleHandler} src="https://img.icons8.com/?size=100&id=5342&format=png&color=000000" alt='priority' />
+                    {showPriority &&
+                        <React.Fragment>
+                            <Backdrop onClick={priorityToggleHandler} />
+                            <div className={classes.calendar} style={{display: 'flex', flexDirection: 'column', gap: '5px', padding: '8px'}}>
+                                <button
+                                    style={{
+                                        padding: '6px 12px',
+                                        fontSize: '14px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#fff'
+                                    }}
+                                    onClick={() => priorityChangeHandler(1)}
+                                >
+                                    1
+                                </button>
+                                <button
+                                    style={{
+                                        padding: '6px 12px',
+                                        fontSize: '14px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#fff'
+                                    }}
+                                    onClick={() => priorityChangeHandler(2)}
+                                >
+                                    2
+                                </button>
+                                <button
+                                    style={{
+                                        padding: '6px 12px',
+                                        fontSize: '14px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#fff'
+                                    }}
+                                    onClick={() => priorityChangeHandler(3)}
+                                >
+                                    3
+                                </button>
+                            </div>
+                        </React.Fragment>
+                    }
                 </Col>
 
                 {/* Calendar */}
