@@ -467,11 +467,11 @@ const DailyPlan = (props) => {
                 </Col>
 
                 {/* Priority */}
-                <Col xs="auto" style={{padding: 0}}>
+                <Col xs="auto" style={{padding: 0, width: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     {priority === 0 ? (
                         <img className={classes.calendar_icon} onClick={priorityToggleHandler} src="https://img.icons8.com/?size=100&id=5342&format=png&color=000000" alt='priority' />
                     ) : (
-                        <div onClick={priorityToggleHandler} style={{cursor: 'pointer', fontSize: '16px', fontWeight: 'bold'}}>
+                        <div onClick={priorityToggleHandler} style={{cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', width: '100%', textAlign: 'center'}}>
                             {priority}
                         </div>
                     )}
