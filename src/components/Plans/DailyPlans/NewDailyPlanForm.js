@@ -30,6 +30,7 @@ const NewDailyPlanForm = (props) => {
             seconds: 0,
             expected_hours: 0,
             expected_minutes: 0,
+            priority: 0,
             parent_id: props.parent_id, // props.parent_id could be undefined if the new plan is the root daily plan
             has_children: false,
             show_plan: true,
