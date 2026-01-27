@@ -29,6 +29,8 @@ const TodayPlan = (props) => {
     const [seconds, setSeconds] = useState(props.today_plan.seconds);
     const [showForm, setShowForm] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false);
+    const [showPriority, setShowPriority] = useState(false);
+    const [priority, setPriority] = useState(props.today_plan.priority);
     const [isAddNewPlan, setIsAddNewPlan] = useState(false);
     const [_date, setDate] = useState(props.today_plan.date);
     const [todayPlanChanged, setTodayPlanChanged] = useState(false);
@@ -134,6 +136,23 @@ const TodayPlan = (props) => {
 
     const highlightHandler = () => {
         props.setHighlight(props.today_plan.id);
+    }
+
+    const priorityToggleHandler = () => {
+        setShowPriority(showPriority => !showPriority)
+    }
+
+    const priorityChangeHandler = (priority) => {
+        setPriority(priority);
+        setShowPriority(false);
+        dispatch(
+            activePlanActions.setPriority({
+                id: props.id,
+                priority
+            })
+        )
+
+        setTodayPlanChanged(true);
     }
 
     const calendarToggleHandler = () => {
@@ -356,6 +375,68 @@ const TodayPlan = (props) => {
                 {/* Show the date of the plan */}
                 <Col style={{width: "12%", flex: '0 0 auto'}}>
                     {dateTransformHandler(_date)}
+                </Col>
+                {/* Priority */}
+                <Col xs="auto" style={{padding: 0, width: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    {priority === 0 ? (
+                        <img className={classes.calendar_icon} onClick={priorityToggleHandler} src="https://img.icons8.com/?size=100&id=5342&format=png&color=000000" alt='priority' />
+                    ) : (
+                        <div onClick={priorityToggleHandler} style={{cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', width: '100%', textAlign: 'center', color: priority === 1 ? '#ff6b6b' : priority === 2 ? '#ffb800' : '#51cf66'}}>
+                            {priority}
+                        </div>
+                    )}
+                    {showPriority &&
+                        <React.Fragment>
+                            <Backdrop onClick={priorityToggleHandler} />
+                            <div className={classes.calendar} style={{display: 'flex', flexDirection: 'column', gap: '5px', padding: '8px'}}>
+                                <button
+                                    style={{
+                                        padding: '6px 12px',
+                                        fontSize: '14px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#fff',
+                                        color: '#ff6b6b',
+                                        fontWeight: 'bold'
+                                    }}
+                                    onClick={() => priorityChangeHandler(1)}
+                                >
+                                    1
+                                </button>
+                                <button
+                                    style={{
+                                        padding: '6px 12px',
+                                        fontSize: '14px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#fff',
+                                        color: '#ffb800',
+                                        fontWeight: 'bold'
+                                    }}
+                                    onClick={() => priorityChangeHandler(2)}
+                                >
+                                    2
+                                </button>
+                                <button
+                                    style={{
+                                        padding: '6px 12px',
+                                        fontSize: '14px',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        backgroundColor: '#fff',
+                                        color: '#51cf66',
+                                        fontWeight: 'bold'
+                                    }}
+                                    onClick={() => priorityChangeHandler(3)}
+                                >
+                                    3
+                                </button>
+                            </div>
+                        </React.Fragment>
+                    }
                 </Col>
                 {/* Calendar */}
                 <Col xs="auto" style={{padding: 0}}>
