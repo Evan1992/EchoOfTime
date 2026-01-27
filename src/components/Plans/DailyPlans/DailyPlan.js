@@ -45,7 +45,10 @@ const DailyPlan = (props) => {
         if (_date !== props.daily_plan.date) {
             setDate(props.daily_plan.date);
         }
-    }, [_date, props.daily_plan.date])
+        if (priority !== props.daily_plan.priority) {
+            setPriority(props.daily_plan.priority);
+        }
+    }, [_date, props.daily_plan.date, priority, props.daily_plan.priority])
 
     useEffect(() => {
         if(dailyPlanChanged === true) {
