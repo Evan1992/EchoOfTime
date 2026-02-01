@@ -35,6 +35,13 @@ const TodayPlan = (props) => {
     const [_date, setDate] = useState(props.today_plan.date);
     const [todayPlanChanged, setTodayPlanChanged] = useState(false);
 
+    // When changing parent plan's priority, all its children plans' priority should be updated
+    useEffect(() => {
+        if (priority !== props.today_plan.priority) {
+            setPriority(props.today_plan.priority);
+        }
+    }, [priority, props.today_plan.priority])
+
     // keep always-fresh refs for anything needed in cleanup
     const useLatest = (value) => {
         const ref = React.useRef(value);
@@ -147,7 +154,7 @@ const TodayPlan = (props) => {
         setShowPriority(false);
         dispatch(
             activePlanActions.setPriority({
-                id: props.id,
+                id: props.today_plan.id,
                 priority
             })
         )
