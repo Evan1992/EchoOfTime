@@ -27,8 +27,18 @@ const TomorrowPreview = (props) => {
     }
 
     let expectedTimeTomorrow = 0;
+    let expectedTimeTomorrowForPriority1 = 0;
+    let expectedTimeTomorrowForPriority2 = 0;
+    let expectedTimeTomorrowForPriority3 = 0;
     for(const tomorrow_plan of props.tomorrow_plans) {
         expectedTimeTomorrow += tomorrow_plan.expected_hours * 60 * 60 + tomorrow_plan.expected_minutes * 60;
+        if(tomorrow_plan.priority === 1) {
+            expectedTimeTomorrowForPriority1 += tomorrow_plan.expected_hours * 60 * 60 + tomorrow_plan.expected_minutes * 60;
+        } else if(tomorrow_plan.priority === 2) {
+            expectedTimeTomorrowForPriority2 += tomorrow_plan.expected_hours * 60 * 60 + tomorrow_plan.expected_minutes * 60;
+        } else if(tomorrow_plan.priority === 3) {
+            expectedTimeTomorrowForPriority3 += tomorrow_plan.expected_hours * 60 * 60 + tomorrow_plan.expected_minutes * 60;
+        }
     }
 
     return (
@@ -43,8 +53,19 @@ const TomorrowPreview = (props) => {
 
                 <Row>
                     <Col xs={2} />
-                    {/* Total Planned Time is: Time for active plans of today + Time for finished plans of today  */}
                     <Col style={{ paddingLeft: 0 }}>Total Planned Time: {secondsToHMS(expectedTimeTomorrow)} </Col>
+                </Row>
+                <Row>
+                    <Col xs={2} />
+                    <Col style={{ paddingLeft: 0, color: '#ff6b6b'}}>1: {secondsToHMS(expectedTimeTomorrowForPriority1)} </Col>
+                </Row>
+                <Row>
+                    <Col xs={2} />
+                    <Col style={{ paddingLeft: 0, color: '#ffb800' }}>2: {secondsToHMS(expectedTimeTomorrowForPriority2)} </Col>
+                </Row>
+                <Row>
+                    <Col xs={2} />
+                    <Col style={{ paddingLeft: 0, color: '#51cf66' }}>3: {secondsToHMS(expectedTimeTomorrowForPriority3)} </Col>
                 </Row>
             </Container>
         </React.Fragment>
