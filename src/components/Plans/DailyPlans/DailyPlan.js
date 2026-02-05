@@ -190,12 +190,25 @@ const DailyPlan = (props) => {
     const priorityChangeHandler = (priority) => {
         setPriority(priority);
         setShowPriority(false);
-        dispatch(
-            activePlanActions.setPriority({
-                id: props.id,
-                priority
-            })
-        )
+
+        if (props.isBacklog) {
+            // TODO
+        } else if (props.isTodoEveryPlan) {
+            dispatch(
+                activePlanActions.setPriority({
+                    id: props.id,
+                    priority,
+                    isTodoEveryPlan: true
+                })
+            )
+        } else {
+            dispatch(
+                activePlanActions.setPriority({
+                    id: props.id,
+                    priority
+                })
+            )
+        }
 
         setDailyPlanChanged(true);
     }
