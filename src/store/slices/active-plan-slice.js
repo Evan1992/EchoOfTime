@@ -114,6 +114,8 @@ const addDailyPlanToList = (state, action, dailyPlans)  => {
                     if (!action.payload.daily_plan.date) {
                         action.payload.daily_plan.date = daily_plan.date
                     }
+                    // Set the priority for action.payload.daily_plan to be same as its parent
+                    action.payload.daily_plan.priority = daily_plan.priority;
 
                     if (index + 1 === dailyPlans.length) {
                         // If the parent plan is the last plan in the list, just push the new daily plan to the end
