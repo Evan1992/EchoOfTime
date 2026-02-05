@@ -76,7 +76,7 @@ const TodoEverydayPlans = (props) => {
                                 rank={dailyPlan.rank}
                                 show_children={show_children}
                                 set_plan_deleted={setPlanDeleted}
-                                isTodoEveryPlan={true}
+                                isTodoEverydayPlan={true}
                                 isTimerActive={props.isTimerActive}
                                 setIsTimerActive={props.setIsTimerActive}
                                 timerHolder={props.timerHolder}
@@ -93,7 +93,7 @@ const TodoEverydayPlans = (props) => {
                     <Col xs={2} />
                     <Col style={{ paddingLeft: 0 }}>
                         <NewDailyPlan
-                            isTodoEveryPlan={true}
+                            isTodoEverydayPlan={true}
                             date={getTodayDateString()}
                         />
                     </Col>

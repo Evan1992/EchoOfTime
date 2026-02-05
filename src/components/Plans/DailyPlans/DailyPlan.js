@@ -54,7 +54,7 @@ const DailyPlan = (props) => {
         if(dailyPlanChanged === true) {
             if (props.isBacklog) {
                 dispatch(sendDailyPlanDataToBacklog(authCtx, backlogPlan));
-            } else if(props.isTodoEveryPlan) {
+            } else if(props.isTodoEverydayPlan) {
                 dispatch(sendDailyPlanData(authCtx, plan));
                 dispatch(updateToday(authCtx,
                     plan.today.date,
@@ -69,7 +69,7 @@ const DailyPlan = (props) => {
             }
             setDailyPlanChanged(false);
         }
-    }, [dispatch, authCtx, props.isBacklog, props.isTodoEveryPlan, plan, backlogPlan, dailyPlanChanged])
+    }, [dispatch, authCtx, props.isBacklog, props.isTodoEverydayPlan, plan, backlogPlan, dailyPlanChanged])
 
     useEffect(() => {
         if(isAddNewPlan) {
@@ -131,12 +131,12 @@ const DailyPlan = (props) => {
                     hours: event.target.value
                 })
             )
-        } else if (props.isTodoEveryPlan) {
+        } else if (props.isTodoEverydayPlan) {
             dispatch(
                 activePlanActions.setExpectedHours({
                     id: props.id,
                     hours:event.target.value,
-                    isTodoEveryPlan: true
+                    isTodoEverydayPlan: true
                 })
             )
         } else {
@@ -159,12 +159,12 @@ const DailyPlan = (props) => {
                     minutes: event.target.value
                 })
             )
-        } else if (props.isTodoEveryPlan) {
+        } else if (props.isTodoEverydayPlan) {
             dispatch(
                 activePlanActions.setExpectedMinutes({
                     id: props.id,
                     minutes:event.target.value,
-                    isTodoEveryPlan: true
+                    isTodoEverydayPlan: true
                 })
             )
         } else {
@@ -193,12 +193,12 @@ const DailyPlan = (props) => {
 
         if (props.isBacklog) {
             // TODO
-        } else if (props.isTodoEveryPlan) {
+        } else if (props.isTodoEverydayPlan) {
             dispatch(
                 activePlanActions.setPriority({
                     id: props.id,
                     priority,
-                    isTodoEveryPlan: true
+                    isTodoEverydayPlan: true
                 })
             )
         } else {
@@ -242,12 +242,12 @@ const DailyPlan = (props) => {
                     date:dateToSet
                 })
             )
-        } else if (props.isTodoEveryPlan) {
+        } else if (props.isTodoEverydayPlan) {
             dispatch(
                 activePlanActions.setDate({
                     id:props.id,
                     date:dateToSet,
-                    isTodoEveryPlan: true
+                    isTodoEverydayPlan: true
                 })
             )
         } else {
@@ -333,13 +333,13 @@ const DailyPlan = (props) => {
                         new_seconds: seconds-props.daily_plan.seconds
                     })
                 )
-            } else if (props.isTodoEveryPlan) {
+            } else if (props.isTodoEverydayPlan) {
                 dispatch(
                     activePlanActions.updateTime({
                         id: props.id,
                         seconds: seconds,
                         new_seconds: seconds-props.daily_plan.seconds,
-                        isTodoEveryPlan: true
+                        isTodoEverydayPlan: true
                     })
                 )
             } else {
@@ -368,7 +368,7 @@ const DailyPlan = (props) => {
                     parent_id: props.daily_plan.parent_id
                 })
             )
-        } else if (props.isTodoEveryPlan) {
+        } else if (props.isTodoEverydayPlan) {
             dispatch(
                 activePlanActions.deleteDailyPlanForTodoEveryPlan({
                     id:props.id,
@@ -406,7 +406,7 @@ const DailyPlan = (props) => {
                     parent_id: props.daily_plan.parent_id
                 })
             )
-        } else if (props.isTodoEveryPlan) {
+        } else if (props.isTodoEverydayPlan) {
             dispatch(
                 activePlanActions.checkTodayPlan({
                     id: props.id,
@@ -588,7 +588,7 @@ const DailyPlan = (props) => {
                                     formToggler={formToggleHandler}
                                     setIsAddNewPlan={setIsAddNewPlan}
                                     isBacklog={props.isBacklog}
-                                    isTodoEveryPlan={props.isTodoEveryPlan}
+                                    isTodoEverydayPlan={props.isTodoEverydayPlan}
                                 />
                             </Col>
                         </Row>
