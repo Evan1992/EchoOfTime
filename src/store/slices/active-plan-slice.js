@@ -260,11 +260,19 @@ const activePlanSlice = createSlice({
             state.changed = true;
         },
         removeShortTermPlan(state) {
+            const dateToday = new Date().toLocaleDateString();
+            const split = dateToday.split("/");
+            const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1]);
+
             state.short_term_plan = {
                 title: "",
                 description: "",
                 date: null,
-                daily_plans: []
+                daily_plans: [],
+                todo_everyday: {
+                    dateOfToday: dateTodayISO,
+                    todo_everyday_plans: []
+                }
             };
             state.changed = true;
         },
