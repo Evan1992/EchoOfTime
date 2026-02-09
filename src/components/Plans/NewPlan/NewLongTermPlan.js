@@ -1,6 +1,6 @@
 /* ========== import React and React hooks ========== */
 import { useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import other libraries ========== */
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
@@ -13,6 +13,7 @@ const NewLongTermPlan = (props) => {
     let inputTitle = useRef(props.inputTitle);
     let inputDescription = useRef(props.inputDescription);
     let formRef = useRef();
+    const plan = useSelector((state) => state.activePlan);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -51,6 +52,18 @@ const NewLongTermPlan = (props) => {
         const split = dateToday.split("/");
         const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1]);
 
+        const new_short_term_plan = {
+            title: "",
+            description: "",
+            date: null,
+            daily_plans: [],
+            todo_everyday: {
+                dateOfToday: dateTodayISO,
+                todo_everyday_plans: []
+            },
+        };
+        const short_term_plan = (plan.short_term_plan !== undefined) ? plan.short_term_plan : new_short_term_plan;
+
         dispatch(
             activePlanActions.addPlan({
                 title: inputTitle.current.value,
@@ -62,16 +75,7 @@ const NewLongTermPlan = (props) => {
                     today_plans: [],
                     used_time: 0
                 },
-                short_term_plan: {
-                    title: "",
-                    description: "",
-                    date: null,
-                    daily_plans: [],
-                    todo_everyday: {
-                        dateOfToday: dateTodayISO,
-                        todo_everyday_plans: []
-                    },
-                }
+                short_term_plan
             })
         )
 
