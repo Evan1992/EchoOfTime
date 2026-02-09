@@ -433,24 +433,26 @@ const activePlanSlice = createSlice({
             }
 
             // Do the same for today.today_plans
-            for (const [index, today_plan] of state.today.today_plans.entries()) {
-                if (today_plan.id === action.payload.id) {
-                    // Update the priority of the current plan and all its children plans
-                    today_plan.priority = action.payload.priority;
-                    if (today_plan.has_children) {
-                        const parent_plan_ids = new Set([today_plan.id]);
-                        for (let i = index + 1; i < state.today.today_plans.length; i++) {
-                            if (parent_plan_ids.has(state.today.today_plans[i].parent_id)) {
-                                state.today.today_plans[i].priority = action.payload.priority;
-                                if (state.today.today_plans[i].has_children) {
-                                    parent_plan_ids.add(state.today.today_plans[i].id);
+            if (state.today.today_plans !== undefined) {
+                for (const [index, today_plan] of state.today.today_plans.entries()) {
+                    if (today_plan.id === action.payload.id) {
+                        // Update the priority of the current plan and all its children plans
+                        today_plan.priority = action.payload.priority;
+                        if (today_plan.has_children) {
+                            const parent_plan_ids = new Set([today_plan.id]);
+                            for (let i = index + 1; i < state.today.today_plans.length; i++) {
+                                if (parent_plan_ids.has(state.today.today_plans[i].parent_id)) {
+                                    state.today.today_plans[i].priority = action.payload.priority;
+                                    if (state.today.today_plans[i].has_children) {
+                                        parent_plan_ids.add(state.today.today_plans[i].id);
+                                    }
+                                } else {
+                                    break;
                                 }
-                            } else {
-                                break;
                             }
                         }
+                        break;
                     }
-                    break;
                 }
             }
         },
