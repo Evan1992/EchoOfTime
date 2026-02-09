@@ -1,5 +1,5 @@
 /* ========== import React and React hooks ========== */
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 /* ========== import other libraries ========== */
@@ -12,6 +12,21 @@ const NewLongTermPlan = (props) => {
     const dispatch = useDispatch();
     let inputTitle = useRef(props.inputTitle);
     let inputDescription = useRef(props.inputDescription);
+    let formRef = useRef();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (formRef.current && !formRef.current.contains(event.target)) {
+                props.editPlanHandler(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [props.editPlanHandler]);
 
     const onFocus = (event) => {
         event.target.style.height = event.target.scrollHeight + "px";
@@ -26,15 +41,6 @@ const NewLongTermPlan = (props) => {
     const onKeyDown = (event) => {
         if (event.key === "Enter" || event.key === "Escape") {
             event.target.blur();
-        }
-    }
-
-    // Cancel edit when focus leaves the form (but not when focus moves between form controls)
-    const onFormBlur = (event) => {
-        const next = event.relatedTarget;
-        // If focus is moving to an element outside the form (or nowhere), close the editor
-        if (!event.currentTarget.contains(next)) {
-            props.editPlanHandler(false);
         }
     }
 
@@ -75,7 +81,7 @@ const NewLongTermPlan = (props) => {
     return (
         <section className={classes.card}>
             <h1>Marathon</h1>
-            <form onSubmit = {onSubmit} onBlur={onFormBlur}>
+            <form onSubmit = {onSubmit} ref={formRef}>
                 <div className={classes.input_form}>
                     <input className={classes.input_title}
                         type = "text"

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 /* ========== import css ========== */
@@ -7,6 +7,23 @@ import classes from './ShortTermPlanContent.module.css';
 const ShortTermPlanContent = (props) => {
     let inputTitle = useRef(props.inputTitle);
     let inputDescription = useRef(props.inputDescription);
+    let formRef = useRef();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (formRef.current && !formRef.current.contains(event.target)) {
+                props.editPlanHandler(false);
+            }
+        };
+
+        if (props.inputTitle.trim() === "" || props.isEditing === true) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [props.inputTitle, props.isEditing, props.editPlanHandler]);
 
     const onFocus = (event) => {
         event.target.style.height = event.target.scrollHeight + "px";
@@ -24,15 +41,6 @@ const ShortTermPlanContent = (props) => {
         }
     }
 
-    // Cancel edit when focus leaves the form (but not when focus moves between form controls)
-    const onFormBlur = (event) => {
-        const next = event.relatedTarget;
-        // If focus is moving to an element outside the form (or nowhere), close the editor
-        if (!event.currentTarget.contains(next)) {
-            props.editPlanHandler(false);
-        }
-    }
-
     const onSubmit = (event) => {
         event.preventDefault();
         props.postPlan(inputTitle.current.value, inputDescription.current.value);
@@ -41,7 +49,7 @@ const ShortTermPlanContent = (props) => {
     return (
         <React.Fragment >
             {props.inputTitle.trim() === "" || props.isEditing === true ? (
-                <form onSubmit={onSubmit} onBlur={onFormBlur}>
+                <form onSubmit={onSubmit} ref={formRef}>
                     <div className={classes.input_form}>
                         <input className={classes.input_title}
                             type = "text"
