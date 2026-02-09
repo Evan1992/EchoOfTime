@@ -197,10 +197,12 @@ const deleteDailyPlanFromList = (state, action, dailyPlans = []) => {
                 break;
             }
         }
-        for (const today_plan of state.today.today_plans) {
-            if (today_plan.id === parent_id) {
-                today_plan.has_children = false;
-                break;
+        if (state.today.today_plans !== undefined) {
+            for (const today_plan of state.today.today_plans) {
+                if (today_plan.id === parent_id) {
+                    today_plan.has_children = false;
+                    break;
+                }
             }
         }
     }
