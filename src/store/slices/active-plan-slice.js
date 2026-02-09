@@ -372,7 +372,7 @@ const activePlanSlice = createSlice({
             }
         },
         setExpectedHours(state, action) {
-            const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
+            const targetList = action.payload.isTodoEverydayPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
             for (const daily_plan of targetList) {
                 if (daily_plan.id === action.payload.id) {
                     daily_plan.expected_hours = action.payload.hours;
@@ -390,7 +390,7 @@ const activePlanSlice = createSlice({
             }
         },
         setExpectedMinutes(state, action) {
-            const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
+            const targetList = action.payload.isTodoEverydayPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
             for (const daily_plan of targetList) {
                 if (daily_plan.id === action.payload.id) {
                     daily_plan.expected_minutes = action.payload.minutes;
@@ -409,7 +409,7 @@ const activePlanSlice = createSlice({
             }
         },
         setPriority(state, action) {
-            const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
+            const targetList = action.payload.isTodoEverydayPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
 
             for (const [index, daily_plan] of targetList.entries()) {
                 if (daily_plan.id === action.payload.id) {
@@ -455,7 +455,7 @@ const activePlanSlice = createSlice({
             }
         },
         setDate(state, action) {
-            const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
+            const targetList = action.payload.isTodoEverydayPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
             setDateForToday(state, action, targetList);
 
             for (const [index, daily_plan] of targetList.entries()) {
@@ -480,7 +480,7 @@ const activePlanSlice = createSlice({
             }
         },
         updateTime(state, action) {
-            const targetList = action.payload.isTodoEveryPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
+            const targetList = action.payload.isTodoEverydayPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
 
             // Update both current plan and its parent plans
             let parent_id;
