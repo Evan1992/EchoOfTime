@@ -39,6 +39,11 @@ const DailyPlans = () => {
             }
         }
     }
+    if (plan.short_term_plan.todo_everyday.todo_everyday_plans !== undefined) {
+        for(const todo_everyday_plan of plan.short_term_plan.todo_everyday.todo_everyday_plans) {
+            tomorrowPlans.push(todo_everyday_plan)
+        }
+    }
 
     useEffect(() => {
         if(planDeleted === true) {
