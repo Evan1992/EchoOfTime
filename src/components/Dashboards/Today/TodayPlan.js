@@ -491,6 +491,7 @@ const TodayPlan = (props) => {
                                     parent_id={props.today_plan.id}
                                     rank={props.today_plan.rank+1}
                                     date={_getDateString()}
+                                    priority={props.today_plan.priority}
                                     formToggler={formToggleHandler}
                                     setIsAddNewPlan={setIsAddNewPlan}
                                 />
