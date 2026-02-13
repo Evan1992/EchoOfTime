@@ -16,9 +16,6 @@ const SPACING_OUT_TIME_SECONDS = 30 * 60;
 const DAY_SECONDS = 24 * 60 * 60;
 
 const TodayPlanSummary = (props) => {
-    let expectedTimeToday = 0;
-    let remainingPlannedTime = 0;
-
     // --- Countdown to 12:30am ---
     const [sleepCountdown, setSleepCountdown] = useState('');
     useEffect(() => {
@@ -44,11 +41,24 @@ const TodayPlanSummary = (props) => {
         return () => clearInterval(timer);
     }, []);
 
+    let expectedTimeToday = 0;
+    let expectedTimeTodayForPriority1 = 0;
+    let expectedTimeTodayForPriority2 = 0;
+    let expectedTimeTodayForPriority3 = 0;
+    let remainingPlannedTime = 0;
     if (props.today_plans !== undefined) {
         for(const today_plan of props.today_plans) {
             expectedTimeToday += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60
             if (today_plan.completed === false) {
                 remainingPlannedTime += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+            }
+
+            if(today_plan.priority === 1) {
+                expectedTimeTodayForPriority1 += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+            } else if(today_plan.priority === 2) {
+                expectedTimeTodayForPriority2 += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
+            } else if(today_plan.priority === 3) {
+                expectedTimeTodayForPriority3 += today_plan.expected_hours * 60 * 60 + today_plan.expected_minutes * 60;
             }
         }
     }
@@ -80,6 +90,18 @@ const TodayPlanSummary = (props) => {
             <Row>
                 <Col className={classes.first_column}>Total Planned Time:</Col>
                 <Col>{secondsToHMS(expectedTimeToday)}</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column} style={{ color: '#ff6b6b'}}><div className={classes.priority}>1:</div></Col>
+                <Col style={{ color: '#ff6b6b'}}>{secondsToHMS(expectedTimeTodayForPriority1)}</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column} style={{ color: '#ffb800' }}><div className={classes.priority}>2:</div></Col>
+                <Col style={{ color: '#ffb800' }}>{secondsToHMS(expectedTimeTodayForPriority2)}</Col>
+            </Row>
+            <Row>
+                <Col className={classes.first_column} style={{ color: '#51cf66' }}><div className={classes.priority}>3:</div></Col>
+                <Col style={{ color: '#51cf66' }}>{secondsToHMS(expectedTimeTodayForPriority3)}</Col>
             </Row>
             <Row>
                 <Col className={classes.first_column}>Remaining Planned Time:</Col>
