@@ -447,25 +447,33 @@ const TodayPlan = (props) => {
                 </Col>
                 {/* Calendar */}
                 <Col xs="auto" style={{padding: 0}}>
-                    {props.today_plan.completed === false && (
-                        <div>
-                            <img className={classes.calendar_icon} onClick={calendarToggleHandler} src="https://img.icons8.com/windows/32/000000/calendar.png" alt='calendar' />
-                            {showCalendar &&
-                                <React.Fragment>
-                                    <Backdrop onClick={calendarToggleHandler} />
-                                    <div className={classes.calendar}>
-                                        <Calendar onChange={dateChangeHandler}/>
-                                    </div>
-                                </React.Fragment>
-                            }
-                        </div>
-                    )}
+                    <div>
+                        <img
+                            className={classes.calendar_icon}
+                            onClick={props.today_plan.completed === false ? calendarToggleHandler : undefined}
+                            style={props.today_plan.completed ? {opacity: 0.4, cursor: 'not-allowed'} : {}}
+                            src="https://img.icons8.com/windows/32/000000/calendar.png"
+                            alt='calendar'
+                        />
+                        {showCalendar && props.today_plan.completed === false &&
+                            <React.Fragment>
+                                <Backdrop onClick={calendarToggleHandler} />
+                                <div className={classes.calendar}>
+                                    <Calendar onChange={dateChangeHandler}/>
+                                </div>
+                            </React.Fragment>
+                        }
+                    </div>
                 </Col>
                 {/* Timer */}
                 <Col xs="auto" style={{padding: 0}}>
-                    {props.today_plan.completed === false && (
-                        <img className={classes.plan_timer_button} onClick={timerToggleHandler} src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png" alt=''/>
-                    )}
+                    <img
+                        className={classes.plan_timer_button}
+                        onClick={props.today_plan.completed === false ? timerToggleHandler : undefined}
+                        style={props.today_plan.completed ? {opacity: 0.4, cursor: 'not-allowed'} : {}}
+                        src="https://img.icons8.com/ios-glyphs/30/000000/--pocket-watch.png"
+                        alt=''
+                    />
                 </Col>
                 {/* Delete a plan */}
                 <Col xs="auto" style={{padding: 0}}>
@@ -473,9 +481,11 @@ const TodayPlan = (props) => {
                 </Col>
                 {/* Add sub-task */}
                 <Col xs="auto" style={{paddingLeft: '15px'}}>
-                    {props.today_plan.completed === false && (
-                        <div className={classes.plan_add_button} onClick={formToggleHandler}>+</div>
-                    )}
+                    <div
+                        className={classes.plan_add_button}
+                        onClick={props.today_plan.completed === false ? formToggleHandler : undefined}
+                        style={props.today_plan.completed ? {opacity: 0.4, cursor: 'not-allowed'} : {}}
+                    >+</div>
                 </Col>
                 <Col className={classes.placeholder_col} />
             </Row>
