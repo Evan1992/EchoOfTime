@@ -55,6 +55,7 @@ const TodayPlans = () => {
     useEffect(() => {
         if(fetched && plan.today.date !== "" && !isToday(plan.today.date)) {
             let new_today_plans = []
+            // Add plans from daily_plans to today_plans if the plan's date is today
             for (const daily_plan of plan.short_term_plan.daily_plans) {
                 if(isToday(daily_plan.date)) {
                     new_today_plans.push(daily_plan);

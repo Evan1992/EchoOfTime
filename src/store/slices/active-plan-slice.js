@@ -376,15 +376,13 @@ const activePlanSlice = createSlice({
             for (const daily_plan of targetList) {
                 if (daily_plan.id === action.payload.id) {
                     daily_plan.expected_hours = action.payload.hours;
-
-                    if (isToday(daily_plan.date)) {
-                        for (const today_plan of state.today.today_plans) {
-                            if (today_plan.id === action.payload.id) {
-                                today_plan.expected_hours = action.payload.hours;
-                                break;
-                            }
-                        }
-                    }
+                    break;
+                }
+            }
+            // Try to update plan in today.today_plans if id matches
+            for (const today_plan of state.today.today_plans) {
+                if (today_plan.id === action.payload.id) {
+                    today_plan.expected_hours = action.payload.hours;
                     break;
                 }
             }
@@ -394,16 +392,13 @@ const activePlanSlice = createSlice({
             for (const daily_plan of targetList) {
                 if (daily_plan.id === action.payload.id) {
                     daily_plan.expected_minutes = action.payload.minutes;
-
-                    if (isToday(daily_plan.date)) {
-                        for (const today_plan of state.today.today_plans) {
-                            if (today_plan.id === action.payload.id) {
-                                today_plan.expected_minutes = action.payload.minutes;
-                                break;
-                            }
-                        }
-                    }
-
+                    break;
+                }
+            }
+            // Try to update plan in today.today_plans if id matches
+            for (const today_plan of state.today.today_plans) {
+                if (today_plan.id === action.payload.id) {
+                    today_plan.expected_minutes = action.payload.minutes;
                     break;
                 }
             }
