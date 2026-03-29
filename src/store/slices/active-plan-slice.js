@@ -506,6 +506,9 @@ const activePlanSlice = createSlice({
             // Do the same for today.today_plans
             for (const today_plan of state.today.today_plans) {
                 if (today_plan.id === action.payload.id) {
+                    // Update today used time
+                    state.today.used_time += action.payload.new_seconds;
+
                     today_plan.seconds = action.payload.seconds;
                     parent_id = today_plan.parent_id;
                     break;
