@@ -476,6 +476,27 @@ const activePlanSlice = createSlice({
                 }
             }
         },
+        setDailyPlans(state, action) {
+            state.short_term_plan.daily_plans = action.payload;
+        },
+        setTodayPlans(state, action) {
+            state.today.today_plans = action.payload;
+        },
+        setShortTermPlan(state, action) {
+            state.short_term_plan = action.payload;
+            if (!state.short_term_plan.daily_plans) {
+                state.short_term_plan.daily_plans = [];
+            }
+            if (!state.short_term_plan.todo_everyday) {
+                state.short_term_plan.todo_everyday = { dateOfToday: '', todo_everyday_plans: [] };
+            }
+        },
+        setToday(state, action) {
+            state.today = action.payload;
+            if (!state.today.today_plans) {
+                state.today.today_plans = [];
+            }
+        },
         updateTime(state, action) {
             const targetList = action.payload.isTodoEverydayPlan ? state.short_term_plan.todo_everyday.todo_everyday_plans : state.short_term_plan.daily_plans;
 
