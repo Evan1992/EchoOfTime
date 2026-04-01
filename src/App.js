@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /* ========== import React components ========== */
@@ -13,8 +13,9 @@ import AuthPage from './pages/AuthPage.js';
 import AuthContext, { refreshIdToken } from './store/auth-context';
 import { activePlanActions } from './store/slices/active-plan-slice';
 import { backlogPlanActions } from './store/slices/backlog-plan-slice';
-import { fetchPlanData as fetchActivePlan } from './store/slices/active-plan-actions';
+import { fetchPlanData as fetchActivePlan, refreshToday, refreshTodoEveryday } from './store/slices/active-plan-actions';
 import { fetchPlanData as fetchBacklogPlan } from './store/slices/backlog-plan-actions';
+import { isToday, getTodayDateString } from './utilities';
 import useFirebaseSSE from './hooks/useFirebaseSSE';
 
 /* ========== import css ========== */
@@ -71,6 +72,62 @@ const App = () => {
     // Keep a ref to the latest authCtx to avoid stale closures in handleAuthRevoked
     const authCtxRef = useRef(authCtx);
     useEffect(() => { authCtxRef.current = authCtx; }, [authCtx]);
+
+    // Keep a ref to the latest plan for the 2am rollover timer
+    const plan = useSelector((state) => state.activePlan);
+    const planRef = useRef(plan);
+    useEffect(() => { planRef.current = plan; }, [plan]);
+
+    const performRollover = useCallback(() => {
+        const currentPlan = planRef.current;
+        const currentAuthCtx = authCtxRef.current;
+        let new_today_plans = [];
+        for (const daily_plan of currentPlan.short_term_plan.daily_plans) {
+            if (isToday(daily_plan.date)) {
+                new_today_plans.push(daily_plan);
+            }
+        }
+        if (currentPlan.short_term_plan.todo_everyday.todo_everyday_plans !== undefined) {
+            for (const daily_plan of currentPlan.short_term_plan.todo_everyday.todo_everyday_plans) {
+                new_today_plans.push({
+                    ...daily_plan,
+                    completed: false,
+                    date: getTodayDateString()
+                });
+            }
+        }
+        dispatch(refreshToday(currentAuthCtx, new_today_plans));
+        // Reset todo_everyday plans for the new day (Sprint page)
+        if (currentPlan.short_term_plan.todo_everyday.todo_everyday_plans !== undefined) {
+            const new_todo_everyday_plans = currentPlan.short_term_plan.todo_everyday.todo_everyday_plans.map(
+                (daily_plan) => ({ ...daily_plan, completed: false, date: getTodayDateString() })
+            );
+            dispatch(refreshTodoEveryday(currentAuthCtx, new_todo_everyday_plans));
+        }
+    }, [dispatch]);
+
+    // Automatically roll over at 2:00am every day, regardless of which page is open
+    useEffect(() => {
+        if (!isLoggedIn) return;
+        const getMsUntil2am = () => {
+            const now = new Date();
+            const next2am = new Date(now);
+            next2am.setHours(2, 0, 0, 0);
+            if (now >= next2am) {
+                next2am.setDate(next2am.getDate() + 1);
+            }
+            return next2am - now;
+        };
+        let timeoutId;
+        const schedule = () => {
+            timeoutId = setTimeout(() => {
+                performRollover();
+                schedule();
+            }, getMsUntil2am());
+        };
+        schedule();
+        return () => clearTimeout(timeoutId);
+    }, [isLoggedIn, performRollover]);
 
     // Sync sseToken when the user logs in or out
     useEffect(() => {

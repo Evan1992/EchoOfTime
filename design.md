@@ -209,6 +209,22 @@ export const fetchPlanData = (authCtx) => async (dispatch) => {
 ### Constants
 - `EATING_TIME_SECONDS` — reserved time budget for meals (excluded from work calculations)
 
+### Daily Rollover (2:00 AM)
+
+When the calendar day changes (at 2:00 AM), two Firebase nodes need to be refreshed so the Today and Sprint pages show correct data for the new day. This is handled automatically by a timer in `App.js` that fires regardless of which page is open.
+
+**What triggers it**: A `setTimeout` scheduled in `App.js` fires at the next 2:00 AM. After firing it immediately re-arms itself for the following day. The timer starts when the user logs in and is cancelled on logout.
+
+**What it does** (`performRollover` in `App.js`):
+1. **`refreshToday`** — rebuilds `today.today_plans` from `short_term_plan.daily_plans` (tasks whose date is now today) and `todo_everyday_plans` (recurring tasks, reset to `completed: false`), then PUTs `{ date: today, today_plans, used_time: 0 }` to `/{uid}/active_plan/today.json`.
+2. **`refreshTodoEveryday`** — resets each todo_everyday plan to `completed: false` and `date: today`, then PUTs to `/{uid}/active_plan/short_term_plan/todo_everyday.json`.
+
+**How Redux state is updated**: Both writes go to Firebase; the SSE subscription in `App.js` picks them up and dispatches `setToday` and a full `fetchActivePlan` refetch respectively, keeping all pages in sync without a manual refresh.
+
+**Stale-closure safety**: `performRollover` reads `plan` and `authCtx` from refs (`planRef`, `authCtxRef`) that are kept up to date on every render, so the callback always sees the latest state even after hours of inactivity.
+
+**Fallback on initial load**: `TodayPlans.js` still checks `!isToday(plan.today.date)` after `fetchPlanData` returns. This covers the case where the app was reopened (page refresh) after missing the 2:00 AM timer.
+
 ### Cross-Device Sync
 Real-time sync is implemented via **Firebase Server-Sent Events (SSE)** using the browser's native `EventSource`. Two persistent subscriptions are opened in `App.js` as soon as the user logs in:
 
