@@ -292,6 +292,10 @@ const TodayPlan = (props) => {
     }
 
     const checkPlanHandler = () => {
+        if (!isToday(props.today_plan.date)) {
+            alert("This plan cannot be completed from Today page. Please complete it from the Sprint page.");
+            return;
+        }
         dispatch(
             activePlanActions.checkDailyPlan({
                 id: props.today_plan.id,
