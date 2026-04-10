@@ -106,27 +106,22 @@ const App = () => {
         }
     }, [dispatch]);
 
-    // Automatically roll over at 2:00am every day, regardless of which page is open
+    // Automatically roll over at 2:00am every day, regardless of which page is open.
+    // Uses setInterval (checking every 5 minutes) instead of a long setTimeout so that
+    // browser tab throttling and device sleep/wake cycles don't prevent the rollover.
+    // The check is idempotent: it only fires when today.date in the store is stale.
     useEffect(() => {
         if (!isLoggedIn) return;
-        const getMsUntil2am = () => {
+        const checkRollover = () => {
             const now = new Date();
-            const next2am = new Date(now);
-            next2am.setHours(2, 0, 0, 0);
-            if (now >= next2am) {
-                next2am.setDate(next2am.getDate() + 1);
-            }
-            return next2am - now;
-        };
-        let timeoutId;
-        const schedule = () => {
-            timeoutId = setTimeout(() => {
+            if (now.getHours() < 2) return; // before 2am cutoff — nothing to do
+            const todayStr = getTodayDateString();
+            const storedDate = planRef.current?.today?.date;
+            if (storedDate !== todayStr) {
                 performRollover();
-                schedule();
-            }, getMsUntil2am());
+            }
         };
-        schedule();
-        return () => clearTimeout(timeoutId);
+        checkRollover(); // run immediately on mount / page load
     }, [isLoggedIn, performRollover]);
 
     // Sync sseToken when the user logs in or out
