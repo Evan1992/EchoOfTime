@@ -106,23 +106,19 @@ const App = () => {
         }
     }, [dispatch]);
 
-    // Automatically roll over at 2:00am every day, regardless of which page is open.
-    // Uses setInterval (checking every 5 minutes) instead of a long setTimeout so that
-    // browser tab throttling and device sleep/wake cycles don't prevent the rollover.
-    // The check is idempotent: it only fires when today.date in the store is stale.
+    // Roll over at 2am when Firebase data loads (via SSE) and today.date is stale.
+    // Triggered by storedTodayDate changing rather than a mount-time check, so it
+    // never fires before SSE has populated the store (which would wipe today's plans).
+    const storedTodayDate = plan.today?.date;
     useEffect(() => {
-        if (!isLoggedIn) return;
-        const checkRollover = () => {
-            const now = new Date();
-            if (now.getHours() < 2) return; // before 2am cutoff — nothing to do
-            const todayStr = getTodayDateString();
-            const storedDate = planRef.current?.today?.date;
-            if (storedDate !== todayStr) {
-                performRollover();
-            }
-        };
-        checkRollover(); // run immediately on mount / page load
-    }, [isLoggedIn, performRollover]);
+        if (!isLoggedIn || !storedTodayDate) return;
+        const now = new Date();
+        if (now.getHours() < 2) return;
+        const todayStr = getTodayDateString();
+        if (storedTodayDate !== todayStr) {
+            performRollover();
+        }
+    }, [isLoggedIn, storedTodayDate, performRollover]);
 
     // Sync sseToken when the user logs in or out
     useEffect(() => {
