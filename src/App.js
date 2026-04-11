@@ -106,19 +106,31 @@ const App = () => {
         }
     }, [dispatch]);
 
-    // Roll over at 2am when Firebase data loads (via SSE) and today.date is stale.
-    // Triggered by storedTodayDate changing rather than a mount-time check, so it
-    // never fires before SSE has populated the store (which would wipe today's plans).
+    // Roll over when Firebase data loads (via SSE) and today.date is no longer today.
+    // Uses isToday() so the 2am overnight logic is handled consistently in one place.
     const storedTodayDate = plan.today?.date;
     useEffect(() => {
         if (!isLoggedIn || !storedTodayDate) return;
-        const now = new Date();
-        if (now.getHours() < 2) return;
-        const todayStr = getTodayDateString();
-        if (storedTodayDate !== todayStr) {
+        if (!isToday(storedTodayDate)) {
             performRollover();
         }
     }, [isLoggedIn, storedTodayDate, performRollover]);
+
+    // Roll over when the laptop wakes from sleep (tab becomes visible again).
+    // The storedTodayDate effect above won't fire in this case because Redux state
+    // survives sleep unchanged — the dependency never changes, so we need this separately.
+    useEffect(() => {
+        if (!isLoggedIn) return;
+        const handleVisibilityChange = () => {
+            if (document.visibilityState !== 'visible') return;
+            if (!planRef.current?.today?.date) return;
+            if (!isToday(planRef.current.today.date)) {
+                performRollover();
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }, [isLoggedIn, performRollover]);
 
     // Sync sseToken when the user logs in or out
     useEffect(() => {

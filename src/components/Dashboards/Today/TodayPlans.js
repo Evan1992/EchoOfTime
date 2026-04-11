@@ -13,7 +13,7 @@ import AuthContext from '../../../store/auth-context';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
-import { sendDailyPlanData, sendPlanData, updateToday, fetchPlanData, refreshToday } from '../../../store/slices/active-plan-actions';
+import { sendDailyPlanData, sendPlanData, updateToday, fetchPlanData } from '../../../store/slices/active-plan-actions';
 import { isToday, getDateString, getTodayDateString } from '../../../utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
@@ -37,7 +37,6 @@ const TodayPlans = () => {
     const [isTimerActive, setIsTimerActive] = useState(false);
     const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
-    const [fetched, setFetched] = useState(false);
     const [filterOptionsVisible, setFilterOptionsVisible] = useState(false);
     const [filter, setFilter] = useState("All tasks");
     const dispatch = useDispatch();
@@ -47,33 +46,9 @@ const TodayPlans = () => {
         // Check if the plan is already fetched
         if (plan.title === "") {
             dispatch(fetchPlanData(authCtx));
-            setFetched(true);
         }
     }, [plan, authCtx, dispatch])
 
-    // Update today if date fetched from database is not today
-    useEffect(() => {
-        if(fetched && plan.today.date !== "" && !isToday(plan.today.date)) {
-            let new_today_plans = []
-            // Add plans from daily_plans to today_plans if the plan's date is today
-            for (const daily_plan of plan.short_term_plan.daily_plans) {
-                if(isToday(daily_plan.date)) {
-                    new_today_plans.push(daily_plan);
-                }
-            }
-            // Add plans from todo_everyday_plans to today_plans
-            if (plan.short_term_plan.todo_everyday.todo_everyday_plans !== undefined) {
-                for (const daily_plan of plan.short_term_plan.todo_everyday.todo_everyday_plans) {
-                    new_today_plans.push({
-                        ...daily_plan,
-                        completed: false,
-                        date: getTodayDateString()
-                    })
-                }
-            }
-            dispatch(refreshToday(authCtx, new_today_plans));
-        }
-    }, [authCtx, dispatch, fetched, plan])
 
     useEffect(() => {
         if(planRemoved) {
