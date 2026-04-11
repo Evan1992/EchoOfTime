@@ -1,5 +1,6 @@
 import { activePlanActions } from "./active-plan-slice";
 import { refreshIdToken }  from "../auth-context";
+import { getTodayDateString } from "../../utilities";
 
 
 export const sendPlanData = (authCtx, plan) => {
@@ -104,15 +105,12 @@ export const fetchPlanData = (authCtx) => {
 export const refreshToday = (authCtx, today_plans) => {
     return async (dispatch) => {
         const postData = async (userID, token) => {
-            const dateToday = new Date().toLocaleDateString();
-            const split = dateToday.split("/")
-            const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1])
             const response = await fetch(
                 `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/today.json?auth=${token}`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
-                        date: dateTodayISO,
+                        date: getTodayDateString(),
                         today_plans: today_plans,
                         used_time: 0
                     })
@@ -151,15 +149,12 @@ export const refreshToday = (authCtx, today_plans) => {
 export const refreshTodoEveryday = (authCtx, todo_everyday_plans) => {
     return async (dispatch) => {
         const postData = async (userID, token) => {
-            const dateToday = new Date().toLocaleDateString();
-            const split = dateToday.split("/")
-            const dateTodayISO = "".concat(split[2], "-", split[0], "-", split[1])
             const response = await fetch(
                 `https://echo-of-time-8a0aa-default-rtdb.firebaseio.com/${userID}/active_plan/short_term_plan/todo_everyday.json?auth=${token}`,
                 {
                     method: 'PUT',
                     body: JSON.stringify({
-                        dateOfToday: dateTodayISO,
+                        dateOfToday: getTodayDateString(),
                         todo_everyday_plans: todo_everyday_plans,
                     })
                 }
