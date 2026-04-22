@@ -123,6 +123,10 @@ const App = () => {
         if (!isLoggedIn) return;
         const handleVisibilityChange = () => {
             if (document.visibilityState !== 'visible') return;
+            // Always re-fetch on wake so mobile-app changes are reflected immediately
+            // rather than waiting for SSE reconnection to complete.
+            dispatch(fetchActivePlan(authCtxRef.current));
+            dispatch(fetchBacklogPlan(authCtxRef.current));
             if (!planRef.current?.today?.date) return;
             if (!isToday(planRef.current.today.date)) {
                 performRollover();
@@ -130,7 +134,7 @@ const App = () => {
         };
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }, [isLoggedIn, performRollover]);
+    }, [isLoggedIn, performRollover, dispatch]);
 
     // Sync sseToken when the user logs in or out
     useEffect(() => {
