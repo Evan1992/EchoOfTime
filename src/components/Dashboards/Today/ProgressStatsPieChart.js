@@ -1,6 +1,6 @@
-import classes from './PieChart.module.css';
+import classes from './ProgressStatsPieChart.module.css';
 
-const PieChart = (props) => {
+const ProgressStatsPieChart = (props) => {
     // Default values to prevent NaN
     const remaining = typeof props.remainingPlannedTime === 'number' ? props.remainingPlannedTime : 0;
     const expected = typeof props.expectedTimeToday === 'number' && props.expectedTimeToday > 0 ? props.expectedTimeToday : 1;
@@ -53,7 +53,7 @@ const PieChart = (props) => {
     );
 };
 
-export default PieChart;
+export default ProgressStatsPieChart;
 
 
 

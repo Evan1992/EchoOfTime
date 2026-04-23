@@ -1,0 +1,42 @@
+.pie_chart_container {
+  width: 200px;
+  height: 200px;
+}
+
+.pie_chart {
+  width: 100%;
+  height: 100%;
+}
+
+.legend {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.78rem;
+}
+
+.legend_item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.legend_title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legend_time {
+  flex-shrink: 0;
+  color: #666;
+}

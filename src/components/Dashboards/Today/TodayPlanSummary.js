@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import classes from './TodayPlanSummary.module.css';
 
 /* ========== import React components ========== */
-import PieChart from './PieChart';
+import ProgressStatsPieChart from './ProgressStatsPieChart';
+import UsedTimePieChart from './UsedTimePieChart';
 
 /* ========== import other libraries ========== */
 import Row from 'react-bootstrap/Row';
@@ -85,6 +86,26 @@ const TodayPlanSummary = (props) => {
 
     const untrackedTime = Math.max(0, DAY_SECONDS - expectedTimeToday - EATING_TIME_SECONDS - SLEEPING_TIME_SECONDS - SPACING_OUT_TIME_SECONDS);
 
+    // --- Used time grouped by root parent plan ---
+    const usedTimeSegments = (() => {
+        if (!props.today_plans) return [];
+        const idPlanMap = new Map();
+        for (const p of props.today_plans) idPlanMap.set(p.id, p);
+
+        const findRoot = (plan) => {
+            if (!plan.parent_id || !idPlanMap.has(plan.parent_id)) return plan;
+            return findRoot(idPlanMap.get(plan.parent_id));
+        };
+
+        const rootMap = new Map(); // rootId -> {title, seconds}
+        for (const p of props.today_plans) {
+            const root = findRoot(p);
+            if (!rootMap.has(root.id)) rootMap.set(root.id, { title: root.title, seconds: 0 });
+            rootMap.get(root.id).seconds += (p.seconds || 0);
+        }
+        return Array.from(rootMap.values());
+    })();
+
     return (
         <React.Fragment>
             <Row>
@@ -143,10 +164,14 @@ const TodayPlanSummary = (props) => {
 
             <Row><h4>Progress Stats</h4></Row>
             <Row className={classes.pie_chart_row}>
-                <PieChart
+                <ProgressStatsPieChart
                     expectedTimeToday={expectedTimeToday}
                     remainingPlannedTime={remainingPlannedTime}
                 />
+            </Row>
+            <Row><h4>Used Time</h4></Row>
+            <Row className={classes.pie_chart_row}>
+                <UsedTimePieChart segments={usedTimeSegments} />
             </Row>
         </React.Fragment>
         
