@@ -234,6 +234,7 @@ const TodayPlans = () => {
                             <Row className={classes.dividing_line} />
                             <TodayPlanSummary
                                 today_plans={plan.today.today_plans}
+                                sprint_plans={plan.short_term_plan.daily_plans}
                                 used_time={plan.today.used_time}
                             />
                         </Container>

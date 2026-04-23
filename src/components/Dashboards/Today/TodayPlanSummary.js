@@ -90,6 +90,7 @@ const TodayPlanSummary = (props) => {
     const usedTimeSegments = (() => {
         if (!props.today_plans) return [];
         const idPlanMap = new Map();
+        for (const p of (props.sprint_plans || [])) idPlanMap.set(p.id, p);
         for (const p of props.today_plans) idPlanMap.set(p.id, p);
 
         const findRoot = (plan) => {
