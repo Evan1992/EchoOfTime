@@ -525,26 +525,28 @@ const activePlanSlice = createSlice({
             }
 
             // Do the same for today.today_plans
-            for (const today_plan of state.today.today_plans) {
-                if (today_plan.id === action.payload.id) {
-                    // Update today used time
-                    state.today.used_time += action.payload.new_seconds;
-
-                    today_plan.seconds = action.payload.seconds;
-                    parent_id = today_plan.parent_id;
-                    break;
-                }
-            }
-            while (parent_id !== undefined) {
-                let new_parent_id;
+            if (state.today.today_plans !== undefined) {
                 for (const today_plan of state.today.today_plans) {
-                    if (today_plan.id === parent_id) {
-                        today_plan.seconds += action.payload.new_seconds;
-                        new_parent_id = today_plan.parent_id;
+                    if (today_plan.id === action.payload.id) {
+                        // Update today used time
+                        state.today.used_time += action.payload.new_seconds;
+
+                        today_plan.seconds = action.payload.seconds;
+                        parent_id = today_plan.parent_id;
                         break;
                     }
                 }
-                parent_id = new_parent_id;
+                while (parent_id !== undefined) {
+                    let new_parent_id;
+                    for (const today_plan of state.today.today_plans) {
+                        if (today_plan.id === parent_id) {
+                            today_plan.seconds += action.payload.new_seconds;
+                            new_parent_id = today_plan.parent_id;
+                            break;
+                        }
+                    }
+                    parent_id = new_parent_id;
+                }
             }
         }
     }
