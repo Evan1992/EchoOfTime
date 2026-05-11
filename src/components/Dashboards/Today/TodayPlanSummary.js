@@ -98,11 +98,21 @@ const TodayPlanSummary = (props) => {
             return findRoot(idPlanMap.get(plan.parent_id));
         };
 
+        const now = new Date();
+        if (now.getHours() < 2) now.setDate(now.getDate() - 1);
+        const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
         const rootMap = new Map(); // rootId -> {title, seconds}
         for (const p of props.today_plans) {
             const root = findRoot(p);
-            if (!rootMap.has(root.id)) rootMap.set(root.id, { title: root.title, seconds: 0 });
-            rootMap.get(root.id).seconds += (p.seconds || 0);
+            if (root.date === todayStr) {
+                // Root is a today plan: its seconds already include all children
+                if (!rootMap.has(root.id)) rootMap.set(root.id, { title: root.title, seconds: root.seconds || 0 });
+            } else {
+                // Root is a sprint plan: sum up today children's seconds
+                if (!rootMap.has(root.id)) rootMap.set(root.id, { title: root.title, seconds: 0 });
+                rootMap.get(root.id).seconds += (p.seconds || 0);
+            }
         }
         return Array.from(rootMap.values());
     })();
