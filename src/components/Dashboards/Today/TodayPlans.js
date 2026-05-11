@@ -33,9 +33,6 @@ const TodayPlans = () => {
     const plan = useSelector((state) => state.activePlan);
     const [planRemoved, setPlanRemoved] = useState(false);
     const [planDeleted, setPlanDeleted] = useState(false);
-    // Only one timer for a task can be active at a time
-    const [isTimerActive, setIsTimerActive] = useState(false);
-    const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
     const [filterOptionsVisible, setFilterOptionsVisible] = useState(false);
     const [filter, setFilter] = useState("All tasks");
@@ -205,10 +202,6 @@ const TodayPlans = () => {
                                             show_children={show_children}
                                             set_plan_deleted={setPlanDeleted}
                                             set_plan_removed={setPlanRemoved}
-                                            isTimerActive={isTimerActive}
-                                            setIsTimerActive={setIsTimerActive}
-                                            timerHolder={timerHolder}
-                                            setTimerHolder={setTimerHolder}
                                             highlight={highlight}
                                             setHighlight={setHighlight}
                                         />

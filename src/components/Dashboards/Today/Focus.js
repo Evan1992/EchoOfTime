@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 
 const Focus = () => {
-    const focusTime = useSelector((state) => state.focusTimer).focusTime;
+    const sessionElapsed = useSelector((state) => state.focusTimer).sessionElapsed;
 
     const formatToTwoDigits = (n) => {
         if(n < 10 ){
@@ -30,7 +30,7 @@ const Focus = () => {
     return(
         <React.Fragment>
             <div style={{fontSize:'2rem'}}>
-                {secondsToHMS(focusTime)}
+                {secondsToHMS(sessionElapsed)}
             </div>
         </React.Fragment>
     )

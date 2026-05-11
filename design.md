@@ -130,7 +130,15 @@ LongTermPlan (Marathon)
     changed
   },
   backlogPlan: { daily_plans[] },
-  focusTimer: { focusTime }  // seconds
+  focusTimer: {
+    focusTime,             // task's running total seconds (baseSeconds + elapsed)
+    sessionElapsed,        // seconds elapsed in the current session (starts from 0, shown in Focus)
+    isTimerActive,         // boolean — is any timer running?
+    timerHolder,           // plan id that owns the active timer (null if none)
+    startTime,             // Date.now() of the current base period (reset on tab-switch)
+    baseSeconds,           // task seconds at the start of the current base period
+    activationBaseSeconds  // task seconds when timer was first started (never reset mid-session)
+  }
 }
 ```
 
@@ -224,6 +232,109 @@ When the calendar day changes (at 2:00 AM), two Firebase nodes need to be refres
 **Stale-closure safety**: `performRollover` reads `plan` and `authCtx` from refs (`planRef`, `authCtxRef`) that are kept up to date on every render, so the callback always sees the latest state even after hours of inactivity.
 
 **Fallback on initial load**: `TodayPlans.js` still checks `!isToday(plan.today.date)` after `fetchPlanData` returns. This covers the case where the app was reopened (page refresh) after missing the 2:00 AM timer.
+
+### Global Persistent Timer
+
+EchoOfTime supports a single active timer that persists across tab switches. Only one task can be timed at a time across all pages (Today, Sprint, Backlog).
+
+#### Problem with the naive approach
+
+Each plan component (`TodayPlan`, `DailyPlan`) previously owned its timer state locally and ran a `setInterval` inside a child `Timer.js` component. Switching tabs unmounted the component tree, killing the interval and stopping the timer.
+
+#### Design
+
+**Two key architectural moves:**
+
+**1. Timer state lives in `focusTimer` Redux slice (global, survives tab switches)**
+
+| Field | Purpose |
+|---|---|
+| `isTimerActive` | Is any timer running? |
+| `timerHolder` | Plan id that owns the timer (`null` if none) |
+| `startTime` | `Date.now()` when the current base period started; reset on tab-switch |
+| `baseSeconds` | Task's saved seconds at the start of the current base period |
+| `activationBaseSeconds` | Task's seconds when first activated; never reset — used to derive `sessionElapsed` |
+| `focusTime` | `baseSeconds + elapsed` — the task's live running total |
+| `sessionElapsed` | `focusTime - activationBaseSeconds` — how long this session has run (shown in `Focus.js`) |
+
+**2. The interval lives in `App.js` (root component, never unmounts)**
+
+```javascript
+// App.js — fires every second whenever isTimerActive is true
+useEffect(() => {
+    if (!focusTimer.isTimerActive) return;
+    const { startTime, baseSeconds } = focusTimer;
+    const interval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        dispatch(focusTimerActions.tickTimer({ seconds: baseSeconds + elapsed }));
+    }, 1000);
+    return () => clearInterval(interval);
+}, [focusTimer.isTimerActive, focusTimer.startTime, focusTimer.baseSeconds, dispatch]);
+```
+
+`Timer.js` reads `focusTime` from Redux for display (no local interval). `Focus.js` reads `sessionElapsed` from Redux.
+
+#### Tab-switch: save without stopping
+
+When the user leaves a tab, the plan component unmounts and its cleanup runs:
+
+```
+1. elapsed    = floor(now - startTime)
+2. currentSecs = baseSeconds + elapsed
+3. dispatch updateTime(currentSecs)        → update Redux activePlan (no DB write)
+4. dispatch resetTimerBase(currentSecs, now) → slide base forward, timer keeps running
+```
+
+`deactivateTimer` is never called on unmount. The App.js interval sees `startTime`/`baseSeconds` change, restarts with the new values, and continues ticking. When the user returns, `Timer.js` reads the live `focusTime` immediately.
+
+**No Firebase writes on tab-switch** — persistence only happens when the user explicitly stops the timer.
+
+#### Explicit stop
+
+```
+1. elapsed     = floor(now - startTime)
+2. currentSecs = baseSeconds + elapsed
+3. dispatch updateTime(currentSecs)        → update Redux activePlan
+4. setTodayPlanChanged = true              → triggers sendDailyPlanData + updateToday (DB write)
+5. dispatch deactivateTimer(currentSecs)   → isTimerActive = false, interval stops
+```
+
+#### Mutual exclusion
+
+Before starting a timer, every plan component checks:
+
+```javascript
+if (isTimerActive && timerHolder !== myPlanId) → alert and block
+```
+
+Since both fields are global Redux state, this prevents two timers running simultaneously across any page.
+
+#### sessionElapsed drift prevention
+
+`sessionElapsed` is derived in the reducer as `focusTime - activationBaseSeconds` rather than being computed independently from wall-clock time. This guarantees it stays perfectly in sync with `focusTime` across any number of tab switches — no drift accumulates.
+
+#### Data flow summary
+
+```
+User clicks start
+  → dispatch activateTimer  (sets isTimerActive, timerHolder, startTime, baseSeconds)
+  → App.js interval starts
+
+Every second (App.js)
+  → dispatch tickTimer  → focusTime++, sessionElapsed++
+  → Timer.js reads focusTime  → task timer display updates
+  → Focus.js reads sessionElapsed  → focus display updates
+
+User switches tab
+  → plan component unmounts
+  → cleanup: update Redux, dispatch resetTimerBase  (no DB write)
+  → App.js interval restarts with new base — timer never stops
+
+User clicks stop
+  → calculate currentSecs from Redux
+  → dispatch updateTime, setTodayPlanChanged  → Redux + Firebase write
+  → dispatch deactivateTimer  → interval stops
+```
 
 ### Cross-Device Sync
 Real-time sync is implemented via **Firebase Server-Sent Events (SSE)** using the browser's native `EventSource`. Two persistent subscriptions are opened in `App.js` as soon as the user logs in:

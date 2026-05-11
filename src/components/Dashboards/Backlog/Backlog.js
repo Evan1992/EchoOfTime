@@ -22,9 +22,6 @@ const Backlog = () => {
     const authCtx = useContext(AuthContext);
     const [fetched, setFetched] = useState(false);
     const [planDeleted, setPlanDeleted] = useState(false);
-    // Only one timer for a task can be active at a time
-    const [isTimerActive, setIsTimerActive] = useState(false);
-    const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
     const dispatch = useDispatch();
     const backlog = useSelector((state) => state.backlogPlan);
@@ -71,10 +68,6 @@ const Backlog = () => {
                                     rank={dailyPlan.rank}
                                     show_children={show_children}
                                     set_plan_deleted={setPlanDeleted}
-                                    isTimerActive={isTimerActive}
-                                    setIsTimerActive={setIsTimerActive}
-                                    timerHolder={timerHolder}
-                                    setTimerHolder={setTimerHolder}
                                     highlight={highlight}
                                     setHighlight={setHighlight}
                                 />

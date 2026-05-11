@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ import AuthPage from './pages/AuthPage.js';
 import AuthContext, { refreshIdToken } from './store/auth-context';
 import { activePlanActions } from './store/slices/active-plan-slice';
 import { backlogPlanActions } from './store/slices/backlog-plan-slice';
+import { focusTimerActions } from './store/slices/focus-timer-slice';
 import { fetchPlanData as fetchActivePlan, refreshToday, refreshTodoEveryday } from './store/slices/active-plan-actions';
 import { fetchPlanData as fetchBacklogPlan } from './store/slices/backlog-plan-actions';
 import { isToday, getTodayDateString } from './utilities';
@@ -76,6 +77,18 @@ const App = () => {
     // Keep a ref to the latest plan for the 2am rollover timer
     const plan = useSelector((state) => state.activePlan);
     const planRef = useRef(plan);
+
+    // Global timer interval — persists across tab switches so the timer never stops
+    const focusTimer = useSelector((state) => state.focusTimer);
+    useEffect(() => {
+        if (!focusTimer.isTimerActive) return;
+        const { startTime, baseSeconds } = focusTimer;
+        const interval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            dispatch(focusTimerActions.tickTimer({ seconds: baseSeconds + elapsed }));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [focusTimer.isTimerActive, focusTimer.startTime, focusTimer.baseSeconds, dispatch]);
     useEffect(() => { planRef.current = plan; }, [plan]);
 
     const performRollover = useCallback(() => {

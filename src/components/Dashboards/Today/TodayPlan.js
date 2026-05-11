@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 /* ========== import React components ========== */
 import NewDailyPlanForm from '../../Plans/DailyPlans/NewDailyPlanForm';
@@ -13,6 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Calendar from 'react-calendar';
 import { activePlanActions } from '../../../store/slices/active-plan-slice';
+import { focusTimerActions } from '../../../store/slices/focus-timer-slice';
 import { sendDailyPlanData, updateToday } from '../../../store/slices/active-plan-actions';
 import { isToday, getDateString, getTodayDateString } from '../../../utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -42,38 +43,44 @@ const TodayPlan = (props) => {
         }
     }, [priority, props.today_plan.priority])
 
+    const focusTimer = useSelector((state) => state.focusTimer);
+
     // keep always-fresh refs for anything needed in cleanup
     const useLatest = (value) => {
         const ref = React.useRef(value);
         React.useEffect(() => { ref.current = value; });
         return ref;
     }
-    const secondsRef = useLatest(seconds);
-    const timerActiveRef = useLatest(props.isTimerActive);
-    const timerHolderRef = useLatest(props.timerHolder);
+    const timerActiveRef = useLatest(focusTimer.isTimerActive);
+    const timerHolderRef = useLatest(focusTimer.timerHolder);
+    const baseSecondsRef = useLatest(focusTimer.baseSeconds);
+    const startTimeRef = useLatest(focusTimer.startTime);
+    const planSecondsRef = useLatest(props.today_plan.seconds);
 
-    // NEW: one-time effect whose *cleanup* runs on unmount
+    // One-time effect whose *cleanup* runs on unmount (e.g. tab switch).
+    // Saves accumulated time without stopping the timer so it keeps running globally.
     useEffect(() => {
         return () => {
-            const timerActiveRefCurrent = timerActiveRef.current; // eslint-disable-line react-hooks/exhaustive-deps
-            const timerHolderRefCurrent = timerHolderRef.current; // eslint-disable-line react-hooks/exhaustive-deps
-            const secondsRefCurrent = secondsRef.current; // eslint-disable-line react-hooks/exhaustive-deps
-            if (secondsRefCurrent !== seconds && timerActiveRefCurrent && timerHolderRefCurrent === props.today_plan.id) {
-                dispatch(
-                    activePlanActions.updateTime({
-                        id: props.today_plan.id,
-                        seconds: secondsRefCurrent,
-                        new_seconds: secondsRefCurrent - props.today_plan.seconds,
-                    })
-                );
+            const timerActive = timerActiveRef.current; // eslint-disable-line react-hooks/exhaustive-deps
+            const timerHolder = timerHolderRef.current; // eslint-disable-line react-hooks/exhaustive-deps
+            if (!timerActive || timerHolder !== props.today_plan.id) return; // eslint-disable-line react-hooks/exhaustive-deps
 
-                // Persist the freshest plan snapshot to backend
-                dispatch(sendDailyPlanData(authCtx, props.plan));
-                dispatch(updateToday(authCtx,
-                    props.plan.today.date,
-                    props.plan.today.today_plans,
-                    props.plan.today.used_time))
-            }
+            const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000); // eslint-disable-line react-hooks/exhaustive-deps
+            const currentSecs = baseSecondsRef.current + elapsed; // eslint-disable-line react-hooks/exhaustive-deps
+
+            dispatch(
+                activePlanActions.updateTime({
+                    id: props.today_plan.id, // eslint-disable-line react-hooks/exhaustive-deps
+                    seconds: currentSecs,
+                    new_seconds: currentSecs - planSecondsRef.current, // eslint-disable-line react-hooks/exhaustive-deps
+                })
+            );
+            // Reset the timer base so the global interval continues from the saved point.
+            // No DB write here — persistence only happens on explicit stop.
+            dispatch(focusTimerActions.resetTimerBase({
+                baseSeconds: currentSecs,
+                startTime: Date.now(),
+            }));
         };
     // We intentionally want unmount-only + latest refs in cleanup.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -216,27 +223,32 @@ const TodayPlan = (props) => {
     }
 
     const timerToggleHandler = () => {
-        if(props.isTimerActive === false && props.timerHolder === null) {
-            props.setIsTimerActive(true);
-            props.setTimerHolder(props.today_plan.id);
+        const { isTimerActive, timerHolder, baseSeconds, startTime } = focusTimer;
+        if (!isTimerActive && timerHolder === null) {
+            dispatch(focusTimerActions.activateTimer({
+                planId: props.today_plan.id,
+                startTime: Date.now(),
+                baseSeconds: seconds,
+            }));
+            return;
         }
-        if(props.isTimerActive === true && props.timerHolder !== props.today_plan.id) {
-            alert("Only one timer can be active at a time!")
-            return
+        if (isTimerActive && timerHolder !== props.today_plan.id) {
+            alert("Only one timer can be active at a time!");
+            return;
         }
-        if(props.isTimerActive === true && props.timerHolder === props.today_plan.id) {
-            // Update both current plan and its parent plans
+        if (isTimerActive && timerHolder === props.today_plan.id) {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const currentSecs = baseSeconds + elapsed;
             dispatch(
                 activePlanActions.updateTime({
                     id: props.today_plan.id,
-                    seconds:seconds,
-                    new_seconds: seconds-props.today_plan.seconds
+                    seconds: currentSecs,
+                    new_seconds: currentSecs - props.today_plan.seconds,
                 })
-            )
-            // Upload the latest time to database after stopping the timer
+            );
+            setSeconds(currentSecs);
             setTodayPlanChanged(true);
-            props.setIsTimerActive(false);
-            props.setTimerHolder(null);
+            dispatch(focusTimerActions.deactivateTimer({ seconds: currentSecs }));
         }
     }
 
@@ -307,8 +319,8 @@ const TodayPlan = (props) => {
                 id: props.today_plan.id,
             })
         )
-        if (props.isTimerActive === true) {
-            props.setIsTimerActive(false);
+        if (focusTimer.isTimerActive && focusTimer.timerHolder === props.today_plan.id) {
+            dispatch(focusTimerActions.deactivateTimer({ seconds: focusTimer.focusTime }));
         }
         props.set_plan_deleted(true);
     }
@@ -379,9 +391,7 @@ const TodayPlan = (props) => {
                         id={props.today_plan.id}
                         used_seconds={props.today_plan.seconds}
                         seconds={seconds}
-                        setSeconds={setSeconds}
-                        isTimerActive={props.isTimerActive}
-                        timerHolder={props.timerHolder} />
+                        setSeconds={setSeconds} />
                 </Col>
                 {/* Show the date of the plan */}
                 <Col style={{width: "12%", flex: '0 0 auto'}}>

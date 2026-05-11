@@ -77,10 +77,6 @@ const TodoEverydayPlans = (props) => {
                                 show_children={show_children}
                                 set_plan_deleted={setPlanDeleted}
                                 isTodoEverydayPlan={true}
-                                isTimerActive={props.isTimerActive}
-                                setIsTimerActive={props.setIsTimerActive}
-                                timerHolder={props.timerHolder}
-                                setTimerHolder={props.setTimerHolder}
                                 highlight={props.highlight}
                                 setHighlight={props.setHighlight}
                             />

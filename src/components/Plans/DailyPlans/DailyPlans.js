@@ -24,9 +24,6 @@ import classes from './DailyPlans.module.css';
 const DailyPlans = () => {
     const authCtx = useContext(AuthContext);
     const [planDeleted, setPlanDeleted] = useState(false);
-    // Only one timer for a task can be active at a time
-    const [isTimerActive, setIsTimerActive] = useState(false);
-    const [timerHolder, setTimerHolder] = useState(null);
     const [highlight, setHighlight] = useState(null);
     const dispatch = useDispatch();
     const plan = useSelector((state) => state.activePlan);
@@ -77,10 +74,6 @@ const DailyPlans = () => {
                                     rank={dailyPlan.rank}
                                     show_children={show_children}
                                     set_plan_deleted={setPlanDeleted}
-                                    isTimerActive={isTimerActive}
-                                    setIsTimerActive={setIsTimerActive}
-                                    timerHolder={timerHolder}
-                                    setTimerHolder={setTimerHolder}
                                     highlight={highlight}
                                     setHighlight={setHighlight}
                                 />
@@ -98,10 +91,6 @@ const DailyPlans = () => {
 
                     <Row>
                         <TodoEverydayPlans
-                            isTimerActive={isTimerActive}
-                            setIsTimerActive={setIsTimerActive}
-                            timerHolder={timerHolder}
-                            setTimerHolder={setTimerHolder}
                             highlight={highlight}
                             setHighlight={setHighlight}
                         />
