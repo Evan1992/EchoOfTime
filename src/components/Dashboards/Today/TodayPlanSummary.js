@@ -101,8 +101,7 @@ const TodayPlanSummary = (props) => {
         const rootMap = new Map(); // rootId -> {title, seconds}
         for (const p of props.today_plans) {
             const root = findRoot(p);
-            if (!rootMap.has(root.id)) rootMap.set(root.id, { title: root.title, seconds: 0 });
-            rootMap.get(root.id).seconds += (p.seconds || 0);
+            if (!rootMap.has(root.id)) rootMap.set(root.id, { title: root.title, seconds: root.seconds || 0 });
         }
         return Array.from(rootMap.values());
     })();
