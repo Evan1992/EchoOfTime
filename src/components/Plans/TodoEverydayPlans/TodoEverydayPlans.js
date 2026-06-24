@@ -41,7 +41,8 @@ const TodoEverydayPlans = (props) => {
                 new_todo_everyday_plans.push({
                     ...daily_plan,
                     completed: false,
-                    date: getTodayDateString()
+                    date: getTodayDateString(),
+                    seconds: 0
                 })
             }
             dispatch(refreshTodoEveryday(authCtx, new_todo_everyday_plans));
