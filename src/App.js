@@ -105,7 +105,8 @@ const App = () => {
                 new_today_plans.push({
                     ...daily_plan,
                     completed: false,
-                    date: getTodayDateString()
+                    date: getTodayDateString(),
+                    seconds: 0
                 });
             }
         }
