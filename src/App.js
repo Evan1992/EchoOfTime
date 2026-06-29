@@ -114,7 +114,12 @@ const App = () => {
         // Reset todo_everyday plans for the new day (Sprint page)
         if (currentPlan.short_term_plan.todo_everyday.todo_everyday_plans !== undefined) {
             const new_todo_everyday_plans = currentPlan.short_term_plan.todo_everyday.todo_everyday_plans.map(
-                (daily_plan) => ({ ...daily_plan, completed: false, date: getTodayDateString() })
+                (daily_plan) => ({
+                    ...daily_plan,
+                    completed: false,
+                    date: getTodayDateString(),
+                    seconds: 0
+                })
             );
             dispatch(refreshTodoEveryday(currentAuthCtx, new_todo_everyday_plans));
         }
